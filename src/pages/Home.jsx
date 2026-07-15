@@ -11,10 +11,6 @@ import telonDerecho from '../assets/telonderecho.png'
 import telonIzquierdo from '../assets/telonizquierdo.png'
 import beaconMockup from '../assets/mockup-beacon.png'
 import capturePipeline from '../assets/capture-pipeline.png'
-import processBea1 from '../assets/process-beacon-1.png'
-import processBea2 from '../assets/process-beacon-2.png'
-import processThea1 from '../assets/process-thea-1.png'
-import processThea2 from '../assets/process-thea-2.png'
 
 function TypingText({ text, speed = 50 }) {
   const [displayed, setDisplayed] = React.useState('')
@@ -123,6 +119,139 @@ function SentidoAnimation() {
   )
 }
 
+function DisintegrationEffect({ active, onComplete }) {
+  const [chars, setChars] = React.useState([])
+  const [started, setStarted] = React.useState(false)
+
+  React.useEffect(() => {
+    if (!active) {
+      setStarted(false)
+      setChars([])
+      return
+    }
+    if (started) return
+    setStarted(true)
+    window._disStart = Date.now()
+
+    const spans = document.querySelectorAll('.note-char')
+    const proyectosEl = document.getElementById('proyectos')
+    const proyectosRect = proyectosEl ? proyectosEl.getBoundingClientRect() : { top: window.innerHeight, left: window.innerWidth / 2 }
+    const newChars = []
+
+    spans.forEach((span, i) => {
+      const rect = span.getBoundingClientRect()
+      newChars.push({
+        id: i,
+        spanId: span.id,
+        char: span.textContent,
+        x: rect.left,
+        y: rect.top + window.scrollY,
+        active: false,
+        delay: Math.random() * 5000,
+        vx: 0,
+        vy: 0,
+        gravity: 0.003 + Math.random() * 0.005,
+        rotation: 0,
+        rotationSpeed: (Math.random() - 0.5) * 2,
+        opacity: 1,
+        phase: 0,
+        shakePhase: 0,
+        shaking: false,
+        shakeDuration: 800 + Math.random() * 400,
+        shakeStart: null,
+        originY: rect.top + window.scrollY,
+        targetX: proyectosRect.left + Math.random() * 400,
+        targetY: proyectosRect.top
+      })
+    })
+
+    setChars(newChars)
+  }, [active])
+
+  React.useEffect(() => {
+    if (!started || chars.length === 0) return
+
+    const interval = setInterval(() => {
+      setChars(prev => prev.map(c => {
+        const elapsed = Date.now() - (window._disStart || 0)
+
+        if (!c.active && !c.shaking && elapsed > c.delay) {
+          return { ...c, shaking: true, shakeStart: Date.now() }
+        }
+
+        if (c.shaking && !c.active) {
+          const shakeElapsed = Date.now() - c.shakeStart
+          const progress = shakeElapsed / c.shakeDuration
+          const shakeX = Math.sin(progress * Math.PI * 8) * (3 * progress)
+          const shakeY = Math.sin(progress * Math.PI * 6) * (1 * progress)
+
+          if (shakeElapsed >= c.shakeDuration) {
+            const originalSpan = document.getElementById(c.spanId)
+            if (originalSpan) originalSpan.style.visibility = 'hidden'
+            return { ...c, active: true, shaking: false, x: c.x + shakeX, y: c.y + shakeY }
+          }
+
+          const originalSpan = document.getElementById(c.spanId)
+          if (originalSpan) {
+            originalSpan.style.transform = `translate(${shakeX}px, ${shakeY}px)`
+          }
+          return c
+        }
+
+        if (!c.active) return c
+
+        const time = Date.now() * 0.0005
+        const wobble = Math.sin(time + c.id * 0.3) * 0.02
+        const newVx = c.vx + wobble
+        const newVy = c.vy + 0.025
+        const newX = c.x + newVx
+        const newY = c.y + newVy
+        const newRotation = c.rotation + Math.sin(time + c.id) * 0.15
+
+        const newOpacity = newY > window.innerHeight * 0.88
+          ? Math.max(0, c.opacity - 0.008)
+          : c.opacity
+
+        return { ...c, x: newX, y: newY, vy: newVy, vx: newVx, rotation: newRotation, opacity: newOpacity }
+      }))
+    }, 16)
+
+    return () => clearInterval(interval)
+  }, [started])
+
+  if (!active && !started) return null
+
+  return (
+    <div style={{position:'fixed', top:0, left:0, width:'100vw', height:'100vh', pointerEvents:'none', zIndex:999}}>
+      {chars.map(c => (
+        <span key={c.id} style={{
+          position:'fixed',
+          left: c.x,
+          top: c.y - window.scrollY,
+          fontFamily:"'IBM Plex Mono', monospace",
+          fontSize:'13px',
+          fontWeight:300,
+          color:'#1A1A1A',
+          opacity: c.active ? c.opacity : 1,
+          transform: c.active ? `rotate(${c.rotation}deg) translateZ(0)` : 'translateZ(0)',
+          transformOrigin: 'center center',
+          backfaceVisibility: 'hidden',
+          pointerEvents:'none',
+          whiteSpace:'pre',
+          display: 'inline-block',
+          willChange: 'transform',
+          imageRendering: 'pixelated',
+          WebkitFontSmoothing: 'antialiased',
+          MozOsxFontSmoothing: 'grayscale',
+          lineHeight: '1.8'
+        }}>
+          {c.char}
+        </span>
+      ))}
+    </div>
+  )
+}
+
 function SequentialTyping() {
   const lines = [
     '¿Por qué el usuario hace esto?',
@@ -190,31 +319,21 @@ function SequentialTyping() {
   }, [currentLine, currentChar])
 
   return (
-    <div style={{fontFamily:"'IBM Plex Mono', monospace", fontSize:'13px', color:'#1A1A1A', fontWeight:300, lineHeight:1.8}}>
+    <div style={{fontFamily:"'IBM Plex Mono', monospace", fontSize:'13px', color:'#1A1A1A', fontWeight:300, lineHeight:1.8}} id="sequential-text">
       {visibleLines.map((line, i) => (
         <p key={i} style={{margin:'2px 0', minHeight:'20px'}}>
-          {line}
+          {line.split('').map((char, j) => (
+            <span key={j} className="note-char" id={`char-${i}-${j}`} style={{display:'inline-block'}}>
+              {char === ' ' ? ' ' : char}
+            </span>
+          ))}
           {i === visibleLines.length - 1 && !done && (
-            <span style={{
-              display:'inline-block',
-              width:'2px',
-              height:'13px',
-              background:'#888',
-              marginLeft:'2px',
-              animation:'blink 1s step-end infinite'
-            }}/>
+            <span style={{display:'inline-block', width:'2px', height:'13px', background:'#888', marginLeft:'2px', animation:'blink 1s step-end infinite'}}/>
           )}
         </p>
       ))}
       {done && (
-        <span style={{
-          display:'inline-block',
-          width:'2px',
-          height:'13px',
-          background:'#888',
-          marginLeft:'2px',
-          animation:'blink 1s step-end infinite'
-        }}/>
+        <span style={{display:'inline-block', width:'2px', height:'13px', background:'#888', marginLeft:'2px', animation:'blink 1s step-end infinite'}}/>
       )}
     </div>
   )
@@ -227,32 +346,14 @@ export default function Home() {
   const [proyectosVisible, setProyectosVisible] = React.useState(false)
   const [misVisible, setMisVisible] = React.useState(false)
   const [misRounded, setMisRounded] = React.useState(true)
+  const [notesDisintegrating, setNotesDisintegrating] = React.useState(false)
   const proyectosRef = React.useRef(null)
-  const [stackScroll, setStackScroll] = React.useState(0)
-  const [note1Text, setNote1Text] = React.useState('')
-  const [note2Text, setNote2Text] = React.useState('')
-  const [image1Settled, setImage1Settled] = React.useState(false)
-  const [image2Settled, setImage2Settled] = React.useState(false)
-  const [noteThea1Text, setNoteThea1Text] = React.useState('')
-  const [noteThea2Text, setNoteThea2Text] = React.useState('')
-  const [image3Settled, setImage3Settled] = React.useState(false)
-  const [image4Settled, setImage4Settled] = React.useState(false)
-  const [cardsVisible, setCardsVisible] = React.useState(false)
-  const [cardsExpanded, setCardsExpanded] = React.useState(false)
-  const stackRef = React.useRef(null)
+  const notesRef = React.useRef(null)
 
-  const NOTE1_STATIC = '> ¿Por qué una venta puede desaparecer entre dos equipos que trabajan por el mismo objetivo? Trabajar con una red de partners significa convivir con decenas de oportunidades abiertas al mismo tiempo. Saber cuál necesita tu atención no siempre es evidente.'
-  const NOTE1_TYPING = '\n\n> Comprender este ecosistema de partners fue mucho más complejo que construir la interfaz.\n\n> No querían más seguimiento, querían más visibilidad. Fue el insight que cambió todo el producto.'
-  const NOTE1 = NOTE1_STATIC + NOTE1_TYPING
-  const NOTE2 = '> No querían más seguimiento, querían más visibilidad. Fue el insight que cambió todo el producto.'
-  const NOTE_THEA1_STATIC = '// insight:\n"Me encanta todo lo que tiene que ver con arte y me atrae la cultura de los países a los que viajo"'
-  const NOTE_THEA1_TYPING = '\n\n> "Cuando llegué a vivir a este país,\ndejé de recorrer la ciudad como turista."\n\n> "Me aburren los planes comunes. Si voy a otro país, voy a ver qué hacen o ven realmente"\n\n> "Descubrí que las mejores experiencias llegaban de recomendaciones de personas."\n\nNota: Theaveling nació de esa diferencia.'
-  const NOTE_THEA1 = NOTE_THEA1_STATIC + NOTE_THEA1_TYPING
-  const NOTE_THEA2 = '> "Descubrí que las mejores experiencias llegaban de recomendaciones de personas."\n\nNota: Theaveling nació de esa diferencia.'
 
   React.useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 80)
+      setScrolled(window.scrollY > 5)
     }
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
@@ -290,114 +391,58 @@ export default function Home() {
   }, [misVisible])
 
   React.useEffect(() => {
-    const handleScroll = () => {
-      if (!stackRef.current) return
-      const rect = stackRef.current.getBoundingClientRect()
-      const progress = Math.max(0, Math.min(1, -rect.top / (rect.height - window.innerHeight)))
-      setStackScroll(progress)
-    }
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
+    const sections = ['intro', 'proyectos', 'sobre-mi', 'contacto']
+    const observers = sections.map(id => {
+      const el = document.getElementById(id)
+      if (!el) return null
+      const observer = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting) {
+            setActiveLink(id === 'intro' ? 'Intro' :
+              id === 'proyectos' ? 'Proyectos' :
+              id === 'sobre-mi' ? 'Sobre mí' : 'Contáctame')
+          }
+        },
+        { threshold: 0.5 }
+      )
+      observer.observe(el)
+      return observer
+    })
+    return () => observers.forEach(o => o && o.disconnect())
   }, [])
 
   React.useEffect(() => {
-    if (stackScroll < 0.02) {
-      setImage1Settled(false)
-      setImage2Settled(false)
-      setNote1Text('')
-      setNote2Text('')
-    }
-    if (stackScroll < 0.2) {
-      setImage2Settled(false)
-      setNote2Text('')
-    }
-    if (stackScroll < 0.45) {
-      setImage3Settled(false)
-      setNoteThea1Text('')
-    }
-    if (stackScroll < 0.68) {
-      setImage4Settled(false)
-      setNoteThea2Text('')
-    }
-    if (stackScroll >= 0.02 && !image1Settled) {
-      setImage1Settled(true)
-    }
-    if (stackScroll >= 0.3 && !image2Settled) {
-      setImage2Settled(true)
-    }
-    if (stackScroll >= 0.7 && !image3Settled) {
-      setImage3Settled(true)
-    }
-    if (stackScroll >= 0.78 && !image4Settled) {
-      setImage4Settled(true)
-    }
-    if (stackScroll >= 0.9 && !cardsVisible) {
-      setCardsVisible(true)
-    }
-    if (stackScroll < 0.8) {
-      setCardsVisible(false)
-    }
-    if (stackScroll >= 0.88) setCardsExpanded(true)
-    else setCardsExpanded(false)
-  }, [stackScroll])
+    let isThrottling = false
+    let lastScroll = window.scrollY
+    let debounceTimer
 
-  React.useEffect(() => {
-    if (!image1Settled) return
-    setNote1Text('')
-    const timer = setTimeout(() => {
-      let i = 0
-      const interval = setInterval(() => {
-        if (i < NOTE1_TYPING.length) {
-          setNote1Text(prev => NOTE1_TYPING.slice(0, i + 1))
-          i++
-        } else clearInterval(interval)
-      }, 25)
-      return () => clearInterval(interval)
-    }, 2500)
-    return () => clearTimeout(timer)
-  }, [image1Settled])
+    const handleScroll = () => {
+      clearTimeout(debounceTimer)
+      debounceTimer = setTimeout(() => {
+        const proyectosEl = document.getElementById('proyectos')
+        if (!proyectosEl) return
+        const rect = proyectosEl.getBoundingClientRect()
 
-  React.useEffect(() => {
-    if (!image2Settled) return
-    setNote2Text('')
-    let i = 0
-    const interval = setInterval(() => {
-      if (i < NOTE2.length) {
-        setNote2Text(NOTE2.slice(0, i + 1))
-        i++
-      } else clearInterval(interval)
-    }, 25)
-    return () => clearInterval(interval)
-  }, [image2Settled])
+        if (rect.top < window.innerHeight * 1.2 && rect.top > -100) {
+          setNotesDisintegrating(true)
 
-  React.useEffect(() => {
-    if (!image3Settled) return
-    setNoteThea1Text('')
-    const timer = setTimeout(() => {
-      let i = 0
-      const interval = setInterval(() => {
-        if (i < NOTE_THEA1_TYPING.length) {
-          setNoteThea1Text(NOTE_THEA1_TYPING.slice(0, i + 1))
-          i++
-        } else clearInterval(interval)
-      }, 20)
-      return () => clearInterval(interval)
-    }, 1500)
-    return () => clearTimeout(timer)
-  }, [image3Settled])
+          if (!isThrottling) {
+            isThrottling = true
+            const currentScroll = window.scrollY
+            window.scrollTo({ top: currentScroll, behavior: 'instant' })
+            setTimeout(() => {
+              isThrottling = false
+            }, 3000)
+          }
+        } else if (rect.top > window.innerHeight) {
+          setNotesDisintegrating(false)
+        }
+      }, 50)
+    }
 
-  React.useEffect(() => {
-    if (!image4Settled) return
-    setNoteThea2Text('')
-    let i = 0
-    const interval = setInterval(() => {
-      if (i < NOTE_THEA2.length) {
-        setNoteThea2Text(NOTE_THEA2.slice(0, i + 1))
-        i++
-      } else clearInterval(interval)
-    }, 25)
-    return () => clearInterval(interval)
-  }, [image4Settled])
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   return (
     <div style={{background:'#F5F2EE', minHeight:'100vh', color:'#1A1A1A', fontFamily:'sans-serif', paddingTop:'200px'}}>
@@ -455,7 +500,7 @@ export default function Home() {
       </div>
 
       {/* HERO */}
-      <section style={{
+      <section id="intro" style={{
         padding:'120px 0 120px 0',
         display:'flex',
         flexDirection:'row',
@@ -514,8 +559,14 @@ export default function Home() {
             <TypingText text={`// Research notes:\n> buscando sentido antes de diseñar soluciones.`} speed={40} />
           </div>
         </div>
-        <div style={{flex:1, paddingTop:'0', marginTop: '-180px'}}>
-          <SequentialTyping />
+        <div style={{flex:1, paddingTop:'0', marginTop:'-180px', position:'relative'}}>
+          <div id="notes-container" ref={notesRef} style={{
+            opacity: notesDisintegrating ? 0 : 1,
+            transition: 'opacity 0s'
+          }}>
+            <SequentialTyping />
+          </div>
+          {notesDisintegrating && <DisintegrationEffect active={notesDisintegrating} />}
         </div>
       </section>
 
@@ -558,115 +609,10 @@ export default function Home() {
         <h3 style={{fontFamily:"'Instrument Sans', sans-serif", fontWeight:300, fontSize:'24px', color:'#1A1A1A', marginTop:'0', marginBottom:'0'}}>
           Donde las notas terminan convirtiéndose en producto.
         </h3>
-
-        {/* STACK SCROLL SECTION */}
-        <div ref={stackRef} style={{height:'400vh', position:'relative', marginBottom:'0', marginTop:'0', marginLeft:'-80px', marginRight:'-80px'}}>
-          <div style={{
-            position:'sticky',
-            top:'0',
-            height:'100vh',
-            display:'flex',
-            alignItems:'center',
-            justifyContent: cardsExpanded ? 'center' : 'center',
-            overflow:'hidden'
-          }}>
-            {/* Left: text notes */}
-            <div style={{
-              position:'absolute',
-              right: image3Settled ? '100px' : 'auto',
-              left: image3Settled ? 'auto' : '0',
-              top:'80px',
-              width:'340px',
-              zIndex:2,
-              display: cardsExpanded ? 'none' : 'block'
-            }}>
-              <p style={{
-                fontFamily:"'IBM Plex Mono', monospace",
-                fontWeight:300,
-                fontSize:'14px',
-                color:'#1A1A1A',
-                lineHeight:1.7,
-                whiteSpace:'pre-wrap'
-              }}>
-                {image3Settled
-                  ? NOTE_THEA1_STATIC + noteThea1Text + (noteThea1Text.length < NOTE_THEA1_TYPING.length ? '|' : '')
-                  : NOTE1_STATIC + note1Text + (note1Text.length < NOTE1_TYPING.length ? '|' : '')
-                }
-              </p>
-            </div>
-
-            {/* Right: stacked images */}
-            <div style={{
-              position:'relative',
-              width: cardsExpanded ? '1100px' : '580px',
-              height: cardsExpanded ? '400px' : '80vh',
-              flexShrink:0,
-              transition:'all 0.7s ease'
-            }}>
-              <div style={{
-                position:'absolute',
-                top:0,
-                left: cardsExpanded ? '-60px' : '0',
-                width: cardsExpanded ? '420px' : '100%',
-                height: cardsExpanded ? '400px' : '100%',
-                borderRadius:'12px',
-                overflow:'hidden',
-                transition:'all 0.7s ease',
-                zIndex:1
-              }}>
-                <img src={processBea1} style={{width:'100%', height:'100%', objectFit:'cover', display:'block'}}/>
-              </div>
-
-              <div style={{
-                position:'absolute',
-                top:0,
-                left: cardsExpanded ? '680px' : '0',
-                width: cardsExpanded ? '420px' : '100%',
-                height: cardsExpanded ? '400px' : '100%',
-                borderRadius:'12px',
-                overflow:'hidden',
-                transition:'left 0.7s ease, width 0.7s ease, height 0.7s ease',
-                zIndex: cardsExpanded ? 1 : 3,
-                transform: cardsExpanded ? 'none' : `translateY(${Math.max(0,(1-Math.max(0,(stackScroll-0.55)/0.35))*100)}vh)`
-              }}>
-                <img src={processThea1} style={{width:'100%', height:'100%', objectFit:'cover', display:'block'}}/>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div style={{
-          display:'flex',
-          gap:'40px',
-          justifyContent:'center',
-          marginTop:'80px',
-          opacity: cardsVisible ? 1 : 0,
-          transform: cardsVisible ? 'translateY(0)' : 'translateY(40px)',
-          transition:'opacity 0.6s ease, transform 0.6s ease'
-        }}>
-          {/* Beacon card */}
-          <div style={{width:'340px', display:'flex', flexDirection:'column', gap:'16px'}}>
-            <img src={processBea1} style={{width:'100%', height:'240px', objectFit:'cover', borderRadius:'8px', display:'block'}}/>
-            <p style={{fontFamily:"'IBM Plex Mono', monospace", fontSize:'12px', fontWeight:300, color:'#888'}}>Product Designer</p>
-            <p style={{fontFamily:"'Instrument Sans', sans-serif", fontSize:'14px', fontWeight:300, color:'#1A1A1A', lineHeight:1.7}}>
-              Beacon es una herramienta web que diseñé desde cero con IA para ayudar a equipos B2B a no perder de vista oportunidades de hasta USD 400.000 anuales.
-            </p>
-          </div>
-
-          {/* Theaveling card */}
-          <div style={{width:'340px', display:'flex', flexDirection:'column', gap:'16px'}}>
-            <img src={processThea1} style={{width:'100%', height:'240px', objectFit:'cover', borderRadius:'8px', display:'block'}}/>
-            <p style={{fontFamily:"'IBM Plex Mono', monospace", fontSize:'12px', fontWeight:300, color:'#888'}}>Product Designer</p>
-            <p style={{fontFamily:"'Instrument Sans', sans-serif", fontSize:'14px', fontWeight:300, color:'#1A1A1A', lineHeight:1.7}}>
-              Se trata la investigación y diseño de una app móvil que ayuda a turistas a descubrir planes artísticos y culturales alternativos en nuevas ciudades. El proyecto incluyó investigación de usuarios, definición del problema, ideación y prototipado en Figma, validando cada etapa con feedback iterativo.
-            </p>
-          </div>
-        </div>
-
       </section>
 
       {/* SOBRE MÍ */}
-      <section style={{
+      <section id="sobre-mi" style={{
         padding:'120px 80px',
         borderTop:'1px solid rgba(0,0,0,0.08)',
         display:'flex',
@@ -700,7 +646,7 @@ export default function Home() {
       </section>
 
       {/* CONTACTO */}
-      <section style={{
+      <section id="contacto" style={{
         padding:'120px 80px',
         borderTop:'1px solid rgba(0,0,0,0.08)',
         textAlign:'center'

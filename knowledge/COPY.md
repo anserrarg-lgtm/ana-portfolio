@@ -51,3 +51,17 @@ Estoy disponible para proyectos freelance y oportunidades de trabajo.
 ### Links
 anserrarg@gmail.com
 linkedin.com/in/anaserrano15
+
+---
+
+## Cards de proyectos (sección scroll)
+
+### Beacon
+**Etiqueta:** Investigación UX / Estrategia de Producto / Desarrollo con IA
+**Descripción:**
+Beacon es una herramienta web que diseñé desde cero con IA para ayudar a equipos comerciales B2B a no perder de vista oportunidades de hasta USD 400.000 anuales. Ayuda a detectar oportunidades en riesgo antes de que afecten las ventas y las comisiones.
+
+### Theaveling
+**Etiqueta:** Investigación UX / Design Thinking / Diseño de Interfaz
+**Descripción:**
+Aplicación móvil para ayudar a turistas a descubrir experiencias artísticas y culturales relevantes en nuevas ciudades. Proyecto desarrollado siguiendo un proceso completo de Design Thinking, desde la investigación hasta la validación del prototipo.
