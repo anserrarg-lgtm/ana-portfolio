@@ -352,13 +352,12 @@ export default function Home() {
   const [misVisible, setMisVisible] = React.useState(false)
   const [misRounded, setMisRounded] = React.useState(true)
   const [notesDisintegrating, setNotesDisintegrating] = React.useState(false)
-  const [cursorZoom, setCursorZoom] = React.useState(false)
-  const [projectsTyping, setProjectsTyping] = React.useState(false)
+  const [phase, setPhase] = React.useState('notes')
+  const [zoomProgress, setZoomProgress] = React.useState(0)
   const [projectsText, setProjectsText] = React.useState('')
   const [showCards, setShowCards] = React.useState(false)
-  const [notesComplete, setNotesComplete] = React.useState(false)
-  const [heroZoom, setHeroZoom] = React.useState(1)
-  const [heroOpacity, setHeroOpacity] = React.useState(1)
+  const notesCompleteRef = React.useRef(false)
+  const zoomProgressRef = React.useRef(0)
   const proyectosRef = React.useRef(null)
   const notesRef = React.useRef(null)
   const endCursorRef = React.useRef(null)
@@ -371,17 +370,6 @@ export default function Home() {
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
-
-  React.useEffect(() => {
-    if (notesComplete) return
-    const preventScroll = (e) => e.preventDefault()
-    window.addEventListener('wheel', preventScroll, { passive: false })
-    window.addEventListener('touchmove', preventScroll, { passive: false })
-    return () => {
-      window.removeEventListener('wheel', preventScroll)
-      window.removeEventListener('touchmove', preventScroll)
-    }
-  }, [notesComplete])
 
   React.useEffect(() => {
     const interval = setInterval(() => {
@@ -436,51 +424,76 @@ export default function Home() {
   }, [])
 
   React.useEffect(() => {
-    if (!notesComplete) return
-    const handleScroll = () => {
-      if (window.scrollY > 10 && !cursorZoom) {
-        const progress = Math.min(1, window.scrollY / 400)
-        setHeroZoom(1 + progress * 4)
-        setHeroOpacity(1 - progress)
-        if (progress >= 1) {
-          setCursorZoom(true)
-          window.removeEventListener('scroll', handleScroll)
-          setTimeout(() => {
-            setProjectsTyping(true)
-            let i = 0
-            const text = 'projects/'
-            const interval = setInterval(() => {
-              if (i < text.length) {
-                setProjectsText(text.slice(0, i + 1))
-                i++
-              } else {
-                clearInterval(interval)
-                setTimeout(() => setShowCards(true), 500)
-              }
-            }, 80)
-          }, 1200)
-        }
+    document.body.style.overflow = 'hidden'
+    return () => { document.body.style.overflow = '' }
+  }, [])
+
+  const typeProjectsText = () => {
+    let i = 0
+    const text = 'projects/'
+    const interval = setInterval(() => {
+      if (i < text.length) {
+        setProjectsText(text.slice(0, i + 1))
+        i++
+      } else {
+        clearInterval(interval)
+        setTimeout(() => setShowCards(true), 500)
       }
-    }
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [notesComplete])
+    }, 80)
+  }
 
   React.useEffect(() => {
-    if (!cursorZoom) return
-    const handleScrollBack = () => {
-      if (window.scrollY < 30) {
-        setCursorZoom(false)
-        setProjectsTyping(false)
+    const handleWheel = (e) => {
+      if (phase === 'notes' && !notesCompleteRef.current) {
+        e.preventDefault()
+        return
+      }
+
+      if (phase === 'notes' && notesCompleteRef.current) {
+        e.preventDefault()
+        setPhase('zooming')
+        return
+      }
+
+      if (phase === 'zooming') {
+        e.preventDefault()
+        if (e.deltaY > 0) {
+          zoomProgressRef.current = Math.min(1, zoomProgressRef.current + 0.02)
+          setZoomProgress(zoomProgressRef.current)
+          if (zoomProgressRef.current >= 1) {
+            setPhase('projects')
+            typeProjectsText()
+          }
+        } else {
+          zoomProgressRef.current = Math.max(0, zoomProgressRef.current - 0.015)
+          setZoomProgress(zoomProgressRef.current)
+          if (zoomProgressRef.current <= 0) {
+            setPhase('notes')
+          }
+        }
+        return
+      }
+
+      if (phase === 'projects' && e.deltaY < 0) {
+        e.preventDefault()
         setProjectsText('')
         setShowCards(false)
-        setHeroZoom(1)
-        setHeroOpacity(1)
+        setPhase('rewinding')
+
+        const rewind = setInterval(() => {
+          zoomProgressRef.current = Math.max(0, zoomProgressRef.current - 0.015)
+          setZoomProgress(zoomProgressRef.current)
+          if (zoomProgressRef.current <= 0) {
+            clearInterval(rewind)
+            setPhase('notes')
+          }
+        }, 16)
       }
     }
-    window.addEventListener('scroll', handleScrollBack)
-    return () => window.removeEventListener('scroll', handleScrollBack)
-  }, [cursorZoom])
+
+    window.addEventListener('wheel', handleWheel, { passive: false })
+    return () => window.removeEventListener('wheel', handleWheel)
+  }, [phase])
 
   return (
     <div style={{background:'#F5F2EE', minHeight:'100vh', color:'#1A1A1A', fontFamily:'sans-serif', paddingTop:'200px'}}>
@@ -545,13 +558,18 @@ export default function Home() {
         alignItems:'flex-start',
         justifyContent:'space-between',
         gap:'80px',
-        transform: `scale(${heroZoom})`,
+        transform: phase === 'zooming' || phase === 'projects'
+          ? `scale(${1 + zoomProgress * 8})`
+          : 'scale(1)',
+        opacity: phase === 'zooming'
+          ? Math.max(0, 1 - zoomProgress * 1.5)
+          : phase === 'projects' ? 0 : 1,
         transition: 'none',
         transformOrigin: endCursorRef.current
           ? `${endCursorRef.current.getBoundingClientRect().left}px ${endCursorRef.current.getBoundingClientRect().top}px`
-          : 'left center'
+          : 'right center'
       }}>
-        <div style={{flex:1, marginTop:'20px', opacity: heroOpacity}}>
+        <div style={{flex:1, marginTop:'20px'}}>
           <div style={{position:'relative', display:'inline-block'}}>
             <span style={{
               position:'absolute',
@@ -602,15 +620,15 @@ export default function Home() {
             <TypingText text={`// Research notes:\n> buscando sentido antes de diseñar soluciones.`} speed={40} />
           </div>
         </div>
-        <div style={{flex:1, paddingTop:'0', marginTop:'-180px', position:'relative', opacity: heroOpacity}}>
+        <div style={{flex:1, paddingTop:'0', marginTop:'-180px', position:'relative'}}>
           <div id="notes-container" ref={notesRef} style={{}}>
-            <SequentialTyping ref={endCursorRef} onComplete={() => setNotesComplete(true)} />
+            <SequentialTyping ref={endCursorRef} onComplete={() => { notesCompleteRef.current = true }} />
           </div>
           {notesDisintegrating && <DisintegrationEffect active={notesDisintegrating} />}
         </div>
       </section>
 
-      {cursorZoom && (
+      {(phase === 'projects' || (phase === 'zooming' && zoomProgress > 0.8)) && (
         <div style={{
           position: 'fixed',
           top: 0,
@@ -621,9 +639,10 @@ export default function Home() {
           zIndex: 500,
           display: 'flex',
           flexDirection: 'column',
-          alignItems: 'center',
+          alignItems: 'flex-start',
           justifyContent: 'center',
-          gap: '60px'
+          paddingLeft: '120px',
+          opacity: phase === 'projects' ? 1 : (zoomProgress - 0.8) / 0.2
         }}>
           <div style={{
             fontFamily: "'Plus Jakarta Sans', sans-serif",
@@ -633,37 +652,21 @@ export default function Home() {
             display: 'flex',
             alignItems: 'center'
           }}>
-            {projectsTyping ? projectsText : ''}
+            {projectsText}
             <span style={{
               display: 'inline-block',
-              width: cursorZoom && !projectsTyping ? '4px' : '3px',
-              height: cursorZoom && !projectsTyping ? '56px' : '48px',
+              width: '2px',
+              height: '56px',
               background: '#1A1A1A',
               marginLeft: '4px',
-              animation: 'blink 1s step-end infinite',
-              transition: 'all 0.8s ease'
+              animation: 'blink 1s step-end infinite'
             }}/>
           </div>
-
-          {showCards && (
-            <div style={{
-              display: 'flex',
-              gap: '40px',
-              animation: 'slideUp 0.8s ease forwards'
-            }}>
-              <div style={{width:'340px', height:'400px', background:'#1A1A1A', borderRadius:'0'}}>
-                placeholder beacon
-              </div>
-              <div style={{width:'340px', height:'400px', background:'#555', borderRadius:'0'}}>
-                placeholder theaveling
-              </div>
-            </div>
-          )}
         </div>
       )}
 
       {/* PROYECTOS */}
-      <section id="proyectos" style={{padding:'80px 80px 0 80px', borderTop:'1px solid rgba(0,0,0,0.08)'}}>
+      <section id="proyectos" style={{padding:'80px 80px 0 80px', borderTop:'1px solid rgba(0,0,0,0.08)', display: phase === 'notes' ? 'block' : 'none'}}>
         <div ref={proyectosRef} style={{position:'relative', height:'70px', marginBottom:'0'}}>
           <div style={{
             position:'absolute',
@@ -707,7 +710,7 @@ export default function Home() {
       <section id="sobre-mi" style={{
         padding:'120px 80px',
         borderTop:'1px solid rgba(0,0,0,0.08)',
-        display:'flex',
+        display: phase === 'notes' ? 'flex' : 'none',
         gap:'80px',
         alignItems:'center'
       }}>
@@ -741,7 +744,8 @@ export default function Home() {
       <section id="contacto" style={{
         padding:'120px 80px',
         borderTop:'1px solid rgba(0,0,0,0.08)',
-        textAlign:'center'
+        textAlign:'center',
+        display: phase === 'notes' ? 'block' : 'none'
       }}>
         <p style={{fontSize:'13px', letterSpacing:'0.05em', textTransform:'uppercase', color:'#888', marginBottom:'24px', fontFamily:"'Ranade', sans-serif", fontWeight:300}}>
           Contacto
