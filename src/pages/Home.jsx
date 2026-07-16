@@ -252,7 +252,7 @@ function DisintegrationEffect({ active, onComplete }) {
   )
 }
 
-const SequentialTyping = React.forwardRef(({ onComplete }, ref) => {
+const SequentialTyping = React.forwardRef(({ onComplete, keepCursorVisible, hideCursor }, ref) => {
   const lines = [
     '¿Por qué el usuario hace esto?',
     '¿Por qué la empresa necesita esto?',
@@ -330,15 +330,15 @@ const SequentialTyping = React.forwardRef(({ onComplete }, ref) => {
       ))}
       {done && (
         <span ref={ref} style={{
-          display:'inline-block',
-          width:'1px',
-          height:'13px',
-          background:'#1A1A1A',
-          marginLeft:'2px',
-          animation:'blink 1s step-end infinite',
-          position:'relative',
-          zIndex:1000,
-          opacity:1
+          display: hideCursor ? 'none' : 'inline-block',
+          width: '1px',
+          height: '13px',
+          background: '#1A1A1A',
+          animation: 'blink 1s step-end infinite',
+          position: 'relative',
+          zIndex: 1000,
+          opacity: 1,
+          marginLeft: '2px'
         }}/>
       )}
     </div>
@@ -625,16 +625,13 @@ export default function Home() {
         </div>
         <div style={{flex:1, paddingTop:'0', marginTop:'-180px', position:'relative', opacity: phase === 'zooming' ? Math.max(0, 1 - zoomProgress * 1.5) : phase === 'projects' ? 0 : 1}}>
           <div id="notes-container" ref={notesRef} style={{}}>
-            <SequentialTyping ref={endCursorRef} onComplete={() => {
+            <SequentialTyping ref={endCursorRef} keepCursorVisible={phase === 'zooming' || phase === 'rewinding'} hideCursor={phase === 'zooming' || phase === 'rewinding'} onComplete={() => {
               notesCompleteRef.current = true
               setTimeout(() => {
                 if (endCursorRef.current) {
                   const rect = endCursorRef.current.getBoundingClientRect()
                   console.log('cursor position:', rect.left, rect.top)
-                  setCursorPos({
-                    x: window.innerWidth / 2,
-                    y: rect.top
-                  })
+                  setCursorPos({ x: rect.left + rect.width, y: rect.top })
                 } else {
                   console.log('still null after delay')
                 }
@@ -644,6 +641,21 @@ export default function Home() {
           {notesDisintegrating && <DisintegrationEffect active={notesDisintegrating} />}
         </div>
       </section>
+
+      {cursorPos && (phase === 'zooming' || phase === 'rewinding') && (
+        <span style={{
+          position: 'fixed',
+          left: cursorPos.x - (cursorPos.x - window.innerWidth * 0.2) * zoomProgress,
+          top: cursorPos.y - (cursorPos.y - window.innerHeight * 0.5) * zoomProgress,
+          width: '1px',
+          height: '13px',
+          background: '#1A1A1A',
+          display: 'inline-block',
+          animation: 'blink 1s step-end infinite',
+          transform: 'none',
+          zIndex: 9999
+        }}/>
+      )}
 
       {(phase === 'projects' || (phase === 'zooming' && zoomProgress > 0.8)) && (
         <div style={{
