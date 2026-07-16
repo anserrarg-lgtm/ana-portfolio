@@ -276,17 +276,13 @@ function SequentialTyping({ onComplete }) {
     '└── notes/',
     '',
     '// Research notes:',
-    '> Fricción en las entrevistas: Primera pregunta demasiado abierta / Falta de historias concretas / La pregunta de automatización no tuvo respuesta.'
+    '> Fricción en las entrevistas: Primera pregunta demasiado\nabierta / Falta de historias concretas / La pregunta de\nautomatización no tuvo respuesta.'
   ]
 
   const [visibleLines, setVisibleLines] = React.useState([])
   const [currentLine, setCurrentLine] = React.useState(0)
   const [currentChar, setCurrentChar] = React.useState(0)
   const [done, setDone] = React.useState(false)
-  const [exitingBlock, setExitingBlock] = React.useState(null)
-  const [exitedBlocks, setExitedBlocks] = React.useState([])
-
-  const blockRanges = [[0,2],[4,4],[6,9],[11,19],[21,22]]
 
   React.useEffect(() => {
     if (currentLine >= lines.length) {
@@ -320,57 +316,27 @@ function SequentialTyping({ onComplete }) {
     }
   }, [currentLine, currentChar])
 
-  React.useEffect(() => {
-    if (!done) return
-    let i = 0
-    const exitNext = () => {
-      if (i >= blockRanges.length) return
-      setExitingBlock(i)
-      setTimeout(() => {
-        setExitedBlocks(prev => [...prev, i])
-        setExitingBlock(null)
-        i++
-        setTimeout(exitNext, 400)
-      }, 700)
-    }
-    setTimeout(exitNext, 800)
-  }, [done])
-
-  const getBlockIndex = (lineIndex) => {
-    for (let i = 0; i < blockRanges.length; i++) {
-      const [start, end] = blockRanges[i]
-      if (lineIndex >= start && lineIndex <= end) return i
-    }
-    return -1
-  }
 
   return (
-    <div style={{fontFamily:"'IBM Plex Mono', monospace", fontSize:'13px', color:'#1A1A1A', fontWeight:300, lineHeight:1.8}}>
-      {visibleLines.map((line, i) => {
-        const blockIdx = getBlockIndex(i)
-        const isExiting = exitingBlock === blockIdx
-        const hasExited = exitedBlocks.includes(blockIdx)
-        return (
-          <p key={i} style={{
-            margin:'2px 0',
-            minHeight:'20px',
-            whiteSpace:'pre',
-            opacity: hasExited ? 0 : 1,
-            transform: isExiting
-              ? 'translateX(-80px) rotate(3deg)'
-              : hasExited
-              ? 'translateX(-200px) translateY(30px) rotate(90deg)'
-              : 'none',
-            transition: isExiting || hasExited ? 'all 0.7s cubic-bezier(0.4,0,0.2,1)' : 'none',
-            display: 'block'
-          }}>
-            {line}
-            {i === visibleLines.length - 1 && !done && (
-              <span style={{display:'inline-block', width:'2px', height:'13px', background:'#888', marginLeft:'2px', animation:'blink 1s step-end infinite'}}/>
-            )}
-          </p>
-        )
-      })}
+    <div style={{fontFamily:"'IBM Plex Mono', monospace", fontSize:'13px', color:'#1A1A1A', fontWeight:300, lineHeight:1.8, position:'relative', overflow:'visible', minHeight:'400px', maxWidth:'520px'}}>
+      {visibleLines.map((line, i) => (
+        <p key={i} style={{margin:'2px 0', minHeight:'20px', whiteSpace:'pre-wrap'}}>
+          {line}
+          {i === visibleLines.length - 1 && !done && (
+            <span style={{display:'inline-block', width:'2px', height:'13px', background:'#888', marginLeft:'2px', animation:'blink 1s step-end infinite'}}/>
+          )}
+        </p>
+      ))}
+      {done && (
+        <span style={{
+          display:'inline-block',
+          width:'2px',
+          height:'13px',
+          background:'#888',
+          marginLeft:'2px',
+          animation:'blink 1s step-end infinite'
+        }}/>
+      )}
     </div>
   )
 }
@@ -563,11 +529,8 @@ export default function Home() {
           </div>
         </div>
         <div style={{flex:1, paddingTop:'0', marginTop:'-180px', position:'relative'}}>
-          <div id="notes-container" ref={notesRef} style={{
-            opacity: notesDisintegrating ? 0 : 1,
-            transition: 'opacity 0s'
-          }}>
-            <SequentialTyping onComplete={() => setNotesDisintegrating(true)} />
+          <div id="notes-container" ref={notesRef} style={{}}>
+            <SequentialTyping onComplete={() => {}} />
           </div>
           {notesDisintegrating && <DisintegrationEffect active={notesDisintegrating} />}
         </div>
