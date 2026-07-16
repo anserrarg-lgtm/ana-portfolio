@@ -285,6 +285,7 @@ const SequentialTyping = React.forwardRef(({ onComplete }, ref) => {
   const [done, setDone] = React.useState(false)
 
   React.useEffect(() => {
+    console.log('currentLine:', currentLine, 'lines.length:', lines.length)
     if (currentLine >= lines.length) {
       setDone(true)
       if (onComplete) onComplete()
@@ -411,9 +412,7 @@ export default function Home() {
       const observer = new IntersectionObserver(
         (entries) => {
           if (entries[0].isIntersecting) {
-            setActiveLink(id === 'intro' ? 'Intro' :
-              id === 'proyectos' ? 'Proyectos' :
-              id === 'sobre-mi' ? 'Sobre mí' : 'Contáctame')
+            setActiveLink(id === 'intro' ? 'Intro' : 'Proyectos')
           }
         },
         { threshold: 0.5 }
@@ -426,7 +425,13 @@ export default function Home() {
 
   React.useEffect(() => {
     document.body.style.overflow = 'hidden'
-    return () => { document.body.style.overflow = '' }
+    document.body.style.position = 'fixed'
+    document.body.style.width = '100%'
+    return () => {
+      document.body.style.overflow = ''
+      document.body.style.position = ''
+      document.body.style.width = ''
+    }
   }, [])
 
   const typeProjectsText = () => {
@@ -532,7 +537,7 @@ export default function Home() {
           alignItems: 'stretch',
           background: '#F5F2EE'
         }}>
-          {['Intro', 'Proyectos', 'Sobre mí', 'Contáctame'].map((link, i) => (
+          {['Intro', 'Proyectos'].map((link, i) => (
             <a key={link} href={`#${link}`} className="nav-link" onClick={() => setActiveLink(link)} style={{
               padding: '8px 16px',
               borderLeft: i === 0 ? 'none' : '1px solid #1A1A1A',
@@ -560,17 +565,14 @@ export default function Home() {
         justifyContent:'space-between',
         gap:'80px',
         transform: phase === 'zooming' || phase === 'projects' || phase === 'rewinding'
-          ? `scale(${1 + zoomProgress * 15})`
+          ? `scale(${1 + zoomProgress * 6})`
           : 'scale(1)',
-        opacity: phase === 'zooming' || phase === 'rewinding'
-          ? Math.max(0, 1 - zoomProgress * 1.5)
-          : phase === 'projects' ? 0 : 1,
         transition: 'none',
         transformOrigin: cursorPos
-          ? `${cursorPos.x * 0.3}px ${cursorPos.y}px`
+          ? `${cursorPos.x}px ${cursorPos.y}px`
           : 'center center'
       }}>
-        <div style={{flex:1, marginTop:'20px'}}>
+        <div style={{flex:1, marginTop:'20px', opacity: phase === 'zooming' ? Math.max(0, 1 - zoomProgress * 2) : phase === 'projects' ? 0 : 1}}>
           <div style={{position:'relative', display:'inline-block'}}>
             <span style={{
               position:'absolute',
@@ -621,17 +623,22 @@ export default function Home() {
             <TypingText text={`// Research notes:\n> buscando sentido antes de diseñar soluciones.`} speed={40} />
           </div>
         </div>
-        <div style={{flex:1, paddingTop:'0', marginTop:'-180px', position:'relative'}}>
+        <div style={{flex:1, paddingTop:'0', marginTop:'-180px', position:'relative', opacity: phase === 'zooming' ? Math.max(0, 1 - zoomProgress * 1.5) : phase === 'projects' ? 0 : 1}}>
           <div id="notes-container" ref={notesRef} style={{}}>
             <SequentialTyping ref={endCursorRef} onComplete={() => {
               notesCompleteRef.current = true
-              if (endCursorRef.current) {
-                const rect = endCursorRef.current.getBoundingClientRect()
-                setCursorPos({
-                  x: rect.left * 0.4,
-                  y: rect.top
-                })
-              }
+              setTimeout(() => {
+                if (endCursorRef.current) {
+                  const rect = endCursorRef.current.getBoundingClientRect()
+                  console.log('cursor position:', rect.left, rect.top)
+                  setCursorPos({
+                    x: window.innerWidth / 2,
+                    y: rect.top
+                  })
+                } else {
+                  console.log('still null after delay')
+                }
+              }, 100)
             }} />
           </div>
           {notesDisintegrating && <DisintegrationEffect active={notesDisintegrating} />}
@@ -716,87 +723,6 @@ export default function Home() {
         </h3>
       </section>
 
-      {/* SOBRE MÍ */}
-      <section id="sobre-mi" style={{
-        padding:'120px 80px',
-        borderTop:'1px solid rgba(0,0,0,0.08)',
-        display: phase === 'notes' ? 'flex' : 'none',
-        gap:'80px',
-        alignItems:'center'
-      }}>
-        <img src={anaPhoto} style={{
-          width:'320px',
-          height:'400px',
-          objectFit:'cover',
-          borderRadius:'16px',
-          flexShrink:0
-        }}/>
-        <div>
-          <p style={{fontSize:'13px', letterSpacing:'0.05em', textTransform:'uppercase', color:'#888', marginBottom:'24px', fontFamily:"'Ranade', sans-serif", fontWeight:300}}>
-            Sobre mí
-          </p>
-          <h2 style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontSize:'32px', fontWeight:600, letterSpacing:'-0.02em', lineHeight:1.2, marginBottom:'32px', color:'#1A1A1A'}}>
-            Del arte al diseño,<br/>sin soltar ninguno de los dos.
-          </h2>
-          <p style={{fontSize:'13px', color:'#555', lineHeight:1.8, marginBottom:'20px', fontFamily:"'Ranade', sans-serif", fontWeight:300}}>
-            Me formé en artes y eso me dio un ojo crítico que no se aprende en un bootcamp: cuido la tipografía, los bordes, los degradados. Cada detalle visual comunica algo, y sé exactamente qué.
-          </p>
-          <p style={{fontSize:'13px', color:'#555', lineHeight:1.8, marginBottom:'20px', fontFamily:"'Ranade', sans-serif", fontWeight:300}}>
-            Trabajé en Customer Experience antes de entrar al diseño de producto, y eso me cambió la perspectiva: diseño desde la experiencia real del usuario, no desde lo que se ve bonito en una presentación.
-          </p>
-          <p style={{fontSize:'13px', color:'#555', lineHeight:1.8, fontFamily:"'Ranade', sans-serif", fontWeight:300}}>
-            Hoy diseño con IA, entiendo el código y construyo soluciones que se ven bien y tienen impacto en el negocio. No debato de píxeles — los resuelvo.
-          </p>
-        </div>
-      </section>
-
-      {/* CONTACTO */}
-      <section id="contacto" style={{
-        padding:'120px 80px',
-        borderTop:'1px solid rgba(0,0,0,0.08)',
-        textAlign:'center',
-        display: phase === 'notes' ? 'block' : 'none'
-      }}>
-        <p style={{fontSize:'13px', letterSpacing:'0.05em', textTransform:'uppercase', color:'#888', marginBottom:'24px', fontFamily:"'Ranade', sans-serif", fontWeight:300}}>
-          Contacto
-        </p>
-        <h2 style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontSize:'38px', fontWeight:600, letterSpacing:'-0.02em', lineHeight:1.2, marginBottom:'16px', color:'#1A1A1A'}}>
-          ¿Hablamos?
-        </h2>
-        <p style={{fontSize:'13px', color:'#555', lineHeight:1.7, marginBottom:'48px', maxWidth:'480px', margin:'0 auto 48px', fontFamily:"'Ranade', sans-serif", fontWeight:300}}>
-          Estoy disponible para proyectos freelance y oportunidades de trabajo.
-        </p>
-        <div style={{display:'flex', gap:'16px', justifyContent:'center'}}>
-          <a href="mailto:anserrarg@gmail.com" style={{
-            display:'inline-flex',
-            alignItems:'center',
-            gap:'8px',
-            fontSize:'13px',
-            fontWeight:600,
-            color:'#fff',
-            textDecoration:'none',
-            padding:'14px 32px',
-            background:'#1A1A1A',
-            borderRadius:'8px'
-          }}>
-            anserrarg@gmail.com
-          </a>
-          <a href="https://www.linkedin.com/in/anaserrano15" target="_blank" style={{
-            display:'inline-flex',
-            alignItems:'center',
-            gap:'8px',
-            fontSize:'13px',
-            fontWeight:600,
-            color:'#1A1A1A',
-            textDecoration:'none',
-            padding:'14px 32px',
-            border:'1.5px solid #1A1A1A',
-            borderRadius:'8px'
-          }}>
-            LinkedIn →
-          </a>
-        </div>
-      </section>
 
     </div>
   )
