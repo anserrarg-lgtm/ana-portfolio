@@ -252,7 +252,7 @@ function DisintegrationEffect({ active, onComplete }) {
   )
 }
 
-function SequentialTyping() {
+function SequentialTyping({ onComplete }) {
   const lines = [
     '¿Por qué el usuario hace esto?',
     '¿Por qué la empresa necesita esto?',
@@ -283,22 +283,24 @@ function SequentialTyping() {
   const [currentLine, setCurrentLine] = React.useState(0)
   const [currentChar, setCurrentChar] = React.useState(0)
   const [done, setDone] = React.useState(false)
+  const [exitingBlock, setExitingBlock] = React.useState(null)
+  const [exitedBlocks, setExitedBlocks] = React.useState([])
+
+  const blockRanges = [[0,2],[4,4],[6,9],[11,19],[21,22]]
 
   React.useEffect(() => {
     if (currentLine >= lines.length) {
       setDone(true)
+      if (onComplete) onComplete()
       return
     }
-
     const line = lines[currentLine]
-
     if (line === '') {
       setVisibleLines(prev => [...prev, ''])
       setCurrentLine(l => l + 1)
       setCurrentChar(0)
       return
     }
-
     if (currentChar < line.length) {
       const timeout = setTimeout(() => {
         setVisibleLines(prev => {
@@ -318,23 +320,57 @@ function SequentialTyping() {
     }
   }, [currentLine, currentChar])
 
+  React.useEffect(() => {
+    if (!done) return
+    let i = 0
+    const exitNext = () => {
+      if (i >= blockRanges.length) return
+      setExitingBlock(i)
+      setTimeout(() => {
+        setExitedBlocks(prev => [...prev, i])
+        setExitingBlock(null)
+        i++
+        setTimeout(exitNext, 400)
+      }, 700)
+    }
+    setTimeout(exitNext, 800)
+  }, [done])
+
+  const getBlockIndex = (lineIndex) => {
+    for (let i = 0; i < blockRanges.length; i++) {
+      const [start, end] = blockRanges[i]
+      if (lineIndex >= start && lineIndex <= end) return i
+    }
+    return -1
+  }
+
   return (
-    <div style={{fontFamily:"'IBM Plex Mono', monospace", fontSize:'13px', color:'#1A1A1A', fontWeight:300, lineHeight:1.8}} id="sequential-text">
-      {visibleLines.map((line, i) => (
-        <p key={i} style={{margin:'2px 0', minHeight:'20px'}}>
-          {line.split('').map((char, j) => (
-            <span key={j} className="note-char" id={`char-${i}-${j}`} style={{display:'inline-block'}}>
-              {char === ' ' ? ' ' : char}
-            </span>
-          ))}
-          {i === visibleLines.length - 1 && !done && (
-            <span style={{display:'inline-block', width:'2px', height:'13px', background:'#888', marginLeft:'2px', animation:'blink 1s step-end infinite'}}/>
-          )}
-        </p>
-      ))}
-      {done && (
-        <span style={{display:'inline-block', width:'2px', height:'13px', background:'#888', marginLeft:'2px', animation:'blink 1s step-end infinite'}}/>
-      )}
+    <div style={{fontFamily:"'IBM Plex Mono', monospace", fontSize:'13px', color:'#1A1A1A', fontWeight:300, lineHeight:1.8}}>
+      {visibleLines.map((line, i) => {
+        const blockIdx = getBlockIndex(i)
+        const isExiting = exitingBlock === blockIdx
+        const hasExited = exitedBlocks.includes(blockIdx)
+        return (
+          <p key={i} style={{
+            margin:'2px 0',
+            minHeight:'20px',
+            whiteSpace:'pre',
+            opacity: hasExited ? 0 : 1,
+            transform: isExiting
+              ? 'translateX(-80px) rotate(3deg)'
+              : hasExited
+              ? 'translateX(-200px) translateY(30px) rotate(90deg)'
+              : 'none',
+            transition: isExiting || hasExited ? 'all 0.7s cubic-bezier(0.4,0,0.2,1)' : 'none',
+            display: 'block'
+          }}>
+            {line}
+            {i === visibleLines.length - 1 && !done && (
+              <span style={{display:'inline-block', width:'2px', height:'13px', background:'#888', marginLeft:'2px', animation:'blink 1s step-end infinite'}}/>
+            )}
+          </p>
+        )
+      })}
     </div>
   )
 }
@@ -411,39 +447,6 @@ export default function Home() {
     return () => observers.forEach(o => o && o.disconnect())
   }, [])
 
-  React.useEffect(() => {
-    let isThrottling = false
-    let lastScroll = window.scrollY
-    let debounceTimer
-
-    const handleScroll = () => {
-      clearTimeout(debounceTimer)
-      debounceTimer = setTimeout(() => {
-        const proyectosEl = document.getElementById('proyectos')
-        if (!proyectosEl) return
-        const rect = proyectosEl.getBoundingClientRect()
-
-        if (rect.top < window.innerHeight * 1.2 && rect.top > -100) {
-          setNotesDisintegrating(true)
-
-          if (!isThrottling) {
-            isThrottling = true
-            const currentScroll = window.scrollY
-            window.scrollTo({ top: currentScroll, behavior: 'instant' })
-            setTimeout(() => {
-              isThrottling = false
-            }, 3000)
-          }
-        } else if (rect.top > window.innerHeight) {
-          setNotesDisintegrating(false)
-        }
-      }, 50)
-    }
-
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
   return (
     <div style={{background:'#F5F2EE', minHeight:'100vh', color:'#1A1A1A', fontFamily:'sans-serif', paddingTop:'200px'}}>
 
@@ -471,8 +474,8 @@ export default function Home() {
           justifyContent: 'center',
           background: '#F5F2EE'
         }}>
-          <span style={{fontFamily:"'Instrument Sans', sans-serif", fontWeight:300, fontSize:'20px', color:'#1A1A1A', lineHeight:1.3}}>Ana María</span>
-          <span style={{fontFamily:"'Instrument Sans', sans-serif", fontWeight:300, fontSize:'20px', color:'#1A1A1A', lineHeight:1.3}}>Serrano</span>
+          <span style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:400, fontSize:'20px', color:'#1A1A1A', lineHeight:1.3}}>Ana María</span>
+          <span style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:400, fontSize:'20px', color:'#1A1A1A', lineHeight:1.3}}>Serrano</span>
         </div>
         <div style={{
           marginLeft: 'auto',
@@ -486,7 +489,7 @@ export default function Home() {
               borderLeft: i === 0 ? 'none' : '1px solid #1A1A1A',
               display: 'flex',
               alignItems: 'center',
-              fontFamily: "'Space Grotesk', sans-serif",
+              fontFamily: "'Plus Jakarta Sans', sans-serif",
               fontSize: '13px',
               fontWeight: 400,
               background: activeLink === link ? '#1A1A1A' : 'transparent',
@@ -518,17 +521,17 @@ export default function Home() {
               letterSpacing:'0.05em',
               textTransform:'uppercase',
               color:'#1A1A1A',
-              fontFamily:"'Instrument Sans', sans-serif",
-              fontWeight:300
+              fontFamily:"'Plus Jakarta Sans', sans-serif",
+              fontWeight:400
             }}>
-              <span style={{fontSize:'20px', fontWeight:300, marginRight:'4px'}}>✳</span>Product Designer
+              <span style={{fontSize:'20px', fontWeight:400, marginRight:'4px'}}>✳</span>Product Designer
             </span>
             <h1 style={{
               fontSize:'42px',
               fontWeight:700,
               lineHeight:1.1,
               letterSpacing:'-0.01em',
-              fontFamily:"'Instrument Sans', sans-serif",
+              fontFamily:"'Plus Jakarta Sans', sans-serif",
               marginBottom:'24px',
               maxWidth:'800px',
               minHeight:'120px'
@@ -547,9 +550,9 @@ export default function Home() {
               </span> tenga{' '}<span style={{display:'inline-block', minWidth:'7ch', fontFamily:'inherit', fontSize:'inherit', fontWeight:'inherit'}}><SentidoAnimation /></span>
             </h1>
             <h3 style={{
-              fontFamily:"'Instrument Sans', sans-serif",
-              fontWeight:300,
-              fontSize:'24px',
+              fontFamily:"'Ranade', sans-serif",
+              fontWeight:200,
+              fontSize:'20px',
               color:'#1A1A1A',
               marginTop:'16px',
               marginBottom:'24px'
@@ -564,7 +567,7 @@ export default function Home() {
             opacity: notesDisintegrating ? 0 : 1,
             transition: 'opacity 0s'
           }}>
-            <SequentialTyping />
+            <SequentialTyping onComplete={() => setNotesDisintegrating(true)} />
           </div>
           {notesDisintegrating && <DisintegrationEffect active={notesDisintegrating} />}
         </div>
@@ -579,7 +582,7 @@ export default function Home() {
             transition:'left 0.5s cubic-bezier(0.16,1,0.3,1)',
             border:'1px solid #1A1A1A',
             padding:'8px 20px',
-            fontFamily:"'Instrument Sans', sans-serif",
+            fontFamily:"'Plus Jakarta Sans', sans-serif",
             fontSize:'42px',
             fontWeight:700,
             color:'#1A1A1A',
@@ -595,7 +598,7 @@ export default function Home() {
             border:'1px solid #1A1A1A',
             borderRadius: misRounded ? '20px' : '0px',
             padding:'8px 20px',
-            fontFamily:"'Instrument Sans', sans-serif",
+            fontFamily:"'Plus Jakarta Sans', sans-serif",
             fontSize:'42px',
             fontWeight:700,
             color:'#1A1A1A',
@@ -606,7 +609,7 @@ export default function Home() {
           </div>
         </div>
 
-        <h3 style={{fontFamily:"'Instrument Sans', sans-serif", fontWeight:300, fontSize:'24px', color:'#1A1A1A', marginTop:'0', marginBottom:'0'}}>
+        <h3 style={{fontFamily:"'Ranade', sans-serif", fontWeight:200, fontSize:'20px', color:'#1A1A1A', marginTop:'0', marginBottom:'0'}}>
           Donde las notas terminan convirtiéndose en producto.
         </h3>
       </section>
@@ -627,19 +630,19 @@ export default function Home() {
           flexShrink:0
         }}/>
         <div>
-          <p style={{fontSize:'13px', letterSpacing:'0.05em', textTransform:'uppercase', color:'#888', marginBottom:'24px', fontFamily:"'Instrument Sans', sans-serif", fontWeight:300}}>
+          <p style={{fontSize:'13px', letterSpacing:'0.05em', textTransform:'uppercase', color:'#888', marginBottom:'24px', fontFamily:"'Ranade', sans-serif", fontWeight:300}}>
             Sobre mí
           </p>
-          <h2 style={{fontFamily:"'IBM Plex Mono', monospace", fontSize:'32px', fontWeight:400, letterSpacing:'-0.02em', lineHeight:1.2, marginBottom:'32px', color:'#1A1A1A'}}>
+          <h2 style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontSize:'32px', fontWeight:600, letterSpacing:'-0.02em', lineHeight:1.2, marginBottom:'32px', color:'#1A1A1A'}}>
             Del arte al diseño,<br/>sin soltar ninguno de los dos.
           </h2>
-          <p style={{fontSize:'13px', color:'#555', lineHeight:1.8, marginBottom:'20px', fontFamily:"'Instrument Sans', sans-serif"}}>
+          <p style={{fontSize:'13px', color:'#555', lineHeight:1.8, marginBottom:'20px', fontFamily:"'Ranade', sans-serif", fontWeight:300}}>
             Me formé en artes y eso me dio un ojo crítico que no se aprende en un bootcamp: cuido la tipografía, los bordes, los degradados. Cada detalle visual comunica algo, y sé exactamente qué.
           </p>
-          <p style={{fontSize:'13px', color:'#555', lineHeight:1.8, marginBottom:'20px', fontFamily:"'Instrument Sans', sans-serif"}}>
+          <p style={{fontSize:'13px', color:'#555', lineHeight:1.8, marginBottom:'20px', fontFamily:"'Ranade', sans-serif", fontWeight:300}}>
             Trabajé en Customer Experience antes de entrar al diseño de producto, y eso me cambió la perspectiva: diseño desde la experiencia real del usuario, no desde lo que se ve bonito en una presentación.
           </p>
-          <p style={{fontSize:'13px', color:'#555', lineHeight:1.8, fontFamily:"'Instrument Sans', sans-serif"}}>
+          <p style={{fontSize:'13px', color:'#555', lineHeight:1.8, fontFamily:"'Ranade', sans-serif", fontWeight:300}}>
             Hoy diseño con IA, entiendo el código y construyo soluciones que se ven bien y tienen impacto en el negocio. No debato de píxeles — los resuelvo.
           </p>
         </div>
@@ -651,13 +654,13 @@ export default function Home() {
         borderTop:'1px solid rgba(0,0,0,0.08)',
         textAlign:'center'
       }}>
-        <p style={{fontSize:'13px', letterSpacing:'0.05em', textTransform:'uppercase', color:'#888', marginBottom:'24px', fontFamily:"'Instrument Sans', sans-serif", fontWeight:300}}>
+        <p style={{fontSize:'13px', letterSpacing:'0.05em', textTransform:'uppercase', color:'#888', marginBottom:'24px', fontFamily:"'Ranade', sans-serif", fontWeight:300}}>
           Contacto
         </p>
-        <h2 style={{fontFamily:"'IBM Plex Mono', monospace", fontSize:'38px', fontWeight:400, letterSpacing:'-0.02em', lineHeight:1.2, marginBottom:'16px', color:'#1A1A1A'}}>
+        <h2 style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontSize:'38px', fontWeight:600, letterSpacing:'-0.02em', lineHeight:1.2, marginBottom:'16px', color:'#1A1A1A'}}>
           ¿Hablamos?
         </h2>
-        <p style={{fontSize:'13px', color:'#555', lineHeight:1.7, marginBottom:'48px', maxWidth:'480px', margin:'0 auto 48px', fontFamily:"'Instrument Sans', sans-serif"}}>
+        <p style={{fontSize:'13px', color:'#555', lineHeight:1.7, marginBottom:'48px', maxWidth:'480px', margin:'0 auto 48px', fontFamily:"'Ranade', sans-serif", fontWeight:300}}>
           Estoy disponible para proyectos freelance y oportunidades de trabajo.
         </p>
         <div style={{display:'flex', gap:'16px', justifyContent:'center'}}>
