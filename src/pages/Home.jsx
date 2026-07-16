@@ -349,6 +349,13 @@ export default function Home() {
   const [misVisible, setMisVisible] = React.useState(false)
   const [misRounded, setMisRounded] = React.useState(true)
   const [notesDisintegrating, setNotesDisintegrating] = React.useState(false)
+  const [cursorZoom, setCursorZoom] = React.useState(false)
+  const [projectsTyping, setProjectsTyping] = React.useState(false)
+  const [projectsText, setProjectsText] = React.useState('')
+  const [showCards, setShowCards] = React.useState(false)
+  const [notesComplete, setNotesComplete] = React.useState(false)
+  const [heroZoom, setHeroZoom] = React.useState(1)
+  const [heroOpacity, setHeroOpacity] = React.useState(1)
   const proyectosRef = React.useRef(null)
   const notesRef = React.useRef(null)
 
@@ -360,6 +367,17 @@ export default function Home() {
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
+
+  React.useEffect(() => {
+    if (notesComplete) return
+    const preventScroll = (e) => e.preventDefault()
+    window.addEventListener('wheel', preventScroll, { passive: false })
+    window.addEventListener('touchmove', preventScroll, { passive: false })
+    return () => {
+      window.removeEventListener('wheel', preventScroll)
+      window.removeEventListener('touchmove', preventScroll)
+    }
+  }, [notesComplete])
 
   React.useEffect(() => {
     const interval = setInterval(() => {
@@ -412,6 +430,51 @@ export default function Home() {
     })
     return () => observers.forEach(o => o && o.disconnect())
   }, [])
+
+  React.useEffect(() => {
+    if (!notesComplete) return
+    const handleScroll = () => {
+      if (window.scrollY > 10 && !cursorZoom) {
+        const progress = Math.min(1, window.scrollY / 400)
+        setHeroZoom(1 + progress * 2)
+        setHeroOpacity(1 - progress)
+        if (progress >= 1) {
+          setCursorZoom(true)
+          window.removeEventListener('scroll', handleScroll)
+          setTimeout(() => {
+            setProjectsTyping(true)
+            let i = 0
+            const text = 'projects/'
+            const interval = setInterval(() => {
+              if (i < text.length) {
+                setProjectsText(text.slice(0, i + 1))
+                i++
+              } else {
+                clearInterval(interval)
+                setTimeout(() => setShowCards(true), 500)
+              }
+            }, 80)
+          }, 1200)
+        }
+      }
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [notesComplete, cursorZoom])
+
+  React.useEffect(() => {
+    if (!cursorZoom) return
+    const handleScrollBack = () => {
+      if (window.scrollY < 30) {
+        setCursorZoom(false)
+        setProjectsTyping(false)
+        setProjectsText('')
+        setShowCards(false)
+      }
+    }
+    window.addEventListener('scroll', handleScrollBack)
+    return () => window.removeEventListener('scroll', handleScrollBack)
+  }, [cursorZoom])
 
   return (
     <div style={{background:'#F5F2EE', minHeight:'100vh', color:'#1A1A1A', fontFamily:'sans-serif', paddingTop:'200px'}}>
@@ -475,7 +538,10 @@ export default function Home() {
         flexDirection:'row',
         alignItems:'flex-start',
         justifyContent:'space-between',
-        gap:'80px'
+        gap:'80px',
+        transform: `scale(${heroZoom})`,
+        opacity: heroOpacity,
+        transition: 'none'
       }}>
         <div style={{flex:1, marginTop:'20px'}}>
           <div style={{position:'relative', display:'inline-block'}}>
@@ -530,11 +596,63 @@ export default function Home() {
         </div>
         <div style={{flex:1, paddingTop:'0', marginTop:'-180px', position:'relative'}}>
           <div id="notes-container" ref={notesRef} style={{}}>
-            <SequentialTyping onComplete={() => {}} />
+            <SequentialTyping onComplete={() => setNotesComplete(true)} />
           </div>
           {notesDisintegrating && <DisintegrationEffect active={notesDisintegrating} />}
         </div>
       </section>
+
+      {cursorZoom && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100vw',
+          height: '100vh',
+          background: '#F5F2EE',
+          zIndex: 500,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '60px'
+        }}>
+          <div style={{
+            fontFamily: "'Plus Jakarta Sans', sans-serif",
+            fontWeight: 700,
+            fontSize: '48px',
+            color: '#1A1A1A',
+            display: 'flex',
+            alignItems: 'center'
+          }}>
+            {projectsTyping ? projectsText : ''}
+            <span style={{
+              display: 'inline-block',
+              width: cursorZoom && !projectsTyping ? '4px' : '3px',
+              height: cursorZoom && !projectsTyping ? '56px' : '48px',
+              background: '#1A1A1A',
+              marginLeft: '4px',
+              animation: 'blink 1s step-end infinite',
+              transition: 'all 0.8s ease'
+            }}/>
+          </div>
+
+          {showCards && (
+            <div style={{
+              display: 'flex',
+              gap: '40px',
+              animation: 'slideUp 0.8s ease forwards'
+            }}>
+              <div style={{width:'340px', height:'400px', background:'#1A1A1A', borderRadius:'0'}}>
+                placeholder beacon
+              </div>
+              <div style={{width:'340px', height:'400px', background:'#555', borderRadius:'0'}}>
+                placeholder theaveling
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* PROYECTOS */}
       <section id="proyectos" style={{padding:'80px 80px 0 80px', borderTop:'1px solid rgba(0,0,0,0.08)'}}>
