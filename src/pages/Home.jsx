@@ -285,7 +285,6 @@ const SequentialTyping = React.forwardRef(({ onComplete, keepCursorVisible, hide
   const [done, setDone] = React.useState(false)
 
   React.useEffect(() => {
-    console.log('currentLine:', currentLine, 'lines.length:', lines.length)
     if (currentLine >= lines.length) {
       setDone(true)
       if (onComplete) onComplete()
@@ -360,6 +359,8 @@ export default function Home() {
   const [cursorPos, setCursorPos] = React.useState(null)
   const notesCompleteRef = React.useRef(false)
   const zoomProgressRef = React.useRef(0)
+  const rafRef = React.useRef(null)
+  const rewindRef = React.useRef(null)
   const proyectosRef = React.useRef(null)
   const notesRef = React.useRef(null)
   const endCursorRef = React.useRef(null)
@@ -450,61 +451,37 @@ export default function Home() {
 
   React.useEffect(() => {
     const handleWheel = (e) => {
-      if (phase === 'notes' && !notesCompleteRef.current) {
-        e.preventDefault()
-        return
-      }
+      e.preventDefault()
 
-      if (phase === 'notes' && notesCompleteRef.current) {
-        e.preventDefault()
+      if (phase === 'notes') {
+        if (!notesCompleteRef.current) return
         setPhase('zooming')
+        zoomProgressRef.current = 0
+        setZoomProgress(0)
         return
       }
 
       if (phase === 'zooming') {
-        e.preventDefault()
-        const direction = e.deltaY > 0 ? 1 : -1
-        const targetProgress = direction > 0 ?
-          Math.min(1, zoomProgressRef.current + 0.08) :
-          Math.max(0, zoomProgressRef.current - 0.06)
-
-        const animate = () => {
-          const diff = targetProgress - zoomProgressRef.current
-          if (Math.abs(diff) < 0.001) {
-            zoomProgressRef.current = targetProgress
-            setZoomProgress(targetProgress)
-            if (targetProgress >= 1) {
-              setPhase('projects')
-              typeProjectsText()
-            } else if (targetProgress <= 0) {
-              setPhase('notes')
-            }
-            return
-          }
-          zoomProgressRef.current += diff * 0.1
-          setZoomProgress(zoomProgressRef.current)
-          requestAnimationFrame(animate)
+        const delta = e.deltaY > 0 ? 0.05 : -0.05
+        const next = Math.max(0, Math.min(1, zoomProgressRef.current + delta))
+        zoomProgressRef.current = next
+        setZoomProgress(next)
+        if (next >= 1) {
+          setPhase('projects')
+          typeProjectsText()
+        } else if (next <= 0) {
+          setPhase('notes')
         }
-        requestAnimationFrame(animate)
         return
       }
 
       if (phase === 'projects' && e.deltaY < 0) {
-        e.preventDefault()
         setProjectsText('')
         setShowCards(false)
-        setPhase('rewinding')
-
-        const rewind = () => {
-          zoomProgressRef.current = Math.max(0, zoomProgressRef.current - 0.03)
-          setZoomProgress(zoomProgressRef.current)
-          if (zoomProgressRef.current > 0) {
-            requestAnimationFrame(rewind)
-          } else {
-            setPhase('notes')
-          }
-        }
-        requestAnimationFrame(rewind)
+        zoomProgressRef.current = 1
+        setZoomProgress(1)
+        setPhase('zooming')
+        return
       }
     }
 
@@ -641,10 +618,7 @@ export default function Home() {
               setTimeout(() => {
                 if (endCursorRef.current) {
                   const rect = endCursorRef.current.getBoundingClientRect()
-                  console.log('cursor position:', rect.left, rect.top)
                   setCursorPos({ x: rect.left + rect.width, y: rect.top })
-                } else {
-                  console.log('still null after delay')
                 }
               }, 100)
             }} />
@@ -658,13 +632,13 @@ export default function Home() {
           position: 'fixed',
           left: cursorPos.x - (cursorPos.x - window.innerWidth * 0.2) * zoomProgress,
           top: cursorPos.y - (cursorPos.y - window.innerHeight * 0.5) * zoomProgress,
-          width: zoomProgress >= 1 ? '3px' : '1px',
-          height: zoomProgress >= 1 ? '48px' : '13px',
+          width: `${1 + Math.max(0, (zoomProgress - 0.4) / 0.6) * 2}px`,
+          height: `${13 + Math.max(0, (zoomProgress - 0.4) / 0.6) * 35}px`,
           background: '#1A1A1A',
           display: 'inline-block',
           animation: 'blink 1s step-end infinite',
           transform: 'none',
-          transition: 'width 0.4s ease, height 0.4s ease',
+          transition: 'none',
           zIndex: 9999
         }}/>
       )}
