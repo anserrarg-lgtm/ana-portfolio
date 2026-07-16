@@ -252,7 +252,7 @@ function DisintegrationEffect({ active, onComplete }) {
   )
 }
 
-function SequentialTyping({ onComplete }) {
+const SequentialTyping = React.forwardRef(({ onComplete }, ref) => {
   const lines = [
     '¿Por qué el usuario hace esto?',
     '¿Por qué la empresa necesita esto?',
@@ -328,18 +328,21 @@ function SequentialTyping({ onComplete }) {
         </p>
       ))}
       {done && (
-        <span style={{
+        <span ref={ref} style={{
           display:'inline-block',
-          width:'2px',
+          width:'1px',
           height:'13px',
-          background:'#888',
+          background:'#1A1A1A',
           marginLeft:'2px',
-          animation:'blink 1s step-end infinite'
+          animation:'blink 1s step-end infinite',
+          position:'relative',
+          zIndex:1000,
+          opacity:1
         }}/>
       )}
     </div>
   )
-}
+})
 
 export default function Home() {
   const [activeLink, setActiveLink] = React.useState('Intro')
@@ -358,6 +361,7 @@ export default function Home() {
   const [heroOpacity, setHeroOpacity] = React.useState(1)
   const proyectosRef = React.useRef(null)
   const notesRef = React.useRef(null)
+  const endCursorRef = React.useRef(null)
 
 
   React.useEffect(() => {
@@ -436,7 +440,7 @@ export default function Home() {
     const handleScroll = () => {
       if (window.scrollY > 10 && !cursorZoom) {
         const progress = Math.min(1, window.scrollY / 400)
-        setHeroZoom(1 + progress * 2)
+        setHeroZoom(1 + progress * 4)
         setHeroOpacity(1 - progress)
         if (progress >= 1) {
           setCursorZoom(true)
@@ -460,7 +464,7 @@ export default function Home() {
     }
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [notesComplete, cursorZoom])
+  }, [notesComplete])
 
   React.useEffect(() => {
     if (!cursorZoom) return
@@ -470,6 +474,8 @@ export default function Home() {
         setProjectsTyping(false)
         setProjectsText('')
         setShowCards(false)
+        setHeroZoom(1)
+        setHeroOpacity(1)
       }
     }
     window.addEventListener('scroll', handleScrollBack)
@@ -540,10 +546,12 @@ export default function Home() {
         justifyContent:'space-between',
         gap:'80px',
         transform: `scale(${heroZoom})`,
-        opacity: heroOpacity,
-        transition: 'none'
+        transition: 'none',
+        transformOrigin: endCursorRef.current
+          ? `${endCursorRef.current.getBoundingClientRect().left}px ${endCursorRef.current.getBoundingClientRect().top}px`
+          : 'left center'
       }}>
-        <div style={{flex:1, marginTop:'20px'}}>
+        <div style={{flex:1, marginTop:'20px', opacity: heroOpacity}}>
           <div style={{position:'relative', display:'inline-block'}}>
             <span style={{
               position:'absolute',
@@ -594,9 +602,9 @@ export default function Home() {
             <TypingText text={`// Research notes:\n> buscando sentido antes de diseñar soluciones.`} speed={40} />
           </div>
         </div>
-        <div style={{flex:1, paddingTop:'0', marginTop:'-180px', position:'relative'}}>
+        <div style={{flex:1, paddingTop:'0', marginTop:'-180px', position:'relative', opacity: heroOpacity}}>
           <div id="notes-container" ref={notesRef} style={{}}>
-            <SequentialTyping onComplete={() => setNotesComplete(true)} />
+            <SequentialTyping ref={endCursorRef} onComplete={() => setNotesComplete(true)} />
           </div>
           {notesDisintegrating && <DisintegrationEffect active={notesDisintegrating} />}
         </div>
