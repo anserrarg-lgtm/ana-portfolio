@@ -356,6 +356,7 @@ export default function Home() {
   const [zoomProgress, setZoomProgress] = React.useState(0)
   const [projectsText, setProjectsText] = React.useState('')
   const [showCards, setShowCards] = React.useState(false)
+  const [showSubtitle, setShowSubtitle] = React.useState(false)
   const [cursorPos, setCursorPos] = React.useState(null)
   const notesCompleteRef = React.useRef(false)
   const zoomProgressRef = React.useRef(0)
@@ -436,17 +437,20 @@ export default function Home() {
   }, [])
 
   const typeProjectsText = () => {
-    let i = 0
-    const text = 'projects/'
-    const interval = setInterval(() => {
-      if (i < text.length) {
-        setProjectsText(text.slice(0, i + 1))
-        i++
-      } else {
-        clearInterval(interval)
-        setTimeout(() => setShowCards(true), 500)
-      }
-    }, 80)
+    setTimeout(() => {
+      let i = 0
+      const text = '> Projects/'
+      const interval = setInterval(() => {
+        if (i < text.length) {
+          setProjectsText(text.slice(0, i + 1))
+          i++
+        } else {
+          clearInterval(interval)
+          setTimeout(() => setShowSubtitle(true), 300)
+          setTimeout(() => setShowCards(true), 500)
+        }
+      }, 120)
+    }, 1500)
   }
 
   React.useEffect(() => {
@@ -478,6 +482,7 @@ export default function Home() {
       if (phase === 'projects' && e.deltaY < 0) {
         setProjectsText('')
         setShowCards(false)
+        setShowSubtitle(false)
         zoomProgressRef.current = 1
         setZoomProgress(1)
         setPhase('zooming')
@@ -627,7 +632,7 @@ export default function Home() {
         </div>
       </section>
 
-      {cursorPos && (phase === 'zooming' || phase === 'rewinding') && (
+      {cursorPos && (phase === 'zooming') && (
         <span style={{
           position: 'fixed',
           left: cursorPos.x - (cursorPos.x - window.innerWidth * 0.2) * zoomProgress,
@@ -655,8 +660,9 @@ export default function Home() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'flex-start',
-          justifyContent: 'center',
-          paddingLeft: '120px',
+          justifyContent: 'flex-start',
+          paddingLeft: '80px',
+          paddingTop: '120px',
           opacity: phase === 'projects' ? 1 : (zoomProgress - 0.8) / 0.2
         }}>
           <div style={{
@@ -679,6 +685,18 @@ export default function Home() {
               }}/>
             )}
           </div>
+          <h3 style={{
+            fontFamily:"'Ranade', sans-serif",
+            fontWeight:200,
+            fontSize:'20px',
+            color:'#1A1A1A',
+            marginTop:'16px',
+            opacity: showSubtitle ? 1 : 0,
+            transform: showSubtitle ? 'translateX(0)' : 'translateX(-30px)',
+            transition: 'opacity 0.8s ease, transform 0.8s ease'
+          }}>
+            Donde las notas terminan convirtiéndose en producto.
+          </h3>
         </div>
       )}
 
