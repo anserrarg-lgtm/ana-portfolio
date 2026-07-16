@@ -463,20 +463,29 @@ export default function Home() {
 
       if (phase === 'zooming') {
         e.preventDefault()
-        if (e.deltaY > 0) {
-          zoomProgressRef.current = Math.min(1, zoomProgressRef.current + 0.02)
-          setZoomProgress(zoomProgressRef.current)
-          if (zoomProgressRef.current >= 1) {
-            setPhase('projects')
-            typeProjectsText()
+        const direction = e.deltaY > 0 ? 1 : -1
+        const targetProgress = direction > 0 ?
+          Math.min(1, zoomProgressRef.current + 0.08) :
+          Math.max(0, zoomProgressRef.current - 0.06)
+
+        const animate = () => {
+          const diff = targetProgress - zoomProgressRef.current
+          if (Math.abs(diff) < 0.001) {
+            zoomProgressRef.current = targetProgress
+            setZoomProgress(targetProgress)
+            if (targetProgress >= 1) {
+              setPhase('projects')
+              typeProjectsText()
+            } else if (targetProgress <= 0) {
+              setPhase('notes')
+            }
+            return
           }
-        } else {
-          zoomProgressRef.current = Math.max(0, zoomProgressRef.current - 0.015)
+          zoomProgressRef.current += diff * 0.1
           setZoomProgress(zoomProgressRef.current)
-          if (zoomProgressRef.current <= 0) {
-            setPhase('notes')
-          }
+          requestAnimationFrame(animate)
         }
+        requestAnimationFrame(animate)
         return
       }
 
@@ -486,14 +495,16 @@ export default function Home() {
         setShowCards(false)
         setPhase('rewinding')
 
-        const rewind = setInterval(() => {
-          zoomProgressRef.current = Math.max(0, zoomProgressRef.current - 0.015)
+        const rewind = () => {
+          zoomProgressRef.current = Math.max(0, zoomProgressRef.current - 0.03)
           setZoomProgress(zoomProgressRef.current)
-          if (zoomProgressRef.current <= 0) {
-            clearInterval(rewind)
+          if (zoomProgressRef.current > 0) {
+            requestAnimationFrame(rewind)
+          } else {
             setPhase('notes')
           }
-        }, 16)
+        }
+        requestAnimationFrame(rewind)
       }
     }
 
@@ -625,7 +636,7 @@ export default function Home() {
         </div>
         <div style={{flex:1, paddingTop:'0', marginTop:'-180px', position:'relative', opacity: phase === 'zooming' ? Math.max(0, 1 - zoomProgress * 1.5) : phase === 'projects' ? 0 : 1}}>
           <div id="notes-container" ref={notesRef} style={{}}>
-            <SequentialTyping ref={endCursorRef} keepCursorVisible={phase === 'zooming' || phase === 'rewinding'} hideCursor={phase === 'zooming' || phase === 'rewinding'} onComplete={() => {
+            <SequentialTyping ref={endCursorRef} keepCursorVisible={phase === 'zooming' || phase === 'rewinding'} hideCursor={phase === 'zooming' || phase === 'rewinding' || phase === 'projects'} onComplete={() => {
               notesCompleteRef.current = true
               setTimeout(() => {
                 if (endCursorRef.current) {
@@ -647,12 +658,13 @@ export default function Home() {
           position: 'fixed',
           left: cursorPos.x - (cursorPos.x - window.innerWidth * 0.2) * zoomProgress,
           top: cursorPos.y - (cursorPos.y - window.innerHeight * 0.5) * zoomProgress,
-          width: '1px',
-          height: '13px',
+          width: zoomProgress >= 1 ? '3px' : '1px',
+          height: zoomProgress >= 1 ? '48px' : '13px',
           background: '#1A1A1A',
           display: 'inline-block',
           animation: 'blink 1s step-end infinite',
           transform: 'none',
+          transition: 'width 0.4s ease, height 0.4s ease',
           zIndex: 9999
         }}/>
       )}
@@ -682,14 +694,16 @@ export default function Home() {
             alignItems: 'center'
           }}>
             {projectsText}
-            <span style={{
-              display: 'inline-block',
-              width: '2px',
-              height: '56px',
-              background: '#1A1A1A',
-              marginLeft: '4px',
-              animation: 'blink 1s step-end infinite'
-            }}/>
+            {phase === 'projects' && (
+              <span style={{
+                display: 'inline-block',
+                width: '2px',
+                height: '56px',
+                background: '#1A1A1A',
+                marginLeft: '4px',
+                animation: 'blink 1s step-end infinite'
+              }}/>
+            )}
           </div>
         </div>
       )}
