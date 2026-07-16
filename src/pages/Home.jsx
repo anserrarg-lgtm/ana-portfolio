@@ -356,6 +356,7 @@ export default function Home() {
   const [zoomProgress, setZoomProgress] = React.useState(0)
   const [projectsText, setProjectsText] = React.useState('')
   const [showCards, setShowCards] = React.useState(false)
+  const [cursorPos, setCursorPos] = React.useState(null)
   const notesCompleteRef = React.useRef(false)
   const zoomProgressRef = React.useRef(0)
   const proyectosRef = React.useRef(null)
@@ -558,16 +559,16 @@ export default function Home() {
         alignItems:'flex-start',
         justifyContent:'space-between',
         gap:'80px',
-        transform: phase === 'zooming' || phase === 'projects'
-          ? `scale(${1 + zoomProgress * 8})`
+        transform: phase === 'zooming' || phase === 'projects' || phase === 'rewinding'
+          ? `scale(${1 + zoomProgress * 15})`
           : 'scale(1)',
-        opacity: phase === 'zooming'
+        opacity: phase === 'zooming' || phase === 'rewinding'
           ? Math.max(0, 1 - zoomProgress * 1.5)
           : phase === 'projects' ? 0 : 1,
         transition: 'none',
-        transformOrigin: endCursorRef.current
-          ? `${endCursorRef.current.getBoundingClientRect().left}px ${endCursorRef.current.getBoundingClientRect().top}px`
-          : 'right center'
+        transformOrigin: cursorPos
+          ? `${cursorPos.x * 0.3}px ${cursorPos.y}px`
+          : 'center center'
       }}>
         <div style={{flex:1, marginTop:'20px'}}>
           <div style={{position:'relative', display:'inline-block'}}>
@@ -622,7 +623,16 @@ export default function Home() {
         </div>
         <div style={{flex:1, paddingTop:'0', marginTop:'-180px', position:'relative'}}>
           <div id="notes-container" ref={notesRef} style={{}}>
-            <SequentialTyping ref={endCursorRef} onComplete={() => { notesCompleteRef.current = true }} />
+            <SequentialTyping ref={endCursorRef} onComplete={() => {
+              notesCompleteRef.current = true
+              if (endCursorRef.current) {
+                const rect = endCursorRef.current.getBoundingClientRect()
+                setCursorPos({
+                  x: rect.left * 0.4,
+                  y: rect.top
+                })
+              }
+            }} />
           </div>
           {notesDisintegrating && <DisintegrationEffect active={notesDisintegrating} />}
         </div>
