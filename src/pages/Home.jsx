@@ -363,6 +363,8 @@ export default function Home() {
   const [showTheaCard, setShowTheaCard] = React.useState(false)
   const [showBeaconInfo, setShowBeaconInfo] = React.useState(false)
   const [showTheaInfo, setShowTheaInfo] = React.useState(false)
+  const [showBeaconName, setShowBeaconName] = React.useState(false)
+  const [showTheaName, setShowTheaName] = React.useState(false)
   const [cursorPos, setCursorPos] = React.useState(null)
   const notesCompleteRef = React.useRef(false)
   const zoomProgressRef = React.useRef(0)
@@ -463,6 +465,8 @@ export default function Home() {
           setTimeout(() => setShowCards(true), 500)
           setTimeout(() => setShowBeaconCard(true), 4000)
           setTimeout(() => setShowTheaCard(true), 4300)
+          setTimeout(() => setShowBeaconName(true), 4900)
+          setTimeout(() => setShowTheaName(true), 5200)
           setTimeout(() => setShowBeaconInfo(true), 1100)
           setTimeout(() => setShowTheaInfo(true), 1400)
         }
@@ -515,6 +519,8 @@ export default function Home() {
         setShowTheaCard(false)
         setShowBeaconInfo(false)
         setShowTheaInfo(false)
+        setShowBeaconName(false)
+        setShowTheaName(false)
 
         setProjectsText('> Projects/')
         setShowSubtitle(true)
@@ -738,9 +744,11 @@ export default function Home() {
           <div style={{display:'flex', gap:'40px', position:'absolute', top:'12px', left:'80px', right:'80px'}}>
             <div style={{flex:1, opacity: showBeaconCard ? 1 : 0, transform: showBeaconCard ? 'translateY(0)' : 'translateY(100vh)', transition:'opacity 0.8s ease, transform 0.8s ease'}}>
               <img src={cardBeacon} style={{width:'100%', height:'70vh', objectFit:'contain', display:'block', animation: showBeaconCard ? 'kenBurns 3s ease-out forwards' : 'none'}}/>
+              <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:700, fontSize:'48px', color:'#1A1A1A', marginTop:'12px', marginLeft:'20px', opacity: showBeaconName ? 1 : 0, transform: showBeaconName ? 'translateX(0)' : 'translateX(-100px)', transition:'opacity 0.6s ease, transform 0.6s ease'}}>Beacon</p>
             </div>
             <div style={{flex:1, opacity: showTheaCard ? 1 : 0, transform: showTheaCard ? 'translateY(0)' : 'translateY(100vh)', transition:'opacity 0.8s ease, transform 0.8s ease'}}>
               <img src={cardTheaveling} style={{width:'100%', height:'70vh', objectFit:'contain', display:'block', animation: showTheaCard ? 'kenBurns 3s ease-out forwards' : 'none'}}/>
+              <p style={{fontFamily:"'Sansita', sans-serif", fontWeight:700, fontSize:'48px', color:'#F31006', marginTop:'12px', marginLeft:'20px', opacity: showTheaName ? 1 : 0, transform: showTheaName ? 'translateX(0)' : 'translateX(100px)', transition:'opacity 0.6s ease, transform 0.6s ease'}}>Theaveling</p>
             </div>
           </div>
         </div>
