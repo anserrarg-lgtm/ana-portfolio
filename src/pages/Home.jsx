@@ -365,6 +365,8 @@ export default function Home() {
   const proyectosRef = React.useRef(null)
   const notesRef = React.useRef(null)
   const endCursorRef = React.useRef(null)
+  const projectsTypedRef = React.useRef(false)
+  const typingIntervalRef = React.useRef(null)
 
 
   React.useEffect(() => {
@@ -437,6 +439,10 @@ export default function Home() {
   }, [])
 
   const typeProjectsText = () => {
+    if (typingIntervalRef.current) {
+      clearTimeout(typingIntervalRef.current)
+      typingIntervalRef.current = null
+    }
     setTimeout(() => {
       let i = 0
       const text = '> Projects/'
@@ -446,10 +452,12 @@ export default function Home() {
           i++
         } else {
           clearInterval(interval)
+          typingIntervalRef.current = null
           setTimeout(() => setShowSubtitle(true), 300)
           setTimeout(() => setShowCards(true), 500)
         }
       }, 120)
+      typingIntervalRef.current = interval
     }, 1500)
   }
 
@@ -472,7 +480,10 @@ export default function Home() {
         setZoomProgress(next)
         if (next >= 1) {
           setPhase('projects')
-          typeProjectsText()
+          if (!projectsTypedRef.current) {
+            projectsTypedRef.current = true
+            typeProjectsText()
+          }
         } else if (next <= 0) {
           setPhase('notes')
         }
@@ -480,6 +491,8 @@ export default function Home() {
       }
 
       if (phase === 'projects' && e.deltaY < 0) {
+        if (typingIntervalRef.current) clearTimeout(typingIntervalRef.current)
+        projectsTypedRef.current = false
         setProjectsText('')
         setShowCards(false)
         setShowSubtitle(false)
