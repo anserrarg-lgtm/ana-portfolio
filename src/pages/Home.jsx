@@ -461,8 +461,8 @@ export default function Home() {
           typingIntervalRef.current = null
           setTimeout(() => setShowSubtitle(true), 300)
           setTimeout(() => setShowCards(true), 500)
-          setTimeout(() => setShowBeaconCard(true), 400)
-          setTimeout(() => setShowTheaCard(true), 700)
+          setTimeout(() => setShowBeaconCard(true), 4000)
+          setTimeout(() => setShowTheaCard(true), 4300)
           setTimeout(() => setShowBeaconInfo(true), 1100)
           setTimeout(() => setShowTheaInfo(true), 1400)
         }
@@ -497,6 +497,11 @@ export default function Home() {
         } else if (next <= 0) {
           setPhase('notes')
         }
+        return
+      }
+
+      if (phase === 'projects' && !showBeaconCard && e.deltaY > 0) {
+        e.preventDefault()
         return
       }
 
@@ -705,7 +710,7 @@ export default function Home() {
             </h3>
           </div>
 
-          <div style={{display:'flex', gap:'40px', flex:1, marginTop:'0'}}>
+          <div style={{display:'flex', gap:'40px', position:'absolute', top:'12px', left:'80px', right:'80px'}}>
             <div style={{flex:1, opacity: showBeaconCard ? 1 : 0, transform: showBeaconCard ? 'translateY(0)' : 'translateY(100vh)', transition:'opacity 0.8s ease, transform 0.8s ease'}}>
               <img src={cardBeacon} style={{width:'100%', height:'70vh', objectFit:'contain', display:'block'}}/>
             </div>
