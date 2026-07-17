@@ -737,10 +737,10 @@ export default function Home() {
 
           <div style={{display:'flex', gap:'40px', position:'absolute', top:'12px', left:'80px', right:'80px'}}>
             <div style={{flex:1, opacity: showBeaconCard ? 1 : 0, transform: showBeaconCard ? 'translateY(0)' : 'translateY(100vh)', transition:'opacity 0.8s ease, transform 0.8s ease'}}>
-              <img src={cardBeacon} style={{width:'100%', height:'70vh', objectFit:'contain', display:'block'}}/>
+              <img src={cardBeacon} style={{width:'100%', height:'70vh', objectFit:'contain', display:'block', animation: showBeaconCard ? 'kenBurns 3s ease-out forwards' : 'none'}}/>
             </div>
             <div style={{flex:1, opacity: showTheaCard ? 1 : 0, transform: showTheaCard ? 'translateY(0)' : 'translateY(100vh)', transition:'opacity 0.8s ease, transform 0.8s ease'}}>
-              <img src={cardTheaveling} style={{width:'100%', height:'70vh', objectFit:'contain', display:'block'}}/>
+              <img src={cardTheaveling} style={{width:'100%', height:'70vh', objectFit:'contain', display:'block', animation: showTheaCard ? 'kenBurns 3s ease-out forwards' : 'none'}}/>
             </div>
           </div>
         </div>
