@@ -373,7 +373,7 @@ export default function Home() {
   const endCursorRef = React.useRef(null)
   const projectsTypedRef = React.useRef(false)
   const typingIntervalRef = React.useRef(null)
-
+  const wheelLockRef = React.useRef(false)
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -506,18 +506,43 @@ export default function Home() {
       }
 
       if (phase === 'projects' && e.deltaY < 0) {
+        e.preventDefault()
+        if (wheelLockRef.current) return
+        wheelLockRef.current = true
         if (typingIntervalRef.current) clearTimeout(typingIntervalRef.current)
         projectsTypedRef.current = false
-        setProjectsText('')
-        setShowCards(false)
-        setShowSubtitle(false)
         setShowBeaconCard(false)
         setShowTheaCard(false)
         setShowBeaconInfo(false)
         setShowTheaInfo(false)
-        zoomProgressRef.current = 1
-        setZoomProgress(1)
-        setPhase('zooming')
+
+        setProjectsText('> Projects/')
+        setShowSubtitle(true)
+
+        setTimeout(() => {
+          setShowSubtitle(false)
+        }, 800)
+
+        setTimeout(() => {
+          setProjectsText('')
+        }, 1400)
+
+        setTimeout(() => {
+          zoomProgressRef.current = 1
+          setZoomProgress(1)
+          setPhase('zooming')
+          const rewind = () => {
+            zoomProgressRef.current = Math.max(0, zoomProgressRef.current - 0.02)
+            setZoomProgress(zoomProgressRef.current)
+            if (zoomProgressRef.current > 0) {
+              requestAnimationFrame(rewind)
+            } else {
+              setPhase('notes')
+              wheelLockRef.current = false
+            }
+          }
+          requestAnimationFrame(rewind)
+        }, 1800)
         return
       }
     }
