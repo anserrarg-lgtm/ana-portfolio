@@ -11,6 +11,8 @@ import telonDerecho from '../assets/telonderecho.png'
 import telonIzquierdo from '../assets/telonizquierdo.png'
 import beaconMockup from '../assets/mockup-beacon.png'
 import capturePipeline from '../assets/capture-pipeline.png'
+import cardBeacon from '../assets/card-beacon.png'
+import cardTheaveling from '../assets/card-theaveling.png'
 
 function TypingText({ text, speed = 50 }) {
   const [displayed, setDisplayed] = React.useState('')
@@ -357,6 +359,10 @@ export default function Home() {
   const [projectsText, setProjectsText] = React.useState('')
   const [showCards, setShowCards] = React.useState(false)
   const [showSubtitle, setShowSubtitle] = React.useState(false)
+  const [showBeaconCard, setShowBeaconCard] = React.useState(false)
+  const [showTheaCard, setShowTheaCard] = React.useState(false)
+  const [showBeaconInfo, setShowBeaconInfo] = React.useState(false)
+  const [showTheaInfo, setShowTheaInfo] = React.useState(false)
   const [cursorPos, setCursorPos] = React.useState(null)
   const notesCompleteRef = React.useRef(false)
   const zoomProgressRef = React.useRef(0)
@@ -455,6 +461,10 @@ export default function Home() {
           typingIntervalRef.current = null
           setTimeout(() => setShowSubtitle(true), 300)
           setTimeout(() => setShowCards(true), 500)
+          setTimeout(() => setShowBeaconCard(true), 400)
+          setTimeout(() => setShowTheaCard(true), 700)
+          setTimeout(() => setShowBeaconInfo(true), 1100)
+          setTimeout(() => setShowTheaInfo(true), 1400)
         }
       }, 120)
       typingIntervalRef.current = interval
@@ -496,6 +506,10 @@ export default function Home() {
         setProjectsText('')
         setShowCards(false)
         setShowSubtitle(false)
+        setShowBeaconCard(false)
+        setShowTheaCard(false)
+        setShowBeaconInfo(false)
+        setShowTheaInfo(false)
         zoomProgressRef.current = 1
         setZoomProgress(1)
         setPhase('zooming')
@@ -663,53 +677,42 @@ export default function Home() {
 
       {(phase === 'projects' || (phase === 'zooming' && zoomProgress > 0.8)) && (
         <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100vw',
-          height: '100vh',
-          background: '#F5F2EE',
-          zIndex: 500,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-          justifyContent: 'flex-start',
-          paddingLeft: '80px',
-          paddingTop: '120px',
-          opacity: phase === 'projects' ? 1 : (zoomProgress - 0.8) / 0.2
+          position:'fixed',
+          top:0,
+          left:0,
+          width:'100vw',
+          height:'100vh',
+          background:'#F5F2EE',
+          zIndex:500,
+          display:'flex',
+          flexDirection:'column',
+          justifyContent:'flex-start',
+          alignItems:'stretch',
+          padding:'0 80px'
         }}>
           <div style={{
-            fontFamily: "'Plus Jakarta Sans', sans-serif",
-            fontWeight: 700,
-            fontSize: '48px',
-            color: '#1A1A1A',
-            display: 'flex',
-            alignItems: 'center'
+            transform: showBeaconCard ? 'translateY(-100px)' : 'translateY(0)',
+            opacity: showBeaconCard ? 0 : 1,
+            transition: 'transform 0.8s ease, opacity 0.8s ease',
+            paddingTop: '40px'
           }}>
-            {projectsText}
-            {phase === 'projects' && (
-              <span style={{
-                display: 'inline-block',
-                width: '2px',
-                height: '56px',
-                background: '#1A1A1A',
-                marginLeft: '4px',
-                animation: 'blink 1s step-end infinite'
-              }}/>
-            )}
+            <div style={{display:'flex', alignItems:'center', fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:700, fontSize:'48px', color:'#1A1A1A'}}>
+              {projectsText}
+              <span style={{display:'inline-block', width: zoomProgress >= 1 ? '3px' : '1px', height: zoomProgress >= 1 ? '48px' : '13px', background:'#1A1A1A', marginLeft:'4px', animation:'blink 1s step-end infinite', transition:'width 0.4s ease, height 0.4s ease'}}/>
+            </div>
+            <h3 style={{fontFamily:"'Ranade', sans-serif", fontWeight:200, fontSize:'20px', color:'#1A1A1A', marginTop:'16px', opacity: showSubtitle ? 1 : 0, transform: showSubtitle ? 'translateX(0)' : 'translateX(-30px)', transition:'opacity 0.8s ease, transform 0.8s ease'}}>
+              Donde las notas terminan convirtiéndose en producto.
+            </h3>
           </div>
-          <h3 style={{
-            fontFamily:"'Ranade', sans-serif",
-            fontWeight:200,
-            fontSize:'20px',
-            color:'#1A1A1A',
-            marginTop:'16px',
-            opacity: showSubtitle ? 1 : 0,
-            transform: showSubtitle ? 'translateX(0)' : 'translateX(-30px)',
-            transition: 'opacity 0.8s ease, transform 0.8s ease'
-          }}>
-            Donde las notas terminan convirtiéndose en producto.
-          </h3>
+
+          <div style={{display:'flex', gap:'40px', flex:1, marginTop:'0'}}>
+            <div style={{flex:1, opacity: showBeaconCard ? 1 : 0, transform: showBeaconCard ? 'translateY(0)' : 'translateY(100vh)', transition:'opacity 0.8s ease, transform 0.8s ease'}}>
+              <img src={cardBeacon} style={{width:'100%', height:'70vh', objectFit:'contain', display:'block'}}/>
+            </div>
+            <div style={{flex:1, opacity: showTheaCard ? 1 : 0, transform: showTheaCard ? 'translateY(0)' : 'translateY(100vh)', transition:'opacity 0.8s ease, transform 0.8s ease'}}>
+              <img src={cardTheaveling} style={{width:'100%', height:'70vh', objectFit:'contain', display:'block'}}/>
+            </div>
+          </div>
         </div>
       )}
 
