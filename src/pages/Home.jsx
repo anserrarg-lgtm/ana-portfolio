@@ -752,24 +752,37 @@ export default function Home() {
               <img src={cardBeacon} style={{width:'100%', height:'70vh', objectFit:'contain', display:'block', animation: showBeaconCard ? 'kenBurns 3s ease-out forwards' : 'none'}}/>
               <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:700, fontSize:'48px', color:'#1A1A1A', marginTop:'12px', marginLeft:'20px', opacity: showBeaconName ? 1 : 0, transform: showBeaconName ? 'translateX(0)' : 'translateX(-100px)', transition:'opacity 0.6s ease, transform 0.6s ease'}}>Beacon</p>
               {showBeaconT && (
-                <div style={{
-                  width:'100%',
-                  height:'1px',
-                  background:'#1A1A1A',
-                  marginTop:'16px',
-                  position:'relative',
-                  opacity: showBeaconT ? 1 : 0,
-                  transition:'opacity 0.6s ease'
-                }}>
+                <div style={{width:'100%', position:'relative', marginTop:'16px'}}>
                   <div style={{
-                    position:'absolute',
-                    left:'50%',
-                    top:'2px',
-                    width:'1.5px',
-                    height:'40px',
+                    width:'100%',
+                    height:'1px',
                     background:'#1A1A1A',
-                    transform:'translateX(-50%)'
-                  }}/>
+                    position:'relative'
+                  }}>
+                    <div style={{
+                      position:'absolute',
+                      left:'50%',
+                      top:'0',
+                      width:'1.5px',
+                      height:'40px',
+                      background:'#1A1A1A',
+                      transform:'translateX(-50%) translateY(-100%)'
+                    }}/>
+                  </div>
+                  <div className="ver-producto-btn" style={{
+                    position:'absolute',
+                    right:'0',
+                    top:'-36px',
+                    display:'inline-flex',
+                    alignItems:'center',
+                    gap:'6px',
+                    cursor:'pointer'
+                  }}>
+                    <span className="texto" style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontSize:'13px', fontWeight:400, color:'#1A1A1A'}}>Ver caso de estudio</span>
+                    <div className="circulo" style={{width:'24px', height:'24px', border:'1px solid #1A1A1A', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center'}}>
+                      <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2 7H12M12 7L8 3M12 7L8 11" stroke="#1A1A1A" strokeWidth="1.5" strokeLinecap="round"/></svg>
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
@@ -777,24 +790,37 @@ export default function Home() {
               <img src={cardTheaveling} style={{width:'100%', height:'70vh', objectFit:'contain', display:'block', animation: showTheaCard ? 'kenBurns 3s ease-out forwards' : 'none'}}/>
               <p style={{fontFamily:"'Sansita', sans-serif", fontWeight:700, fontSize:'48px', color:'#F31006', marginTop:'12px', marginLeft:'20px', opacity: showTheaName ? 1 : 0, transform: showTheaName ? 'translateX(0)' : 'translateX(100px)', transition:'opacity 0.6s ease, transform 0.6s ease'}}>Theaveling</p>
               {showTheaT && (
-                <div style={{
-                  width:'100%',
-                  height:'1px',
-                  background:'#1A1A1A',
-                  marginTop:'16px',
-                  position:'relative',
-                  opacity: showTheaT ? 1 : 0,
-                  transition:'opacity 0.6s ease'
-                }}>
+                <div style={{width:'100%', position:'relative', marginTop:'16px'}}>
                   <div style={{
-                    position:'absolute',
-                    left:'50%',
-                    top:'2px',
-                    width:'1.5px',
-                    height:'40px',
+                    width:'100%',
+                    height:'1px',
                     background:'#1A1A1A',
-                    transform:'translateX(-50%)'
-                  }}/>
+                    position:'relative'
+                  }}>
+                    <div style={{
+                      position:'absolute',
+                      left:'50%',
+                      top:'0',
+                      width:'1.5px',
+                      height:'40px',
+                      background:'#1A1A1A',
+                      transform:'translateX(-50%) translateY(-100%)'
+                    }}/>
+                  </div>
+                  <div className="ver-producto-btn" style={{
+                    position:'absolute',
+                    right:'0',
+                    top:'-36px',
+                    display:'inline-flex',
+                    alignItems:'center',
+                    gap:'6px',
+                    cursor:'pointer'
+                  }}>
+                    <span className="texto" style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontSize:'13px', fontWeight:400, color:'#1A1A1A'}}>Ver caso de estudio</span>
+                    <div className="circulo" style={{width:'24px', height:'24px', border:'1px solid #1A1A1A', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center'}}>
+                      <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2 7H12M12 7L8 3M12 7L8 11" stroke="#1A1A1A" strokeWidth="1.5" strokeLinecap="round"/></svg>
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
