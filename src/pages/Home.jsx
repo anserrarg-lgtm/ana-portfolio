@@ -365,6 +365,8 @@ export default function Home() {
   const [showTheaInfo, setShowTheaInfo] = React.useState(false)
   const [showBeaconName, setShowBeaconName] = React.useState(false)
   const [showTheaName, setShowTheaName] = React.useState(false)
+  const [showBeaconT, setShowBeaconT] = React.useState(false)
+  const [showTheaT, setShowTheaT] = React.useState(false)
   const [cursorPos, setCursorPos] = React.useState(null)
   const notesCompleteRef = React.useRef(false)
   const zoomProgressRef = React.useRef(0)
@@ -467,6 +469,8 @@ export default function Home() {
           setTimeout(() => setShowTheaCard(true), 4300)
           setTimeout(() => setShowBeaconName(true), 4900)
           setTimeout(() => setShowTheaName(true), 5200)
+          setTimeout(() => setShowBeaconT(true), 5600)
+          setTimeout(() => setShowTheaT(true), 5900)
           setTimeout(() => setShowBeaconInfo(true), 1100)
           setTimeout(() => setShowTheaInfo(true), 1400)
         }
@@ -521,6 +525,8 @@ export default function Home() {
         setShowTheaInfo(false)
         setShowBeaconName(false)
         setShowTheaName(false)
+        setShowBeaconT(false)
+        setShowTheaT(false)
 
         setProjectsText('> Projects/')
         setShowSubtitle(true)
@@ -745,10 +751,52 @@ export default function Home() {
             <div style={{flex:1, opacity: showBeaconCard ? 1 : 0, transform: showBeaconCard ? 'translateY(0)' : 'translateY(100vh)', transition:'opacity 0.8s ease, transform 0.8s ease'}}>
               <img src={cardBeacon} style={{width:'100%', height:'70vh', objectFit:'contain', display:'block', animation: showBeaconCard ? 'kenBurns 3s ease-out forwards' : 'none'}}/>
               <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:700, fontSize:'48px', color:'#1A1A1A', marginTop:'12px', marginLeft:'20px', opacity: showBeaconName ? 1 : 0, transform: showBeaconName ? 'translateX(0)' : 'translateX(-100px)', transition:'opacity 0.6s ease, transform 0.6s ease'}}>Beacon</p>
+              {showBeaconT && (
+                <div style={{
+                  width:'100%',
+                  height:'1px',
+                  background:'#1A1A1A',
+                  marginTop:'16px',
+                  position:'relative',
+                  opacity: showBeaconT ? 1 : 0,
+                  transition:'opacity 0.6s ease'
+                }}>
+                  <div style={{
+                    position:'absolute',
+                    left:'50%',
+                    top:'2px',
+                    width:'1.5px',
+                    height:'40px',
+                    background:'#1A1A1A',
+                    transform:'translateX(-50%)'
+                  }}/>
+                </div>
+              )}
             </div>
             <div style={{flex:1, opacity: showTheaCard ? 1 : 0, transform: showTheaCard ? 'translateY(0)' : 'translateY(100vh)', transition:'opacity 0.8s ease, transform 0.8s ease'}}>
               <img src={cardTheaveling} style={{width:'100%', height:'70vh', objectFit:'contain', display:'block', animation: showTheaCard ? 'kenBurns 3s ease-out forwards' : 'none'}}/>
               <p style={{fontFamily:"'Sansita', sans-serif", fontWeight:700, fontSize:'48px', color:'#F31006', marginTop:'12px', marginLeft:'20px', opacity: showTheaName ? 1 : 0, transform: showTheaName ? 'translateX(0)' : 'translateX(100px)', transition:'opacity 0.6s ease, transform 0.6s ease'}}>Theaveling</p>
+              {showTheaT && (
+                <div style={{
+                  width:'100%',
+                  height:'1px',
+                  background:'#1A1A1A',
+                  marginTop:'16px',
+                  position:'relative',
+                  opacity: showTheaT ? 1 : 0,
+                  transition:'opacity 0.6s ease'
+                }}>
+                  <div style={{
+                    position:'absolute',
+                    left:'50%',
+                    top:'2px',
+                    width:'1.5px',
+                    height:'40px',
+                    background:'#1A1A1A',
+                    transform:'translateX(-50%)'
+                  }}/>
+                </div>
+              )}
             </div>
           </div>
         </div>
