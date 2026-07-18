@@ -47,47 +47,38 @@ body {
 .ver-producto-btn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
   cursor: pointer;
-  width: fit-content;
-  position: relative;
+}
+
+.ver-producto-btn .texto {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: #1A1A1A;
+  border: 1px solid #1A1A1A;
+  padding: 10px 12px;
+  border-right: none;
+  transition: border-right 0.15s ease;
 }
 
 .ver-producto-btn .circulo {
-  width: 28px;
-  height: 28px;
-  border: 1.5px solid #1A1A1A;
+  width: 36px;
+  height: 36px;
+  border: 1px solid #1A1A1A;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: border-radius 0.15s ease, border-left 0.15s ease, width 0.15s ease;
   flex-shrink: 0;
-  transition: all 0.2s ease;
 }
 
-.ver-producto-btn .texto {
-  font-family: 'Instrument Sans', sans-serif;
-  font-size: 13px;
-  color: #1A1A1A;
-  transition: all 0.2s ease;
-}
-
-.ver-producto-btn:hover {
-  width: fit-content;
-}
-
-.ver-producto-btn:hover::after {
-  content: '';
-  position: absolute;
-  inset: -3px -6px;
-  border: 1.5px solid #1A1A1A;
-  pointer-events: none;
+.ver-producto-btn:hover .texto {
+  border-right: 1px solid #1A1A1A;
 }
 
 .ver-producto-btn:hover .circulo {
-  border: none;
   border-radius: 0;
-  background: none;
-  padding: 0;
-  margin: 0;
+  border-left: none;
+  margin-left: -1px;
 }
