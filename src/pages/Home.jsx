@@ -467,6 +467,18 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
               Sin ops en la oscuridad
             </p>
           )}
+          {projectName === 'Theaveling' && (
+            <p style={{
+              fontFamily: "'Roboto', sans-serif",
+              fontWeight: 300,
+              fontSize: '48px',
+              color: '#F5F2EE',
+              marginTop: '8px',
+              paddingLeft: '8px'
+            }}>
+              Arte local, donde sea que estés.
+            </p>
+          )}
         </div>
       </div>
       <div style={{
