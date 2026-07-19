@@ -817,7 +817,7 @@ export default function Home() {
           </div>
 
           <div style={{display:'flex', gap:'40px', position:'absolute', top:'12px', left:'80px', right:'80px'}}>
-            <div style={{flex:1, opacity: showBeaconCard ? 1 : 0, transform: showBeaconCard ? 'translateY(0)' : 'translateY(100vh)', transition:'opacity 0.8s ease, transform 0.8s ease', position:'relative'}} onMouseEnter={() => {
+            <div style={{flex:1, opacity: showBeaconCard ? 1 : 0, transform: showBeaconCard ? 'translateY(0)' : 'translateY(100vh)', transition:'opacity 0.8s ease, transform 0.8s ease', position:'relative', alignSelf:'stretch', height:'70vh'}} onMouseEnter={() => {
               setBeaconHovered(true)
               setBeaconTyping('')
               let i = 0
@@ -835,15 +835,19 @@ export default function Home() {
               clearInterval(beaconIntervalRef.current)
               setBeaconTyping('')
             }}>
-              <img src={cardBeacon} style={{width:'100%', height:'70vh', objectFit:'contain', display:'block', animation: showBeaconCard ? 'kenBurns 3s ease-out forwards' : 'none', filter: beaconHovered ? 'brightness(0.15)' : 'none', transition: 'filter 0.3s ease', cursor: 'pointer'}}/>
+              <img src={cardBeacon} style={{width:'100%', height:'70vh', display:'block', objectFit:'contain', animation: showBeaconCard ? 'kenBurns 3s ease-out forwards' : 'none', filter: beaconHovered ? 'brightness(0.15)' : 'none', transition: 'filter 0.3s ease', cursor: 'pointer'}}/>
               {beaconHovered && (
                 <div style={{
                   position:'absolute',
-                  top:0, left:0, right:0, bottom:0,
+                  top:'0',
+                  left:'0',
+                  width:'100%',
+                  height:'100%',
                   display:'flex',
                   alignItems:'center',
                   justifyContent:'center',
-                  padding:'40px 32px'
+                  flexDirection:'column',
+                  padding:'0 32px'
                 }}>
                   <div>
                     <p style={{
@@ -852,7 +856,7 @@ export default function Home() {
                       fontWeight:150,
                       color:'rgba(255,255,255,0.5)',
                       marginBottom:'8px'
-                    }}>// insight</p>
+                    }}>// insight:</p>
                     <p style={{
                       fontFamily:"'IBM Plex Mono', monospace",
                       fontSize:'14px',
@@ -928,8 +932,48 @@ export default function Home() {
                 </div>
               )}
             </div>
-            <div style={{flex:1, opacity: showTheaCard ? 1 : 0, transform: showTheaCard ? 'translateY(0)' : 'translateY(100vh)', transition:'opacity 0.8s ease, transform 0.8s ease', paddingLeft:'40px', position:'relative'}} onMouseEnter={() => setTheaHovered(true)} onMouseLeave={() => setTheaHovered(false)}>
-              <img src={cardTheaveling} style={{width:'100%', height:'70vh', objectFit:'contain', display:'block', animation: showTheaCard ? 'kenBurns 3s ease-out forwards' : 'none', filter: theaHovered ? 'brightness(0.15)' : 'none', transition: 'filter 0.3s ease', cursor: 'pointer'}}/>
+            <div style={{flex:1, opacity: showTheaCard ? 1 : 0, transform: showTheaCard ? 'translateY(0)' : 'translateY(100vh)', transition:'opacity 0.8s ease, transform 0.8s ease', paddingLeft:'40px', position:'relative', height:'70vh'}} onMouseEnter={() => {
+              setTheaHovered(true)
+              setTheaTyping('')
+              let i = 0
+              const text = 'Un turista conoce una ciudad\na través de algoritmos.\nUn local,\na través de experiencias.'
+              theaIntervalRef.current = setInterval(() => {
+                if (i < text.length) {
+                  setTheaTyping(text.slice(0, i + 1))
+                  i++
+                } else {
+                  clearInterval(theaIntervalRef.current)
+                }
+              }, 50)
+            }} onMouseLeave={() => {
+              setTheaHovered(false)
+              clearInterval(theaIntervalRef.current)
+              setTheaTyping('')
+            }}>
+              <img src={cardTheaveling} style={{width:'100%', height:'70vh', objectFit:'cover', display:'block', animation: showTheaCard ? 'kenBurns 3s ease-out forwards' : 'none', filter: theaHovered ? 'brightness(0.15)' : 'none', transition: 'filter 0.3s ease', cursor: 'pointer'}}/>
+              {theaHovered && (
+                <div style={{
+                  position:'absolute',
+                  top:'0',
+                  left:'0',
+                  width:'100%',
+                  height:'100%',
+                  display:'flex',
+                  alignItems:'center',
+                  justifyContent:'center',
+                  flexDirection:'column',
+                  padding:'0 32px'
+                }}>
+                  <div>
+                    <p style={{fontFamily:"'IBM Plex Mono', monospace", fontSize:'14px', fontWeight:150, color:'rgba(255,255,255,0.5)', marginBottom:'8px'}}>// insight:</p>
+                    <p style={{fontFamily:"'IBM Plex Mono', monospace", fontSize:'14px', fontWeight:150, color:'rgba(255,255,255,0.5)', textAlign:'center', lineHeight:1.8, maxWidth:'280px', whiteSpace:'pre-wrap'}}>
+                      {theaTyping}
+                      <span style={{display:'inline-block', width:'1px', height:'13px', background:'#fff', marginLeft:'2px', animation:'blink 1s step-end infinite'}}/>
+                    </p>
+                    <a href="#" style={{fontFamily:"'IBM Plex Mono', monospace", fontSize:'16px', fontWeight:300, color:'#FFFFFF', textDecoration:'underline', marginTop:'8px', display:'block', textAlign:'center'}}>theaveling.md</a>
+                  </div>
+                </div>
+              )}
               <p style={{fontFamily:"'Sansita', sans-serif", fontWeight:700, fontSize:'48px', color:'#F31006', marginTop:'12px', marginLeft:'20px', opacity: showTheaName ? 1 : 0, transform: showTheaName ? 'translateX(0)' : 'translateX(100px)', transition:'opacity 0.6s ease, transform 0.6s ease'}}>Theaveling</p>
               {showTheaT && (
                 <div style={{width:'100%', position:'relative', marginTop:'16px'}}>
