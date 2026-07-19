@@ -407,7 +407,7 @@ function VerProductoBtn({ texto = 'Ver producto' }) {
   )
 }
 
-function ProjectTransition({ color, onClose }) {
+function ProjectTransition({ color, onClose, projectName, projectColor }) {
   const [progress, setProgress] = React.useState(0)
 
   React.useEffect(() => {
@@ -434,7 +434,23 @@ function ProjectTransition({ color, onClose }) {
         background: color,
         zIndex: 9999,
         transition: 'none'
-      }}/>
+      }}>
+        <div style={{
+          position: 'absolute',
+          top: '40px',
+          left: '40px'
+        }}>
+          <p style={{
+            fontFamily: projectColor === '#121716' ? "'Satoshi', sans-serif" : "'Sansita', sans-serif",
+            fontWeight: 700,
+            fontSize: '80px',
+            color: projectColor === '#121716' ? '#F5F2EE' : '#F31006',
+            lineHeight: 1
+          }}>
+            {projectName}
+          </p>
+        </div>
+      </div>
       <div style={{
         position: 'fixed',
         top: 0,
@@ -1140,6 +1156,8 @@ export default function Home() {
       {projectTransition && (
         <ProjectTransition
           color={projectTransition === 'beacon' ? '#121716' : '#112C2C'}
+          projectName={projectTransition === 'beacon' ? 'Beacon' : 'Theaveling'}
+          projectColor={projectTransition === 'beacon' ? '#121716' : '#112C2C'}
           onClose={() => {
             setProjectTransition(null)
             setProjectsText('> Projects/')
