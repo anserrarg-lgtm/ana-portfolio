@@ -409,6 +409,7 @@ function VerProductoBtn({ texto = 'Ver producto' }) {
 
 function ProjectTransition({ color, onClose, projectName, projectColor }) {
   const [progress, setProgress] = React.useState(0)
+  const [showRightContent, setShowRightContent] = React.useState(false)
 
   React.useEffect(() => {
     let start = null
@@ -418,6 +419,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
       const elapsed = timestamp - start
       const p = Math.min(1, elapsed / duration)
       setProgress(p)
+      if (p >= 1) setShowRightContent(true)
       if (p < 1) requestAnimationFrame(animate)
     }
     requestAnimationFrame(animate)
@@ -437,13 +439,14 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
       }}>
         <div style={{
           position: 'absolute',
-          top: '40px',
-          left: '40px'
+          top: '0',
+          left: '8px',
+          padding: '0'
         }}>
           <p style={{
             fontFamily: projectColor === '#121716' ? "'Satoshi', sans-serif" : "'Sansita', sans-serif",
             fontWeight: 700,
-            fontSize: '80px',
+            fontSize: '150px',
             color: projectColor === '#121716' ? '#F5F2EE' : '#F31006',
             lineHeight: 1
           }}>
@@ -460,7 +463,53 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
         background: '#F5F2EE',
         zIndex: 9999,
         transition: 'none'
-      }}/>
+      }}>
+        <div style={{overflow:'hidden'}}>
+          <p style={{
+            position: 'absolute',
+            top: '0',
+            left: '20px',
+            fontFamily: "'Plus Jakarta Sans', sans-serif",
+            fontWeight: 600,
+            fontSize: '90px',
+            color: '#1A1A1A',
+            lineHeight: 1,
+            transform: showRightContent ? 'translateY(0)' : 'translateY(-100%)',
+            transition: 'transform 0.7s cubic-bezier(0.4, 0, 0.2, 1)'
+          }}>
+            {projectName}
+          </p>
+        </div>
+        <div style={{
+          position: 'absolute',
+          top: '120px',
+          left: '20px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '0',
+          marginTop: '8px'
+        }}>
+          {(projectName === 'Beacon' ?
+            ['Channel Sales', 'B2B', 'Pipeline', 'Partners', 'Visibilidad'] :
+            ['Arte', 'Teatro', 'Viaje', 'Cultura', 'Conexión humana']
+          ).map((tag, i) => (
+            <div key={i} style={{overflow:'hidden'}}>
+              <p style={{
+                fontFamily: "'Plus Jakarta Sans', sans-serif",
+                fontSize: '16px',
+                fontWeight: 700,
+                color: '#1A1A1A',
+                lineHeight: 1.2,
+                overflow: 'hidden',
+                transform: showRightContent ? 'translateY(0)' : 'translateY(-100%)',
+                transition: `transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) ${i * 60}ms`
+              }}>
+                {tag}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
       {progress >= 1 && (
         <div
           onClick={onClose}
