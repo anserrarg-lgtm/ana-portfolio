@@ -410,6 +410,7 @@ function VerProductoBtn({ texto = 'Ver producto' }) {
 function ProjectTransition({ color, onClose, projectName, projectColor }) {
   const [progress, setProgress] = React.useState(0)
   const [showRightContent, setShowRightContent] = React.useState(false)
+  const [mdText, setMdText] = React.useState('')
 
   React.useEffect(() => {
     let start = null
@@ -419,7 +420,18 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
       const elapsed = timestamp - start
       const p = Math.min(1, elapsed / duration)
       setProgress(p)
-      if (p >= 1) setShowRightContent(true)
+      if (p >= 1) {
+        setShowRightContent(true)
+        let i = 0
+        const mdInterval = setInterval(() => {
+          if (i < 3) {
+            setMdText('.md'.slice(0, i + 1))
+            i++
+          } else {
+            clearInterval(mdInterval)
+          }
+        }, 150)
+      }
       if (p < 1) requestAnimationFrame(animate)
     }
     requestAnimationFrame(animate)
@@ -507,6 +519,19 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
             {projectName}
           </p>
         </div>
+        <span style={{
+          fontFamily:"'IBM Plex Mono', monospace",
+          fontWeight:300,
+          fontSize:'48px',
+          color:'#1A1A1A',
+          opacity: showRightContent ? 1 : 0,
+          transition:'opacity 0.3s ease 0.7s'
+        }}>
+          {mdText}
+          {mdText.length < 3 && showRightContent && (
+            <span style={{display:'inline-block', width:'2px', height:'40px', background:'#1A1A1A', marginLeft:'2px', animation:'blink 1s step-end infinite', verticalAlign:'middle'}}/>
+          )}
+        </span>
         <div style={{
           position: 'absolute',
           top: '120px',
