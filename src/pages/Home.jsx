@@ -431,6 +431,10 @@ export default function Home() {
   const [cursorPos, setCursorPos] = React.useState(null)
   const [beaconHovered, setBeaconHovered] = React.useState(false)
   const [theaHovered, setTheaHovered] = React.useState(false)
+  const [beaconTyping, setBeaconTyping] = React.useState('')
+  const [theaTyping, setTheaTyping] = React.useState('')
+  const beaconIntervalRef = React.useRef(null)
+  const theaIntervalRef = React.useRef(null)
   const notesCompleteRef = React.useRef(false)
   const zoomProgressRef = React.useRef(0)
   const rafRef = React.useRef(null)
@@ -813,8 +817,67 @@ export default function Home() {
           </div>
 
           <div style={{display:'flex', gap:'40px', position:'absolute', top:'12px', left:'80px', right:'80px'}}>
-            <div style={{flex:1, opacity: showBeaconCard ? 1 : 0, transform: showBeaconCard ? 'translateY(0)' : 'translateY(100vh)', transition:'opacity 0.8s ease, transform 0.8s ease', position:'relative'}} onMouseEnter={() => setBeaconHovered(true)} onMouseLeave={() => setBeaconHovered(false)}>
+            <div style={{flex:1, opacity: showBeaconCard ? 1 : 0, transform: showBeaconCard ? 'translateY(0)' : 'translateY(100vh)', transition:'opacity 0.8s ease, transform 0.8s ease', position:'relative'}} onMouseEnter={() => {
+              setBeaconHovered(true)
+              setBeaconTyping('')
+              let i = 0
+              const text = 'Una venta no siempre se pierde. A veces, simplemente deja de ser visible.'
+              beaconIntervalRef.current = setInterval(() => {
+                if (i < text.length) {
+                  setBeaconTyping(text.slice(0, i + 1))
+                  i++
+                } else {
+                  clearInterval(beaconIntervalRef.current)
+                }
+              }, 50)
+            }} onMouseLeave={() => {
+              setBeaconHovered(false)
+              clearInterval(beaconIntervalRef.current)
+              setBeaconTyping('')
+            }}>
               <img src={cardBeacon} style={{width:'100%', height:'70vh', objectFit:'contain', display:'block', animation: showBeaconCard ? 'kenBurns 3s ease-out forwards' : 'none', filter: beaconHovered ? 'brightness(0.15)' : 'none', transition: 'filter 0.3s ease', cursor: 'pointer'}}/>
+              {beaconHovered && (
+                <div style={{
+                  position:'absolute',
+                  top:0, left:0, right:0, bottom:0,
+                  display:'flex',
+                  alignItems:'center',
+                  justifyContent:'center',
+                  padding:'40px 32px'
+                }}>
+                  <div>
+                    <p style={{
+                      fontFamily:"'IBM Plex Mono', monospace",
+                      fontSize:'14px',
+                      fontWeight:150,
+                      color:'rgba(255,255,255,0.5)',
+                      marginBottom:'8px'
+                    }}>// insight</p>
+                    <p style={{
+                      fontFamily:"'IBM Plex Mono', monospace",
+                      fontSize:'14px',
+                      fontWeight:150,
+                      color:'rgba(255,255,255,0.5)',
+                      textAlign:'center',
+                      lineHeight:1.8,
+                      maxWidth:'280px'
+                    }}>
+                      {beaconTyping}
+                      <span style={{display:'inline-block', width:'1px', height:'13px', background:'#fff', marginLeft:'2px', animation:'blink 1s step-end infinite'}}/>
+                    </p>
+                    <a href="#" style={{
+                      fontFamily:"'IBM Plex Mono', monospace",
+                      fontSize:'16px',
+                      fontWeight:300,
+                      color:'#FFFFFF',
+                      textDecoration:'underline',
+                      marginTop:'8px',
+                      display:'block',
+                      textAlign:'center'
+                    }}>beacon.md</a>
+                  </div>
+                </div>
+              )}
               <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:700, fontSize:'48px', color:'#1A1A1A', marginTop:'12px', marginLeft:'20px', opacity: showBeaconName ? 1 : 0, transform: showBeaconName ? 'translateX(0)' : 'translateX(-100px)', transition:'opacity 0.6s ease, transform 0.6s ease'}}>Beacon</p>
               {showBeaconT && (
                 <div style={{width:'100%', position:'relative', marginTop:'16px'}}>
