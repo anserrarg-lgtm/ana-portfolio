@@ -536,6 +536,19 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
             </div>
           ))}
         </div>
+        {projectName === 'Beacon' && showRightContent && (
+          <div style={{
+            position: 'absolute',
+            bottom: '40px',
+            left: '20px',
+            opacity: showRightContent ? 1 : 0,
+            transition: 'opacity 0.6s ease 0.5s'
+          }}>
+            <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontSize:'12px', fontWeight:300, color:'#888', marginBottom:'4px'}}>Completado</p>
+            <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontSize:'14px', fontWeight:600, color:'#1A1A1A', marginBottom:'2px'}}>Product Designer</p>
+            <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontSize:'13px', fontWeight:300, color:'#1A1A1A'}}>3 meses · 2026</p>
+          </div>
+        )}
         {showRightContent && (
           <div style={{
             position: 'absolute',
