@@ -834,21 +834,21 @@ export default function Home() {
                   </div>
                   <p style={{
                     fontFamily:"'Plus Jakarta Sans', sans-serif",
-                    fontSize:'15px',
+                    fontSize:'14px',
                     fontWeight:240,
                     color:'#1A1A1A',
                     marginTop:'16px',
                     lineHeight:2
                   }}>
-                    Investigación UX * Estrategia de Producto * Producto SaaS * Desarrollo con IA aplicada
+                    Investigación UX ✳ Estrategia de Producto ✳ Producto SaaS ✳ Desarrollo con IA aplicada
                   </p>
                   <p style={{
                     fontFamily:"'Plus Jakarta Sans', sans-serif",
                     fontSize:'20px',
-                    fontWeight:330,
+                    fontWeight:600,
                     color:'#1A1A1A',
                     lineHeight:1.6,
-                    marginTop:'24px'
+                    marginTop:'8px'
                   }}>
                     Beacon es una herramienta web que diseñé desde cero con IA para ayudar a equipos comerciales B2B a no perder de vista oportunidades de hasta USD 400.000 anuales. Ayuda a detectar oportunidades en riesgo antes de que afecten las ventas y las comisiones.
                   </p>
@@ -885,21 +885,21 @@ export default function Home() {
                   </div>
                   <p style={{
                     fontFamily:"'Plus Jakarta Sans', sans-serif",
-                    fontSize:'15px',
+                    fontSize:'14px',
                     fontWeight:240,
                     color:'#1A1A1A',
                     marginTop:'16px',
                     lineHeight:2
                   }}>
-                    Investigación UX * Diseño de Interfaz * Prototipado * Testing
+                    Investigación UX ✳ Diseño de Interfaz ✳ Prototipado ✳ Testing
                   </p>
                   <p style={{
                     fontFamily:"'Plus Jakarta Sans', sans-serif",
                     fontSize:'20px',
-                    fontWeight:330,
+                    fontWeight:600,
                     color:'#1A1A1A',
                     lineHeight:1.6,
-                    marginTop:'24px'
+                    marginTop:'8px'
                   }}>
                     Theaveling es una app móvil que diseñé para ayudar a viajeros amantes del arte a descubrir experiencias culturales con una perspectiva más local y humana, conectando con personas que asistirán al mismo evento y explorando una ciudad más allá de sus rutas turísticas. Encuentra experiencias artísticas relevantes en pocos minutos y descubre una ciudad desde una perspectiva más local.
                   </p>
