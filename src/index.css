@@ -82,3 +82,11 @@ body {
   border-left: none;
   margin-left: -1px;
 }
+
+.projects-overlay::-webkit-scrollbar {
+  display: none;
+}
+.projects-overlay {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

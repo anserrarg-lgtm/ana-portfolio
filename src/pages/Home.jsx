@@ -500,12 +500,8 @@ export default function Home() {
 
   React.useEffect(() => {
     document.body.style.overflow = 'hidden'
-    document.body.style.position = 'fixed'
-    document.body.style.width = '100%'
     return () => {
       document.body.style.overflow = ''
-      document.body.style.position = ''
-      document.body.style.width = ''
     }
   }, [])
 
@@ -542,10 +538,13 @@ export default function Home() {
 
   React.useEffect(() => {
     const handleWheel = (e) => {
-      e.preventDefault()
+      if (phase === 'projects' && showBeaconT) {
+        return
+      }
 
       if (phase === 'notes') {
         if (!notesCompleteRef.current) return
+        e.preventDefault()
         setPhase('zooming')
         zoomProgressRef.current = 0
         setZoomProgress(0)
@@ -553,6 +552,7 @@ export default function Home() {
       }
 
       if (phase === 'zooming') {
+        e.preventDefault()
         const delta = e.deltaY > 0 ? 0.05 : -0.05
         const next = Math.max(0, Math.min(1, zoomProgressRef.current + delta))
         zoomProgressRef.current = next
@@ -620,12 +620,12 @@ export default function Home() {
       }
     }
 
-    window.addEventListener('wheel', handleWheel, { passive: false })
+    window.addEventListener('wheel', handleWheel, { passive: true })
     return () => window.removeEventListener('wheel', handleWheel)
   }, [phase])
 
   return (
-    <div style={{background:'#F5F2EE', minHeight:'100vh', color:'#1A1A1A', fontFamily:'sans-serif', paddingTop:'200px'}}>
+    <div style={{background:'#F5F2EE', minHeight:'100vh', color:'#1A1A1A', fontFamily:'sans-serif', paddingTop:'200px', overflowY: phase === 'projects' ? 'auto' : 'hidden', height: phase === 'projects' ? 'auto' : '100vh'}}>
 
       {/* NAVBAR */}
       <div style={{
@@ -734,9 +734,9 @@ export default function Home() {
               </span> tenga{' '}<span style={{display:'inline-block', minWidth:'7ch', fontFamily:'inherit', fontSize:'inherit', fontWeight:'inherit'}}><SentidoAnimation /></span>
             </h1>
             <h3 style={{
-              fontFamily:"'Ranade', sans-serif",
-              fontWeight:100,
-              fontSize:'20px',
+              fontFamily:"'Plus Jakarta Sans', sans-serif",
+              fontWeight:200,
+              fontSize:'30px',
               color:'#1A1A1A',
               marginTop:'16px',
               marginBottom:'24px'
@@ -779,7 +779,7 @@ export default function Home() {
       )}
 
       {(phase === 'projects' || (phase === 'zooming' && zoomProgress > 0.8)) && (
-        <div style={{
+        <div className="projects-overlay" style={{
           position:'fixed',
           top:0,
           left:0,
@@ -791,7 +791,9 @@ export default function Home() {
           flexDirection:'column',
           justifyContent:'flex-start',
           alignItems:'stretch',
-          padding:'0 80px'
+          padding:'0 80px',
+          overflowY:'scroll',
+          touchAction:'pan-y'
         }}>
           <div style={{
             transform: showBeaconCard ? 'translateY(-100px)' : 'translateY(0)',
@@ -803,7 +805,7 @@ export default function Home() {
               {projectsText}
               <span style={{display:'inline-block', width: zoomProgress >= 1 ? '3px' : '1px', height: zoomProgress >= 1 ? '48px' : '13px', background:'#1A1A1A', marginLeft:'4px', animation:'blink 1s step-end infinite', transition:'width 0.4s ease, height 0.4s ease'}}/>
             </div>
-            <h3 style={{fontFamily:"'Ranade', sans-serif", fontWeight:100, fontSize:'20px', color:'#1A1A1A', marginTop:'16px', opacity: showSubtitle ? 1 : 0, transform: showSubtitle ? 'translateX(0)' : 'translateX(-30px)', transition:'opacity 0.8s ease, transform 0.8s ease'}}>
+            <h3 style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:200, fontSize:'30px', color:'#1A1A1A', marginTop:'16px', opacity: showSubtitle ? 1 : 0, transform: showSubtitle ? 'translateX(0)' : 'translateX(-30px)', transition:'opacity 0.8s ease, transform 0.8s ease'}}>
               Donde las notas terminan convirtiéndose en producto.
             </h3>
           </div>
@@ -831,14 +833,24 @@ export default function Home() {
                     }}/>
                   </div>
                   <p style={{
-                    fontFamily:"'Ranade', sans-serif",
-                    fontSize:'13px',
-                    fontWeight:300,
+                    fontFamily:"'Plus Jakarta Sans', sans-serif",
+                    fontSize:'15px',
+                    fontWeight:240,
                     color:'#1A1A1A',
                     marginTop:'16px',
                     lineHeight:2
                   }}>
                     Investigación UX * Estrategia de Producto * Producto SaaS * Desarrollo con IA aplicada
+                  </p>
+                  <p style={{
+                    fontFamily:"'Plus Jakarta Sans', sans-serif",
+                    fontSize:'20px',
+                    fontWeight:330,
+                    color:'#1A1A1A',
+                    lineHeight:1.6,
+                    marginTop:'24px'
+                  }}>
+                    Beacon es una herramienta web que diseñé desde cero con IA para ayudar a equipos comerciales B2B a no perder de vista oportunidades de hasta USD 400.000 anuales. Ayuda a detectar oportunidades en riesgo antes de que afecten las ventas y las comisiones.
                   </p>
                   <div style={{
                     position:'absolute',
@@ -872,14 +884,24 @@ export default function Home() {
                     }}/>
                   </div>
                   <p style={{
-                    fontFamily:"'Ranade', sans-serif",
-                    fontSize:'13px',
-                    fontWeight:300,
+                    fontFamily:"'Plus Jakarta Sans', sans-serif",
+                    fontSize:'15px',
+                    fontWeight:240,
                     color:'#1A1A1A',
                     marginTop:'16px',
                     lineHeight:2
                   }}>
                     Investigación UX * Diseño de Interfaz * Prototipado * Testing
+                  </p>
+                  <p style={{
+                    fontFamily:"'Plus Jakarta Sans', sans-serif",
+                    fontSize:'20px',
+                    fontWeight:330,
+                    color:'#1A1A1A',
+                    lineHeight:1.6,
+                    marginTop:'24px'
+                  }}>
+                    Theaveling es una app móvil que diseñé para ayudar a viajeros amantes del arte a descubrir experiencias culturales con una perspectiva más local y humana, conectando con personas que asistirán al mismo evento y explorando una ciudad más allá de sus rutas turísticas. Encuentra experiencias artísticas relevantes en pocos minutos y descubre una ciudad desde una perspectiva más local.
                   </p>
                   <div style={{
                     position:'absolute',
@@ -931,7 +953,7 @@ export default function Home() {
           </div>
         </div>
 
-        <h3 style={{fontFamily:"'Ranade', sans-serif", fontWeight:100, fontSize:'20px', color:'#1A1A1A', marginTop:'0', marginBottom:'0'}}>
+        <h3 style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:200, fontSize:'30px', color:'#1A1A1A', marginTop:'0', marginBottom:'0'}}>
           Donde las notas terminan convirtiéndose en producto.
         </h3>
       </section>
