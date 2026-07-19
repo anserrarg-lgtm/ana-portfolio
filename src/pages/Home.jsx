@@ -455,12 +455,14 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
           {projectName === 'Beacon' && (
             <p style={{
               fontFamily: "'Satoshi', sans-serif",
-              fontWeight: 700,
-              fontSize: '16px',
+              fontWeight: 300,
+              fontSize: '72px',
               color: '#F5F7F7',
-              letterSpacing: '-0.01em',
-              marginTop: '8px',
-              paddingLeft: '8px'
+              letterSpacing: '-0.02em',
+              lineHeight: 1.1,
+              margin: '0',
+              paddingLeft: '8px',
+              textShadow: '0 0 40px rgba(176,255,146,0.15), 0 0 120px rgba(176,255,146,0.08)'
             }}>
               Sin ops en la oscuridad
             </p>
