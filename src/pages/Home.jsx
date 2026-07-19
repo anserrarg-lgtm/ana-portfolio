@@ -518,7 +518,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
             opacity: showRightContent ? 1 : 0,
             transition: 'opacity 0.6s ease 0.5s'
           }}>
-            <VerProductoBtn texto="Ver caso de estudio" />
+            <VerProductoBtn texto="Ver producto" />
           </div>
         )}
       </div>
