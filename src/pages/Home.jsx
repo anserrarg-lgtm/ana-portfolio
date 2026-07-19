@@ -455,7 +455,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
           {projectName === 'Beacon' && (
             <p style={{
               fontFamily: "'Satoshi', sans-serif",
-              fontWeight: 300,
+              fontWeight: 100,
               fontSize: '72px',
               color: '#F5F7F7',
               letterSpacing: '-0.02em',
