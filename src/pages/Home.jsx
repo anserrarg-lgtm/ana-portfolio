@@ -364,10 +364,11 @@ function VerProductoBtn({ texto = 'Ver producto' }) {
         alignItems: 'center',
         padding: '10px 12px',
         boxShadow: 'inset 0 0 0 1px #1A1A1A, 2px 2px 0px #1A1A1A',
-        width: hovered ? '175px' : '130px',
+        width: hovered ? '145px' : '130px',
         overflow: 'hidden',
         transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-        background: '#F5F2EE'
+        background: '#F5F2EE',
+        justifyContent: 'center'
       }}>
         <span style={{
           fontFamily: "'Plus Jakarta Sans', sans-serif",
@@ -375,7 +376,7 @@ function VerProductoBtn({ texto = 'Ver producto' }) {
           fontWeight: 400,
           color: '#1A1A1A',
           whiteSpace: 'nowrap',
-          flex: 1
+          flex: 'none'
         }}>
           {texto}
         </span>
@@ -734,7 +735,7 @@ export default function Home() {
             </h1>
             <h3 style={{
               fontFamily:"'Ranade', sans-serif",
-              fontWeight:200,
+              fontWeight:100,
               fontSize:'20px',
               color:'#1A1A1A',
               marginTop:'16px',
@@ -802,7 +803,7 @@ export default function Home() {
               {projectsText}
               <span style={{display:'inline-block', width: zoomProgress >= 1 ? '3px' : '1px', height: zoomProgress >= 1 ? '48px' : '13px', background:'#1A1A1A', marginLeft:'4px', animation:'blink 1s step-end infinite', transition:'width 0.4s ease, height 0.4s ease'}}/>
             </div>
-            <h3 style={{fontFamily:"'Ranade', sans-serif", fontWeight:200, fontSize:'20px', color:'#1A1A1A', marginTop:'16px', opacity: showSubtitle ? 1 : 0, transform: showSubtitle ? 'translateX(0)' : 'translateX(-30px)', transition:'opacity 0.8s ease, transform 0.8s ease'}}>
+            <h3 style={{fontFamily:"'Ranade', sans-serif", fontWeight:100, fontSize:'20px', color:'#1A1A1A', marginTop:'16px', opacity: showSubtitle ? 1 : 0, transform: showSubtitle ? 'translateX(0)' : 'translateX(-30px)', transition:'opacity 0.8s ease, transform 0.8s ease'}}>
               Donde las notas terminan convirtiéndose en producto.
             </h3>
           </div>
@@ -910,7 +911,7 @@ export default function Home() {
           </div>
         </div>
 
-        <h3 style={{fontFamily:"'Ranade', sans-serif", fontWeight:200, fontSize:'20px', color:'#1A1A1A', marginTop:'0', marginBottom:'0'}}>
+        <h3 style={{fontFamily:"'Ranade', sans-serif", fontWeight:100, fontSize:'20px', color:'#1A1A1A', marginTop:'0', marginBottom:'0'}}>
           Donde las notas terminan convirtiéndose en producto.
         </h3>
       </section>
