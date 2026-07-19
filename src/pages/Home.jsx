@@ -950,7 +950,7 @@ export default function Home() {
               clearInterval(theaIntervalRef.current)
               setTheaTyping('')
             }}>
-              <img src={cardTheaveling} style={{width:'100%', height:'70vh', objectFit:'cover', display:'block', animation: showTheaCard ? 'kenBurns 3s ease-out forwards' : 'none', filter: theaHovered ? 'brightness(0.15)' : 'none', transition: 'filter 0.3s ease', cursor: 'pointer'}}/>
+              <img src={cardTheaveling} style={{width:'100%', height:'70vh', objectFit:'contain', display:'block', animation: showTheaCard ? 'kenBurns 3s ease-out forwards' : 'none', filter: theaHovered ? 'brightness(0.15)' : 'none', transition: 'filter 0.3s ease', cursor: 'pointer'}}/>
               {theaHovered && (
                 <div style={{
                   position:'absolute',
