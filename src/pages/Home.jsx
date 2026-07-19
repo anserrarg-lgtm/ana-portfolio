@@ -358,54 +358,34 @@ function VerProductoBtn({ texto = 'Ver producto' }) {
         cursor: 'pointer',
       }}
     >
+      <span style={{
+        fontFamily: "'Plus Jakarta Sans', sans-serif",
+        fontSize: '13px',
+        fontWeight: 400,
+        color: '#1A1A1A',
+        padding: '10px 12px',
+        boxShadow: hovered ? 'inset 0 0 0 1px #1A1A1A' : 'inset 1px 1px 0 1px #1A1A1A, inset -0px 1px 0 1px #1A1A1A',
+        transition: 'box-shadow 0.4s ease',
+        whiteSpace: 'nowrap'
+      }}>
+        {texto}
+      </span>
       <div style={{
+        width: '36px',
+        height: '36px',
         display: 'flex',
         alignItems: 'center',
-        border: '1px solid #1A1A1A',
-        overflow: 'hidden',
-        width: hovered ? '180px' : '130px',
-        transition: 'width 0.25s ease'
+        justifyContent: 'center',
+        borderRadius: hovered ? '0' : '50%',
+        boxShadow: 'inset 0 0 0 1px #1A1A1A',
+        marginLeft: '-1px',
+        transition: 'border-radius 0.4s ease',
+        flexShrink: 0
       }}>
-        <span style={{
-          fontFamily: "'Plus Jakarta Sans', sans-serif",
-          fontSize: '13px',
-          fontWeight: 400,
-          color: '#1A1A1A',
-          padding: '10px 12px',
-          whiteSpace: 'nowrap'
-        }}>
-          {texto}
-        </span>
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          flexShrink: 0,
-          marginLeft: 'auto',
-          paddingRight: '10px'
-        }}>
-          <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
-            <path d="M2 7H12M12 7L8 3M12 7L8 11" stroke="#1A1A1A" strokeWidth="1.5" strokeLinecap="round"/>
-          </svg>
-        </div>
+        <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
+          <path d="M2 7H12M12 7L8 3M12 7L8 11" stroke="#1A1A1A" strokeWidth="1.5" strokeLinecap="round"/>
+        </svg>
       </div>
-      {!hovered && (
-        <div style={{
-          width: '36px',
-          height: '36px',
-          border: '1px solid #1A1A1A',
-          borderRadius: '50%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginLeft: '-1px',
-          flexShrink: 0
-        }}>
-          <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
-            <path d="M2 7H12M12 7L8 3M12 7L8 11" stroke="#1A1A1A" strokeWidth="1.5" strokeLinecap="round"/>
-          </svg>
-        </div>
-      )}
     </div>
   )
 }
