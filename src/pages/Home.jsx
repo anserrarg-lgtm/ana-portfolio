@@ -830,6 +830,16 @@ export default function Home() {
                       transform:'translateX(-50%) translateY(-100%)'
                     }}/>
                   </div>
+                  <p style={{
+                    fontFamily:"'Ranade', sans-serif",
+                    fontSize:'13px',
+                    fontWeight:300,
+                    color:'#1A1A1A',
+                    marginTop:'16px',
+                    lineHeight:2
+                  }}>
+                    Investigación UX * Estrategia de Producto * Producto SaaS * Desarrollo con IA aplicada
+                  </p>
                   <div style={{
                     position:'absolute',
                     right:'0',
@@ -861,6 +871,16 @@ export default function Home() {
                       transform:'translateX(-50%) translateY(-100%)'
                     }}/>
                   </div>
+                  <p style={{
+                    fontFamily:"'Ranade', sans-serif",
+                    fontSize:'13px',
+                    fontWeight:300,
+                    color:'#1A1A1A',
+                    marginTop:'16px',
+                    lineHeight:2
+                  }}>
+                    Investigación UX * Diseño de Interfaz * Prototipado * Testing
+                  </p>
                   <div style={{
                     position:'absolute',
                     right:'0',
