@@ -407,8 +407,75 @@ function VerProductoBtn({ texto = 'Ver producto' }) {
   )
 }
 
+function ProjectTransition({ color, onClose }) {
+  const [progress, setProgress] = React.useState(0)
+
+  React.useEffect(() => {
+    let start = null
+    const duration = 800
+    const animate = (timestamp) => {
+      if (!start) start = timestamp
+      const elapsed = timestamp - start
+      const p = Math.min(1, elapsed / duration)
+      setProgress(p)
+      if (p < 1) requestAnimationFrame(animate)
+    }
+    requestAnimationFrame(animate)
+  }, [])
+
+  return (
+    <>
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: `${progress * 55}vw`,
+        height: '100vh',
+        background: color,
+        zIndex: 9999,
+        transition: 'none'
+      }}/>
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        right: 0,
+        width: `${100 - progress * 55}vw`,
+        height: '100vh',
+        background: '#F5F2EE',
+        zIndex: 9999,
+        transition: 'none'
+      }}/>
+      {progress >= 1 && (
+        <div
+          onClick={onClose}
+          style={{
+            position: 'fixed',
+            top: '24px',
+            right: '24px',
+            width: '36px',
+            height: '36px',
+            border: '1px solid #1A1A1A',
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            zIndex: 10000,
+            background: '#F5F2EE'
+          }}
+        >
+          <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
+            <path d="M1 1L13 13M13 1L1 13" stroke="#1A1A1A" strokeWidth="1.5" strokeLinecap="round"/>
+          </svg>
+        </div>
+      )}
+    </>
+  )
+}
+
 export default function Home() {
   const [activeLink, setActiveLink] = React.useState('Intro')
+  const [projectTransition, setProjectTransition] = React.useState(null)
   const [scrolled, setScrolled] = React.useState(false)
   const [brRounded, setBrRounded] = React.useState(false)
   const [proyectosVisible, setProyectosVisible] = React.useState(false)
@@ -869,7 +936,7 @@ export default function Home() {
                       {beaconTyping}
                       <span style={{display:'inline-block', width:'1px', height:'13px', background:'#fff', marginLeft:'2px', animation:'blink 1s step-end infinite'}}/>
                     </p>
-                    <a href="#" style={{
+                    <a onClick={(e) => { e.preventDefault(); setProjectTransition('beacon') }} style={{
                       fontFamily:"'IBM Plex Mono', monospace",
                       fontSize:'16px',
                       fontWeight:300,
@@ -877,7 +944,8 @@ export default function Home() {
                       textDecoration:'underline',
                       marginTop:'8px',
                       display:'block',
-                      textAlign:'center'
+                      textAlign:'center',
+                      cursor:'pointer'
                     }}>beacon.md</a>
                   </div>
                 </div>
@@ -970,7 +1038,7 @@ export default function Home() {
                       {theaTyping}
                       <span style={{display:'inline-block', width:'1px', height:'13px', background:'#fff', marginLeft:'2px', animation:'blink 1s step-end infinite'}}/>
                     </p>
-                    <a href="#" style={{fontFamily:"'IBM Plex Mono', monospace", fontSize:'16px', fontWeight:300, color:'#FFFFFF', textDecoration:'underline', marginTop:'8px', display:'block', textAlign:'center'}}>theaveling.md</a>
+                    <a onClick={(e) => { e.preventDefault(); setProjectTransition('theaveling') }} style={{fontFamily:"'IBM Plex Mono', monospace", fontSize:'16px', fontWeight:300, color:'#FFFFFF', textDecoration:'underline', marginTop:'8px', display:'block', textAlign:'center', cursor:'pointer'}}>theaveling.md</a>
                   </div>
                 </div>
               )}
@@ -1069,7 +1137,22 @@ export default function Home() {
         </h3>
       </section>
 
-
+      {projectTransition && (
+        <ProjectTransition
+          color={projectTransition === 'beacon' ? '#121716' : '#112C2C'}
+          onClose={() => {
+            setProjectTransition(null)
+            setProjectsText('> Projects/')
+            setShowSubtitle(true)
+            setShowBeaconCard(true)
+            setShowTheaCard(true)
+            setShowBeaconName(true)
+            setShowTheaName(true)
+            setShowBeaconT(true)
+            setShowTheaT(true)
+          }}
+        />
+      )}
     </div>
   )
 }
