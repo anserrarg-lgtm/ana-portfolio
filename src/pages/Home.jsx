@@ -356,36 +356,52 @@ function VerProductoBtn({ texto = 'Ver producto' }) {
         display: 'inline-flex',
         alignItems: 'center',
         cursor: 'pointer',
+        justifyContent: 'flex-end'
       }}
     >
-      <span style={{
-        fontFamily: "'Plus Jakarta Sans', sans-serif",
-        fontSize: '13px',
-        fontWeight: 400,
-        color: '#1A1A1A',
-        padding: '10px 12px',
-        boxShadow: hovered ? 'inset 0 0 0 1px #1A1A1A' : 'inset 1px 1px 0 1px #1A1A1A, inset -0px 1px 0 1px #1A1A1A',
-        transition: 'box-shadow 0.4s ease',
-        whiteSpace: 'nowrap'
-      }}>
-        {texto}
-      </span>
       <div style={{
-        width: '36px',
-        height: '36px',
-        display: 'flex',
+        display: 'inline-flex',
         alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: hovered ? '0' : '50%',
-        boxShadow: 'inset 0 0 0 1px #1A1A1A',
-        marginLeft: '-1px',
-        transition: 'border-radius 0.4s ease',
-        flexShrink: 0
+        padding: '10px 12px',
+        boxShadow: 'inset 0 0 0 1px #1A1A1A, 2px 2px 0px #1A1A1A',
+        width: hovered ? '175px' : '130px',
+        overflow: 'hidden',
+        transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+        background: '#F5F2EE'
       }}>
-        <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
-          <path d="M2 7H12M12 7L8 3M12 7L8 11" stroke="#1A1A1A" strokeWidth="1.5" strokeLinecap="round"/>
-        </svg>
+        <span style={{
+          fontFamily: "'Plus Jakarta Sans', sans-serif",
+          fontSize: '13px',
+          fontWeight: 400,
+          color: '#1A1A1A',
+          whiteSpace: 'nowrap',
+          flex: 1
+        }}>
+          {texto}
+        </span>
+        {hovered && (
+          <svg style={{flexShrink:0, marginLeft:'8px'}} width="12" height="12" viewBox="0 0 14 14" fill="none">
+            <path d="M2 7H12M12 7L8 3M12 7L8 11" stroke="#1A1A1A" strokeWidth="1.5" strokeLinecap="round"/>
+          </svg>
+        )}
       </div>
+      {!hovered && (
+        <div style={{
+          width: '36px',
+          height: '36px',
+          boxShadow: 'inset 0 0 0 1px #1A1A1A',
+          borderRadius: '50%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginLeft: '6px',
+          flexShrink: 0
+        }}>
+          <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
+            <path d="M2 7H12M12 7L8 3M12 7L8 11" stroke="#1A1A1A" strokeWidth="1.5" strokeLinecap="round"/>
+          </svg>
+        </div>
+      )}
     </div>
   )
 }
