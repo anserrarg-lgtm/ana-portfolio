@@ -1176,7 +1176,7 @@ export default function Home() {
                 }}>
                   <div>
                     <p style={{fontFamily:"'IBM Plex Mono', monospace", fontSize:'14px', fontWeight:150, color:'rgba(255,255,255,0.5)', marginBottom:'8px'}}>// insight:</p>
-                    <p style={{fontFamily:"'IBM Plex Mono', monospace", fontSize:'14px', fontWeight:150, color:'rgba(255,255,255,0.5)', textAlign:'center', lineHeight:1.8, maxWidth:'280px', whiteSpace:'pre-wrap'}}>
+                    <p style={{fontFamily:"'IBM Plex Mono', monospace", fontSize:'14px', fontWeight:150, color:'rgba(255,255,255,0.5)', textAlign:'center', lineHeight:1.8, maxWidth:'320px', whiteSpace:'normal'}}>
                       {theaTyping}
                       <span style={{display:'inline-block', width:'1px', height:'13px', background:'#fff', marginLeft:'2px', animation:'blink 1s step-end infinite'}}/>
                     </p>
