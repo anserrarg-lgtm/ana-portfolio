@@ -581,9 +581,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
           <div style={{
             position: 'absolute',
             bottom: '40px',
-            left: '20px',
-            opacity: showRightContent ? 1 : 0,
-            transition: 'opacity 0.6s ease 0.5s'
+            left: '20px'
           }}>
             {[
               {text:'Completado', size:'12px', weight:300, color:'#888'},
