@@ -523,7 +523,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
         position: 'fixed',
         top: 0,
         right: 0,
-        width: closing ? `${100 - (1 - closeProgress) * 63}vw` : `${100 - progress * 63}vw`,
+        width: closing ? `${(1 - closeProgress) * 37}vw` : `${100 - progress * 63}vw`,
         height: '100vh',
         background: '#F5F2EE',
         zIndex: 9999,
