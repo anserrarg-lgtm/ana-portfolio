@@ -612,7 +612,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   fontWeight:300,
                   fontSize:'16px',
                   color:'#B0FF92',
-                  marginTop:'120px',
+                  marginTop:'4px',
                   width:'60%'
                 }}>
                   // insight: Los usuarios no querían más seguimiento. Querían recuperar la visibilidad.
