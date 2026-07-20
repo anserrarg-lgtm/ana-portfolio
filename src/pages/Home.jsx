@@ -504,17 +504,6 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                 </p>
                 <ArrowDown size={64} color="#B0FF92" strokeWidth={1.5} style={{animation:'bounceArrow 2s ease-in-out infinite', flexShrink:0, transform:'rotate(-90deg)'}}/>
               </div>
-              <div style={{
-                position: 'absolute',
-                bottom: '40px',
-                left: '50%',
-                transform: 'translateX(-50%)',
-                width: '200px',
-                height: '120px',
-                border: '1px solid rgba(255,255,255,0.2)',
-                borderRadius: '16px',
-                background: 'transparent'
-              }}/>
             </>
           )}
           {projectName === 'Theaveling' && (
