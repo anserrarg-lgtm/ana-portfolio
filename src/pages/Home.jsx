@@ -524,7 +524,8 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   display:'flex',
                   alignItems:'center',
                   gap:'8px',
-                  marginTop:'24px',
+                  marginTop:'40px',
+                  marginBottom:'40px',
                   flexWrap:'wrap',
                   justifyContent:'center'
                 }}>
