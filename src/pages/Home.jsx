@@ -494,7 +494,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B0FF92" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{animation: 'bounceArrow 2s ease-in-out infinite', transform: 'rotate(-90deg)'}}>
                   <line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/>
                 </svg>
-                <p style={{fontFamily:"'DM Sans', sans-serif", fontWeight:300, fontSize:'24px', color:'rgba(255,255,255,0.2)', whiteSpace:'nowrap', margin:0, textAlign:'center', width:'100%', display:'block'}}>
+                <p style={{fontFamily:"'DM Sans', sans-serif", fontWeight:300, fontSize:'24px', color:'rgba(255,255,255,0.5)', whiteSpace:'nowrap', margin:0, textAlign:'center', width:'100%', display:'block'}}>
                   Antes de enseñarte lo que hice... déjame mostrarte el mundo que tuve que entender.
                 </p>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B0FF92" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{animation: 'bounceArrow 2s ease-in-out infinite', transform: 'rotate(90deg)'}}>
