@@ -439,7 +439,8 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
         background: color,
         zIndex: 9999,
         transition: 'none',
-        overflowY: 'auto'
+        overflowY: 'auto',
+        overflowX: 'hidden'
       }}>
         <div style={{
           position: 'absolute',
