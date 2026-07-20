@@ -454,20 +454,32 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
           </p>
           {projectName === 'Beacon' && (
             <>
-              <p style={{
-                fontFamily: "'Satoshi', sans-serif",
-                fontWeight: 100,
-                fontSize: '72px',
-                color: '#F5F7F7',
-                letterSpacing: '-0.02em',
-                lineHeight: 1.1,
-                margin: '0',
-                paddingLeft: '8px',
-                whiteSpace: 'nowrap',
-                textShadow: '0 0 40px rgba(176,255,146,0.15), 0 0 120px rgba(176,255,146,0.08)'
-              }}>
-                Sin ops en la oscuridad
-              </p>
+              <div style={{position: 'relative'}}>
+                <p style={{
+                  fontFamily: "'Satoshi', sans-serif",
+                  fontWeight: 100,
+                  fontSize: '72px',
+                  color: '#F5F7F7',
+                  letterSpacing: '-0.02em',
+                  lineHeight: 1.1,
+                  margin: '0',
+                  paddingLeft: '8px',
+                  whiteSpace: 'nowrap',
+                  textShadow: '0 0 40px rgba(176,255,146,0.15), 0 0 120px rgba(176,255,146,0.08)'
+                }}>
+                  Sin ops en la oscuridad
+                  <span style={{
+                    position: 'absolute',
+                    top: '-4px',
+                    right: '-12px',
+                    width: '8px',
+                    height: '8px',
+                    borderRadius: '50%',
+                    background: '#B0FF92',
+                    boxShadow: '0 0 6px #B0FF92, 0 0 12px rgba(176,255,146,0.5)'
+                  }}/>
+                </p>
+              </div>
               <p style={{
                 fontFamily: "'Satoshi', sans-serif",
                 fontWeight: 300,
