@@ -573,24 +573,28 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   <span style={{fontWeight:700, fontSize:'30px', color:'#F5F7F7'}}>CAM: </span>
                   Channel Account Manager, un rol estratégico que escala las ventas indirectas potenciando a la red de distribuidores, revendedores y aliados de negocio.
                 </p>
-                <p style={{
-                  fontFamily:"'DM Sans', sans-serif",
-                  fontWeight:700,
-                  fontSize:'30px',
-                  color:'#F5F7F7',
-                  marginTop:'40px'
-                }}>PROBLEMA:</p>
-                <p style={{
-                  fontFamily:"'DM Sans', sans-serif",
-                  fontWeight:300,
-                  fontSize:'14px',
-                  color:'rgba(255,255,255,0.5)',
-                  textAlign:'justify',
-                  marginTop:'8px',
-                  width:'60%'
-                }}>
-                  En ecosistemas de venta por canal B2B, una vez que una oportunidad pasa al partner, el CAM pierde visibilidad sobre su estado real. No sabe si el partner la está trabajando, si está bloqueada o si ya se cerró. Para saberlo, tiene que salir a buscar esa información entre múltiples herramientas y conversaciones, un proceso manual que consume tiempo y que no siempre da una respuesta clara.
-                </p>
+                <div style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
+                  <p style={{
+                    fontFamily:"'DM Sans', sans-serif",
+                    fontWeight:700,
+                    fontSize:'30px',
+                    color:'#F5F7F7',
+                    marginTop:'40px',
+                    textAlign:'center',
+                    width:'80%'
+                  }}>PROBLEMA:</p>
+                  <p style={{
+                    fontFamily:"'DM Sans', sans-serif",
+                    fontWeight:300,
+                    fontSize:'14px',
+                    color:'rgba(255,255,255,0.5)',
+                    textAlign:'center',
+                    marginTop:'8px',
+                    width:'80%'
+                  }}>
+                    En ecosistemas de venta por canal B2B, una vez que una oportunidad pasa al partner, el CAM pierde visibilidad sobre su estado real. No sabe si el partner la está trabajando, si está bloqueada o si ya se cerró. Para saberlo, tiene que salir a buscar esa información entre múltiples herramientas y conversaciones, un proceso manual que consume tiempo y que no siempre da una respuesta clara.
+                  </p>
+                </div>
                 <p style={{
                   fontFamily:"'DM Sans', sans-serif",
                   fontWeight:300,
