@@ -522,6 +522,49 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                 <br/>
                 <span style={{color:'#B0FF92'}}>Mi trabajo fue unirlas.</span>
               </p>
+              <div style={{marginTop:'30px', paddingLeft:'8px'}}>
+                <p style={{
+                  fontFamily:"'DM Sans', sans-serif",
+                  fontWeight:700,
+                  fontSize:'30px',
+                  color:'#F5F7F7',
+                  marginBottom:'8px'
+                }}>CAM:</p>
+                <p style={{
+                  fontFamily:"'DM Sans', sans-serif",
+                  fontWeight:300,
+                  fontSize:'20px',
+                  color:'rgba(255,255,255,0.5)',
+                  lineHeight:1.6,
+                  maxWidth:'480px'
+                }}>
+                  Channer Account Manager, un rol estratégico que escala las ventas indirectas potenciando a la red de distribuidores, revendedores y aliados de negocio.
+                </p>
+                <div style={{
+                  display:'flex',
+                  alignItems:'center',
+                  gap:'8px',
+                  marginTop:'24px',
+                  flexWrap:'wrap'
+                }}>
+                  {['Vendor', 'Asesor / CAM', 'Partners', 'Cliente'].map((item, i) => (
+                    <React.Fragment key={i}>
+                      <span style={{
+                        fontFamily:"'DM Sans', sans-serif",
+                        fontWeight: item === 'Asesor / CAM' ? 700 : 300,
+                        fontSize:'16px',
+                        color: item === 'Asesor / CAM' ? '#B0FF92' : 'rgba(255,255,255,0.5)'
+                      }}>{item}</span>
+                      {i < 3 && (
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="1.5" strokeLinecap="round">
+                          <line x1="5" y1="12" x2="19" y2="12"/>
+                          <polyline points="12 5 19 12 12 19"/>
+                        </svg>
+                      )}
+                    </React.Fragment>
+                  ))}
+                </div>
+              </div>
             </>
           )}
           {projectName === 'Theaveling' && (
