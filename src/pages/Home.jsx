@@ -530,7 +530,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   fontSize:'20px',
                   color:'rgba(255,255,255,0.5)',
                   lineHeight:1.6,
-                  maxWidth:'700px'
+                  width:'90%'
                 }}>
                   <span style={{fontWeight:700, color:'#F5F7F7'}}>CAM:</span> Channel Account Manager, un rol estratégico que escala las ventas indirectas potenciando a la red de distribuidores, revendedores y aliados de negocio.
                 </p>
