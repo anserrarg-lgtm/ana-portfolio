@@ -501,18 +501,6 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                 </p>
                 <ArrowDown size={64} color="#B0FF92" strokeWidth={1.5} style={{animation:'bounceArrow 2s ease-in-out infinite', flexShrink:0, transform:'rotate(-90deg)'}}/>
               </div>
-              <p style={{
-                fontFamily: "'Satoshi', sans-serif",
-                fontWeight: 300,
-                fontSize: '16px',
-                color: 'rgba(255,255,255,0.2)',
-                marginTop: '16px',
-                paddingLeft: '8px',
-                whiteSpace: 'nowrap',
-                lineHeight: 1.5
-              }}>
-                ¿Por qué una venta puede desaparecer entre equipos que trabajan por el mismo objetivo?
-              </p>
             </>
           )}
           {projectName === 'Theaveling' && (
