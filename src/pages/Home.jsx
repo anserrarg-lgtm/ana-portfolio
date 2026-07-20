@@ -525,7 +525,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   display:'flex',
                   alignItems:'flex-start',
                   gap:'8px',
-                  marginTop:'120px',
+                  marginTop:'80px',
                   marginBottom:'120px',
                   justifyContent:'center',
                   width: `${progress * 63}vw`
