@@ -579,7 +579,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                     fontWeight:700,
                     fontSize:'30px',
                     color:'#F5F7F7',
-                    marginTop:'40px',
+                    marginTop:'80px',
                     textAlign:'center',
                     width:'80%'
                   }}>PROBLEMA:</p>
@@ -601,7 +601,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   fontSize:'16px',
                   color:'rgba(255,255,255,0.5)',
                   textAlign:'justify',
-                  marginTop:'40px',
+                  marginTop:'80px',
                   width:'60%'
                 }}>
                   Ellos ya sabían hacer seguimiento pero las herramientas los obligaban a ir a buscar lo que debería llegar solo.
