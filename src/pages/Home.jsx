@@ -477,8 +477,9 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                     borderRadius: '50%',
                     background: '#B0FF92',
                     boxShadow: '0 0 6px #B0FF92, 0 0 12px rgba(176,255,146,0.5)',
-                    verticalAlign: 'super',
-                    marginLeft: '2px'
+                    verticalAlign: 'top',
+                    marginLeft: '2px',
+                    top: '-8px'
                   }}/>
                 </p>
               </div>
