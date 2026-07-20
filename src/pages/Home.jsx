@@ -492,11 +492,11 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                 textAlign: 'center',
                 zIndex: 10000
               }}>
-                <ArrowDown size={32} color="#B0FF92" strokeWidth={1} style={{animation:'bounceArrow 2s ease-in-out infinite', flexShrink:0, transform:'rotate(90deg)'}}/>
+                <ArrowDown size={48} color="#B0FF92" strokeWidth={1} style={{animation:'bounceArrow 2s ease-in-out infinite', flexShrink:0, transform:'rotate(90deg)'}}/>
                 <p style={{fontFamily:"'DM Sans', sans-serif", fontWeight:300, fontSize:'22px', color:'rgba(255,255,255,0.5)', whiteSpace:'nowrap', margin:0, textAlign:'center', width:'100%', display:'block'}}>
                   Antes de enseñarte lo que hice... déjame mostrarte el mundo que tuve que entender.
                 </p>
-                <ArrowDown size={32} color="#B0FF92" strokeWidth={1} style={{animation:'bounceArrow 2s ease-in-out infinite', flexShrink:0, transform:'rotate(-90deg)'}}/>
+                <ArrowDown size={48} color="#B0FF92" strokeWidth={1} style={{animation:'bounceArrow 2s ease-in-out infinite', flexShrink:0, transform:'rotate(-90deg)'}}/>
               </div>
               <p style={{
                 fontFamily: "'Satoshi', sans-serif",
