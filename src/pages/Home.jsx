@@ -444,7 +444,8 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
           position: 'absolute',
           top: '0',
           left: '8px',
-          padding: '0'
+          padding: '0',
+          opacity: closing ? (1 - closeProgress) : 1
         }}>
           <p style={{
             fontFamily: projectColor === '#121716' ? "'Satoshi', sans-serif" : "'Sansita', sans-serif",
@@ -540,7 +541,9 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
             color: '#1A1A1A',
             lineHeight: 1,
             transform: showRightContent ? 'translateY(0)' : 'translateY(-100%)',
-            transition: 'transform 0.7s cubic-bezier(0.4, 0, 0.2, 1)'
+            transition: 'transform 0.7s cubic-bezier(0.4, 0, 0.2, 1)',
+            opacity: closing ? (1 - closeProgress) : 1,
+            transitionProperty: 'opacity, transform'
           }}>
             {projectName}
           </p>
