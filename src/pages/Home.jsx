@@ -470,14 +470,15 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                 }}>
                   Sin ops en la oscuridad
                   <span style={{
-                    position: 'absolute',
-                    top: '-4px',
-                    right: '-6px',
+                    position: 'relative',
+                    display: 'inline-block',
                     width: '8px',
                     height: '8px',
                     borderRadius: '50%',
                     background: '#B0FF92',
-                    boxShadow: '0 0 6px #B0FF92, 0 0 12px rgba(176,255,146,0.5)'
+                    boxShadow: '0 0 6px #B0FF92, 0 0 12px rgba(176,255,146,0.5)',
+                    verticalAlign: 'super',
+                    marginLeft: '2px'
                   }}/>
                 </p>
               </div>
