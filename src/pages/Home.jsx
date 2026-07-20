@@ -481,7 +481,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
             fontSize: '150px',
             color: projectColor === '#121716' ? '#F5F2EE' : '#F31006',
             lineHeight: 1,
-            textShadow: '0 0 40px rgba(176,255,146,0.3), 0 0 80px rgba(176,255,146,0.15)'
+            textShadow: '0 0 20px rgba(176,255,146,0.1), 0 0 40px rgba(176,255,146,0.05)'
           }}>
             {projectName}
           </p>
