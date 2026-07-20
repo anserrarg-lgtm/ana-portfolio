@@ -1,5 +1,5 @@
 import React from 'react'
-import { ArrowDown, Building2, Phone, Handshake, User } from 'lucide-react'
+import { ArrowDown, Building2, Phone, Handshake, User, Settings2 } from 'lucide-react'
 import anaPhoto from '../assets/ana.png'
 import theavelingPhoto from '../assets/theaveling.png'
 import pipelinePhoto from '../assets/pipeline.png'
@@ -534,7 +534,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   {[
                     { label:'Vendor', icon: <Building2 size={28} color="rgba(255,255,255,0.5)" strokeWidth={1}/> },
                     { label:'Asesor', icon: <Phone size={28} color="rgba(255,255,255,0.5)" strokeWidth={1}/> },
-                    { label:'CAM', icon: <Phone size={28} color="#B0FF92" strokeWidth={1}/>, highlight: true },
+                    { label:'CAM', icon: <Settings2 size={28} color="#B0FF92" strokeWidth={1}/>, highlight: true },
                     { label:'Partners', icon: <Handshake size={28} color="rgba(255,255,255,0.5)" strokeWidth={1}/> },
                     { label:'Cliente', icon: <User size={28} color="rgba(255,255,255,0.5)" strokeWidth={1}/> }
                   ].map((item, i) => (
