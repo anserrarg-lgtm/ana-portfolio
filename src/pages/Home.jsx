@@ -514,13 +514,13 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                 paddingLeft: '8px',
                 maxWidth: '500px'
               }}>
-                Beacon no nació porque alguien pidiera una herramienta.<br/>
+                <span style={{color:'#B0FF92'}}>Beacon no nació porque alguien pidiera una herramienta.</span><br/>
                 <br/>
                 Nació porque distintas personas describían el mismo problema desde perspectivas diferentes.<br/>
                 <br/>
                 Cada entrevista iluminó una pieza distinta.<br/>
                 <br/>
-                Mi trabajo fue unirlas.
+                <span style={{color:'#B0FF92'}}>Mi trabajo fue unirlas.</span>
               </p>
             </>
           )}
