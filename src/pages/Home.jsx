@@ -479,7 +479,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                     boxShadow: '0 0 6px #B0FF92, 0 0 12px rgba(176,255,146,0.5)',
                     verticalAlign: 'top',
                     marginLeft: '2px',
-                    top: '-8px'
+                    top: '-6px'
                   }}/>
                 </p>
               </div>
