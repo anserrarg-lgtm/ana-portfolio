@@ -491,7 +491,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                 position: 'relative',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center',
+                justifyContent: 'flex-start',
                 gap: '4px',
                 marginTop: '32px',
                 width: '100%',
