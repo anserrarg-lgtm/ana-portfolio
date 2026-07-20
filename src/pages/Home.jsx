@@ -542,12 +542,6 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                       <div style={{display:'flex', flexDirection:'column', alignItems:'center', gap:'8px'}}>
                         {item.icon}
                         <span style={{fontFamily:"'DM Sans', sans-serif", fontWeight: item.color === '#B0FF92' ? 700 : 300, fontSize:'24px', color: item.color}}>{item.label}</span>
-                        <span style={{
-                          fontFamily:"'DM Sans', sans-serif",
-                          fontWeight: item.color === '#B0FF92' ? 700 : 300,
-                          fontSize:'24px',
-                          color: item.color
-                        }}>{item.label}</span>
                       </div>
                       {i < 4 && (
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="1.5" strokeLinecap="round" style={{marginTop:'12px'}}>
