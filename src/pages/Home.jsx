@@ -475,7 +475,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                 color: '#F5F7F7',
                 marginTop: '16px',
                 paddingLeft: '8px',
-                maxWidth: '500px',
+                whiteSpace: 'nowrap',
                 lineHeight: 1.5
               }}>
                 ¿Por qué una venta puede desaparecer entre equipos que trabajan por el mismo objetivo?
