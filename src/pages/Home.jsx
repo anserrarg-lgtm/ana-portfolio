@@ -505,6 +505,13 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                 <ArrowDown size={64} color="#B0FF92" strokeWidth={1.5} style={{animation:'bounceArrow 2s ease-in-out infinite', flexShrink:0, transform:'rotate(-90deg)'}}/>
               </div>
               <div style={{
+                marginTop: '24px',
+                width: '85%',
+                height: '160px',
+                background: '#F5F2EE',
+                borderRadius: '24px'
+              }}/>
+              <div style={{
                 position: 'absolute',
                 bottom: '40px',
                 left: '50%',
