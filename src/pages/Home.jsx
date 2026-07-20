@@ -513,7 +513,8 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                 lineHeight: 1.7,
                 marginTop: '32px',
                 paddingLeft: '8px',
-                width: '90%'
+                width: '90%',
+                maxWidth: '70%'
               }}>
                 <span style={{color:'#B0FF92'}}>Beacon no nació porque alguien pidiera una herramienta. </span><span style={{color:'rgba(255,255,255,0.5)'}}>Nació porque distintas personas describían el mismo problema desde perspectivas diferentes.</span><br/>
                 <br/>
@@ -557,7 +558,8 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   color:'rgba(255,255,255,0.5)',
                   lineHeight:1.6,
                   width:'90%',
-                  marginTop:'24px'
+                  marginTop:'24px',
+                  maxWidth: '70%'
                 }}>
                   <span style={{fontWeight:700, fontSize:'30px', color:'#F5F7F7'}}>CAM: </span>
                   Channel Account Manager, un rol estratégico que escala las ventas indirectas potenciando a la red de distribuidores, revendedores y aliados de negocio.
