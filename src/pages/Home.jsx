@@ -589,7 +589,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                     fontSize:'16px',
                     color:'rgba(255,255,255,0.5)',
                     textAlign:'center',
-                    marginTop:'8px',
+                    marginTop:'40px',
                     width:'80%'
                   }}>
                     En ecosistemas de venta por canal B2B, una vez que una oportunidad pasa al partner, el CAM pierde visibilidad sobre su estado real. No sabe si el partner la está trabajando, si está bloqueada o si ya se cerró. Para saberlo, tiene que salir a buscar esa información entre múltiples herramientas y conversaciones, un proceso manual que consume tiempo y que no siempre da una respuesta clara.
@@ -601,7 +601,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   fontSize:'14px',
                   color:'rgba(255,255,255,0.5)',
                   textAlign:'justify',
-                  marginTop:'4px',
+                  marginTop:'40px',
                   width:'60%'
                 }}>
                   Ellos ya sabían hacer seguimiento pero las herramientas los obligaban a ir a buscar lo que debería llegar solo.
