@@ -621,42 +621,12 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   }}>
                     En ecosistemas de venta por canal B2B, una vez que una oportunidad pasa al partner, el CAM pierde visibilidad sobre su estado real. No sabe si el partner la está trabajando, si está bloqueada o si ya se cerró. Para saberlo, tiene que salir a buscar esa información entre múltiples herramientas y conversaciones, un proceso manual que consume tiempo y que no siempre da una respuesta clara.
                   </p>
-                  <p style={{
-                    fontFamily:"'IBM Plex Mono', monospace",
-                    fontWeight:150,
-                    fontSize:'14px',
-                    color:'rgba(255,255,255,0.5)',
-                    marginTop:'120px',
-                    width:'60%',
-                    lineHeight:1.8
-                  }}>
-                    Ellos ya sabían hacer seguimiento pero las herramientas los obligaban a ir a buscar lo que debería llegar solo.<br/>
-                    <span style={{color:'#B0FF92'}}>Los usuarios no querían más seguimiento, querían recuperar la visibilidad.</span>
-                  </p>
                 </div>
-                <p ref={ellосRef} style={{
-                  fontFamily:"'IBM Plex Mono', monospace",
-                  fontWeight:150,
-                  fontSize:'14px',
-                  color:'rgba(255,255,255,0.5)',
-                  marginTop:'120px',
-                  width:'60%',
-                  lineHeight:1.8
-                }}>
-                  {ellosTyping}
-                  {ellosTyping.length < 'Ellos ya sabían hacer seguimiento pero las herramientas los obligaban a ir a buscar lo que debería llegar solo.'.length && ellosStarted && (
-                    <span style={{display:'inline-block', width:'1px', height:'13px', background:'rgba(255,255,255,0.5)', marginLeft:'2px', animation:'blink 1s step-end infinite'}}/>
-                  )}
+                <p style={{fontFamily:"'DM Sans', sans-serif", fontWeight:300, fontSize:'16px', color:'rgba(255,255,255,0.5)', marginTop:'120px', width:'60%', lineHeight:1.8, textAlign:'left', paddingLeft:'8px'}}>
+                  Ellos ya sabían hacer seguimiento pero las herramientas los obligaban a ir a buscar lo que debería llegar solo.
                 </p>
-                <p style={{
-                  fontFamily:"'IBM Plex Mono', monospace",
-                  fontWeight:300,
-                  fontSize:'16px',
-                  color:'#B0FF92',
-                  marginTop:'4px',
-                  width:'60%'
-                }}>
-                  // insight: Los usuarios no querían más seguimiento. Querían recuperar la visibilidad.
+                <p style={{fontFamily:"'DM Sans', sans-serif", fontWeight:300, fontSize:'16px', color:'#B0FF92', marginTop:'4px', width:'60%', lineHeight:1.8, textAlign:'left', paddingLeft:'8px'}}>
+                  Los usuarios no querían más seguimiento, querían recuperar la visibilidad.
                 </p>
               </div>
             </>
