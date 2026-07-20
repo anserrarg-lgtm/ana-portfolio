@@ -532,11 +532,11 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   width: `${progress * 63}vw`
                 }}>
                   {[
-                    { label:'Vendor', icon: <Building2 size={28} color="rgba(255,255,255,0.5)" strokeWidth={1}/> },
-                    { label:'Asesor', icon: <Phone size={28} color="rgba(255,255,255,0.5)" strokeWidth={1}/> },
-                    { label:'CAM', icon: <Settings2 size={28} color="#B0FF92" strokeWidth={1}/>, highlight: true },
-                    { label:'Partners', icon: <Handshake size={28} color="rgba(255,255,255,0.5)" strokeWidth={1}/> },
-                    { label:'Cliente', icon: <User size={28} color="rgba(255,255,255,0.5)" strokeWidth={1}/> }
+                    { label:'Vendor', icon: <Building2 size={28} color="rgba(255,255,255,0.5)" strokeWidth={1}/>, color: 'rgba(255,255,255,0.5)' },
+                    { label:'Asesor', icon: <Phone size={28} color="rgba(255,255,255,0.5)" strokeWidth={1}/>, color: 'rgba(255,255,255,0.5)' },
+                    { label:'CAM', icon: <Settings2 size={28} color="#B0FF92" strokeWidth={1}/>, color: '#B0FF92', highlight: true },
+                    { label:'Partners', icon: <Handshake size={28} color="rgba(255,255,255,0.5)" strokeWidth={1}/>, color: 'rgba(255,255,255,0.5)' },
+                    { label:'Cliente', icon: <User size={28} color="rgba(255,255,255,0.5)" strokeWidth={1}/>, color: 'rgba(255,255,255,0.5)' }
                   ].map((item, i) => (
                     <React.Fragment key={i}>
                       <div style={{display:'flex', flexDirection:'column', alignItems:'center', gap:'8px'}}>
