@@ -453,20 +453,34 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
             {projectName}
           </p>
           {projectName === 'Beacon' && (
-            <p style={{
-              fontFamily: "'Satoshi', sans-serif",
-              fontWeight: 100,
-              fontSize: '72px',
-              color: '#F5F7F7',
-              letterSpacing: '-0.02em',
-              lineHeight: 1.1,
-              margin: '0',
-              paddingLeft: '8px',
-              whiteSpace: 'nowrap',
-              textShadow: '0 0 40px rgba(176,255,146,0.15), 0 0 120px rgba(176,255,146,0.08)'
-            }}>
-              Sin ops en la oscuridad
-            </p>
+            <>
+              <p style={{
+                fontFamily: "'Satoshi', sans-serif",
+                fontWeight: 100,
+                fontSize: '72px',
+                color: '#F5F7F7',
+                letterSpacing: '-0.02em',
+                lineHeight: 1.1,
+                margin: '0',
+                paddingLeft: '8px',
+                whiteSpace: 'nowrap',
+                textShadow: '0 0 40px rgba(176,255,146,0.15), 0 0 120px rgba(176,255,146,0.08)'
+              }}>
+                Sin ops en la oscuridad
+              </p>
+              <p style={{
+                fontFamily: "'Satoshi', sans-serif",
+                fontWeight: 620,
+                fontSize: '20px',
+                color: '#F5F7F7',
+                marginTop: '16px',
+                paddingLeft: '8px',
+                maxWidth: '500px',
+                lineHeight: 1.5
+              }}>
+                ¿Por qué una venta puede desaparecer entre equipos que trabajan por el mismo objetivo?
+              </p>
+            </>
           )}
           {projectName === 'Theaveling' && (
             <p style={{
