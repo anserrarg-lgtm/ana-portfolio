@@ -540,8 +540,8 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
             fontSize: '90px',
             color: '#1A1A1A',
             lineHeight: 1,
-            transform: showRightContent ? 'translateY(0)' : 'translateY(-100%)',
-            transition: 'transform 0.7s cubic-bezier(0.4, 0, 0.2, 1)',
+            transform: closing ? 'translateY(-100%)' : showRightContent ? 'translateY(0)' : 'translateY(-100%)',
+            transition: 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
             opacity: closing ? (1 - closeProgress) : 1,
             transitionProperty: 'opacity, transform'
           }}>
@@ -569,7 +569,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                 color: '#1A1A1A',
                 lineHeight: 1.2,
                 overflow: 'hidden',
-                transform: showRightContent ? 'translateY(0)' : 'translateY(-100%)',
+                transform: closing ? 'translateY(-100%)' : showRightContent ? 'translateY(0)' : 'translateY(-100%)',
                 transition: `transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) ${i * 60}ms`
               }}>
                 {tag}
@@ -595,7 +595,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   fontWeight: item.weight,
                   color: item.color,
                   marginBottom: i < 2 ? '4px' : '0',
-                  transform: showRightContent ? 'translateY(0)' : 'translateY(-100%)',
+                  transform: closing ? 'translateY(-100%)' : showRightContent ? 'translateY(0)' : 'translateY(-100%)',
                   transition: `transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) ${i * 60}ms`
                 }}>{item.text}</p>
               </div>
@@ -608,8 +608,9 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
             bottom: '40px',
             left: 'auto',
             right: '20px',
-            opacity: showRightContent ? 1 : 0,
-            transition: 'opacity 0.6s ease 0.5s'
+            opacity: closing ? 0 : showRightContent ? 1 : 0,
+            transform: closing ? 'translateY(20px)' : 'translateY(0)',
+            transition: 'opacity 0.4s ease, transform 0.4s ease'
           }}>
             <VerProductoBtn texto="Ver producto" />
           </div>
