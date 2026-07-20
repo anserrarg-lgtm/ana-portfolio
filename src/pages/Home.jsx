@@ -1,5 +1,5 @@
 import React from 'react'
-import { ArrowDown } from 'lucide-react'
+import { ArrowDown, Building2, Phone, Handshake, User } from 'lucide-react'
 import anaPhoto from '../assets/ana.png'
 import theavelingPhoto from '../assets/theaveling.png'
 import pipelinePhoto from '../assets/pipeline.png'
@@ -531,11 +531,11 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   justifyContent:'center'
                 }}>
                   {[
-                    { label:'Vendor', icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="1.5" strokeLinecap="round"><rect x="2" y="3" width="20" height="18" rx="1"/><path d="M9 21V9h6v12"/><path d="M3 9h18"/></svg>, color: 'rgba(255,255,255,0.5)' },
-                    { label:'Asesor', icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="1.5" strokeLinecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.18 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.9a16 16 0 0 0 5.72 5.72l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>, color: 'rgba(255,255,255,0.5)' },
-                    { label:'CAM', icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#B0FF92" strokeWidth="1.5" strokeLinecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.18 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.9a16 16 0 0 0 5.72 5.72l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>, color: '#B0FF92', highlight: true },
-                    { label:'Partners', icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="1.5" strokeLinecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>, color: 'rgba(255,255,255,0.5)' },
-                    { label:'Cliente', icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="1.5" strokeLinecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/><text x="15" y="6" fill="rgba(255,255,255,0.5)" fontSize="8">✦✦✦</text></svg>, color: 'rgba(255,255,255,0.5)' }
+                    { label:'Vendor', icon: <Building2 size={28} color="rgba(255,255,255,0.5)" strokeWidth={1}/> },
+                    { label:'Asesor', icon: <Phone size={28} color="rgba(255,255,255,0.5)" strokeWidth={1}/> },
+                    { label:'CAM', icon: <Phone size={28} color="#B0FF92" strokeWidth={1}/>, highlight: true },
+                    { label:'Partners', icon: <Handshake size={28} color="rgba(255,255,255,0.5)" strokeWidth={1}/> },
+                    { label:'Cliente', icon: <User size={28} color="rgba(255,255,255,0.5)" strokeWidth={1}/> }
                   ].map((item, i) => (
                     <React.Fragment key={i}>
                       <div style={{display:'flex', flexDirection:'column', alignItems:'center', gap:'8px'}}>
