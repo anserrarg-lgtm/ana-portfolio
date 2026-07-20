@@ -488,7 +488,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '8px',
+                gap: '4px',
                 marginTop: '32px',
                 width: '100%',
                 maxWidth: `${progress * 63}vw`,
