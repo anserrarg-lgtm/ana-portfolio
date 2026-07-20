@@ -471,6 +471,17 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
               <p style={{
                 fontFamily: "'Satoshi', sans-serif",
                 fontWeight: 300,
+                fontSize: '16px',
+                color: 'rgba(255,255,255,0.2)',
+                marginTop: '24px',
+                paddingLeft: '8px',
+                whiteSpace: 'nowrap'
+              }}>
+                Antes de enseñarte lo que hice... déjame mostrarte el mundo que tuve que entender.
+              </p>
+              <p style={{
+                fontFamily: "'Satoshi', sans-serif",
+                fontWeight: 300,
                 fontSize: '20px',
                 color: 'rgba(255,255,255,0.5)',
                 marginTop: '16px',
@@ -479,17 +490,6 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                 lineHeight: 1.5
               }}>
                 ¿Por qué una venta puede desaparecer entre equipos que trabajan por el mismo objetivo?
-              </p>
-              <p style={{
-                fontFamily: "'Satoshi', sans-serif",
-                fontWeight: 300,
-                fontSize: '16px',
-                color: 'rgba(255,255,255,0.2)',
-                marginTop: '24px',
-                paddingLeft: '8px',
-                whiteSpace: 'nowrap'
-              }}>
-                Antes de enseñarte lo que hice... déjame mostrarte el mundo que tuve que entender.
               </p>
             </>
           )}
