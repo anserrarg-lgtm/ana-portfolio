@@ -573,6 +573,27 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   <span style={{fontWeight:700, fontSize:'30px', color:'#F5F7F7'}}>CAM: </span>
                   Channel Account Manager, un rol estratégico que escala las ventas indirectas potenciando a la red de distribuidores, revendedores y aliados de negocio.
                 </p>
+                <p style={{
+                  fontFamily:"'DM Sans', sans-serif",
+                  fontWeight:300,
+                  fontSize:'14px',
+                  color:'rgba(255,255,255,0.5)',
+                  textAlign:'justify',
+                  marginTop:'4px',
+                  width:'60%'
+                }}>
+                  Ellos ya sabían hacer seguimiento pero las herramientas los obligaban a ir a buscar lo que debería llegar solo.
+                </p>
+                <p style={{
+                  fontFamily:"'DM Sans', sans-serif",
+                  fontWeight:300,
+                  fontSize:'14px',
+                  color:'#B0FF92',
+                  marginTop:'4px',
+                  width:'60%'
+                }}>
+                  Los usuarios no querían más seguimiento, querían recuperar la visibilidad.
+                </p>
               </div>
             </>
           )}
