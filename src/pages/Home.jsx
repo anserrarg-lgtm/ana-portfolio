@@ -488,7 +488,8 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '16px'
+                gap: '16px',
+                zIndex: 10000
               }}>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B0FF92" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{animation: 'bounceArrow 2s ease-in-out infinite', transform: 'rotate(-90deg)'}}>
                   <line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/>
