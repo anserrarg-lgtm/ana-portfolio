@@ -607,14 +607,14 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   Ellos ya sabían hacer seguimiento pero las herramientas los obligaban a ir a buscar lo que debería llegar solo.
                 </p>
                 <p style={{
-                  fontFamily:"'DM Sans', sans-serif",
+                  fontFamily:"'IBM Plex Mono', monospace",
                   fontWeight:300,
                   fontSize:'16px',
                   color:'#B0FF92',
-                  marginTop:'4px',
+                  marginTop:'120px',
                   width:'60%'
                 }}>
-                  Los usuarios no querían más seguimiento, querían recuperar la visibilidad.
+                  // insight: Los usuarios no querían más seguimiento. Querían recuperar la visibilidad.
                 </p>
               </div>
             </>
