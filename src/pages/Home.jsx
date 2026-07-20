@@ -471,7 +471,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   <span style={{
                     position: 'absolute',
                     top: '-4px',
-                    right: '-12px',
+                    right: '-6px',
                     width: '8px',
                     height: '8px',
                     borderRadius: '50%',
