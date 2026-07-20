@@ -585,17 +585,21 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
             opacity: showRightContent ? 1 : 0,
             transition: 'opacity 0.6s ease 0.5s'
           }}>
-            {['Completado', 'Product Designer', '3 meses · 2026'].map((text, i) => (
+            {[
+              {text:'Completado', size:'12px', weight:300, color:'#888'},
+              {text:'Product Designer', size:'14px', weight:600, color:'#1A1A1A'},
+              {text:'3 meses · 2026', size:'13px', weight:300, color:'#1A1A1A'}
+            ].map((item, i) => (
               <div key={i} style={{overflow:'hidden'}}>
                 <p style={{
                   fontFamily:"'Plus Jakarta Sans', sans-serif",
-                  fontSize: i === 0 ? '12px' : i === 1 ? '14px' : '13px',
-                  fontWeight: i === 1 ? 600 : 300,
-                  color: i === 0 ? '#888' : '#1A1A1A',
+                  fontSize: item.size,
+                  fontWeight: item.weight,
+                  color: item.color,
                   marginBottom: i < 2 ? '4px' : '0',
                   transform: showRightContent ? 'translateY(0)' : 'translateY(-100%)',
-                  transition: `transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) ${i * 80}ms`
-                }}>{text}</p>
+                  transition: `transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) ${i * 60}ms`
+                }}>{item.text}</p>
               </div>
             ))}
           </div>
