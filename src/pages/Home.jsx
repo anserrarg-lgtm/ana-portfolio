@@ -472,7 +472,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                 fontFamily: "'Satoshi', sans-serif",
                 fontWeight: 300,
                 fontSize: '20px',
-                color: '#F5F7F7',
+                color: 'rgba(255,255,255,0.5)',
                 marginTop: '16px',
                 paddingLeft: '8px',
                 whiteSpace: 'nowrap',
