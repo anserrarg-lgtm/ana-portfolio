@@ -416,6 +416,9 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
   const ellосRef = React.useRef(null)
   const [ellosTyping, setEllosTyping] = React.useState('')
   const [ellosStarted, setEllosStarted] = React.useState(false)
+  const [insightTyping, setInsightTyping] = React.useState('')
+  const [insightStarted, setInsightStarted] = React.useState(false)
+  const insightRef = React.useRef(null)
 
   React.useEffect(() => {
     let start = null
@@ -453,6 +456,29 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
     observer.observe(el)
     return () => observer.disconnect()
   }, [ellosStarted])
+
+  React.useEffect(() => {
+    const el = insightRef.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !insightStarted) {
+          setInsightStarted(true)
+          let i = 0
+          const text = '// insight: Los usuarios no querían más seguimiento. Querían recuperar la visibilidad.'
+          const interval = setInterval(() => {
+            if (i < text.length) {
+              setInsightTyping(text.slice(0, i + 1))
+              i++
+            } else clearInterval(interval)
+          }, 30)
+        }
+      },
+      { threshold: 0.5 }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [insightStarted])
 
   return (
     <>
@@ -622,11 +648,25 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                     En ecosistemas de venta por canal B2B, una vez que una oportunidad pasa al partner, el CAM pierde visibilidad sobre su estado real. No sabe si el partner la está trabajando, si está bloqueada o si ya se cerró. Para saberlo, tiene que salir a buscar esa información entre múltiples herramientas y conversaciones, un proceso manual que consume tiempo y que no siempre da una respuesta clara.
                   </p>
                 </div>
-                <p style={{fontFamily:"'DM Sans', sans-serif", fontWeight:300, fontSize:'16px', color:'rgba(255,255,255,0.5)', marginTop:'120px', width:'60%', lineHeight:1.8, textAlign:'left', paddingLeft:'8px'}}>
+                <p style={{fontFamily:"'DM Sans', sans-serif", fontWeight:300, fontSize:'16px', color:'rgba(255,255,255,0.5)', marginTop:'120px', lineHeight:1.8, textAlign:'left', paddingLeft:'8px', whiteSpace:'nowrap'}}>
                   Ellos ya sabían hacer seguimiento pero las herramientas los obligaban a ir a buscar lo que debería llegar solo.
                 </p>
                 <p style={{fontFamily:"'DM Sans', sans-serif", fontWeight:300, fontSize:'16px', color:'#B0FF92', marginTop:'4px', width:'60%', lineHeight:1.8, textAlign:'left', paddingLeft:'8px'}}>
                   Los usuarios no querían más seguimiento, querían recuperar la visibilidad.
+                </p>
+                <p ref={insightRef} style={{
+                  fontFamily:"'IBM Plex Mono', monospace",
+                  fontWeight:150,
+                  fontSize:'14px',
+                  color:'rgba(255,255,255,0.5)',
+                  marginTop:'40px',
+                  width:'60%',
+                  lineHeight:1.8
+                }}>
+                  {insightTyping}
+                  {insightTyping.length < '// insight: Los usuarios no querían más seguimiento. Querían recuperar la visibilidad.'.length && insightStarted && (
+                    <span style={{display:'inline-block', width:'1px', height:'13px', background:'rgba(255,255,255,0.5)', marginLeft:'2px', animation:'blink 1s step-end infinite'}}/>
+                  )}
                 </p>
               </div>
             </>
