@@ -500,7 +500,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                 zIndex: 10000
               }}>
                 <ArrowDown size={64} color="#B0FF92" strokeWidth={1.5} style={{animation:'bounceArrow 2s ease-in-out infinite', flexShrink:0, transform:'rotate(90deg)'}}/>
-                <p style={{fontFamily:"'DM Sans', sans-serif", fontWeight:300, fontSize:'22px', color:'rgba(255,255,255,0.5)', whiteSpace:'nowrap', margin:0, textAlign:'center', width:'100%', display:'block'}}>
+                <p style={{fontFamily:"'DM Sans', sans-serif", fontWeight:300, fontSize:'22px', color:'#7B58F8', whiteSpace:'nowrap', margin:0, textAlign:'center', width:'100%', display:'block'}}>
                   Antes de enseñarte lo que hice... déjame mostrarte el mundo que tuve que entender.
                 </p>
                 <ArrowDown size={64} color="#B0FF92" strokeWidth={1.5} style={{animation:'bounceArrow 2s ease-in-out infinite', flexShrink:0, transform:'rotate(-90deg)'}}/>
@@ -515,9 +515,9 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                 paddingLeft: '8px',
                 width: '90%'
               }}>
-                <span style={{color:'#B0FF92'}}>Beacon no nació porque alguien pidiera una herramienta. </span><span style={{color:'#7B58F8'}}>Nació porque distintas personas describían el mismo problema desde perspectivas diferentes.</span><br/>
+                <span style={{color:'#B0FF92'}}>Beacon no nació porque alguien pidiera una herramienta. </span><span style={{color:'rgba(255,255,255,0.5)'}}>Nació porque distintas personas describían el mismo problema desde perspectivas diferentes.</span><br/>
                 <br/>
-                <span style={{color:'#7B58F8'}}>Cada entrevista iluminó una pieza distinta.</span> <span style={{color:'#B0FF92'}}>Mi trabajo fue unirlas.</span>
+                <span style={{color:'rgba(255,255,255,0.5)'}}>Cada entrevista iluminó una pieza distinta.</span> <span style={{color:'#B0FF92'}}>Mi trabajo fue unirlas.</span>
               </p>
               <div style={{marginTop:'30px', paddingLeft:'8px'}}>
                 <div style={{
