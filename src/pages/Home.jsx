@@ -487,6 +487,8 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                 justifyContent: 'center',
                 gap: '16px',
                 marginTop: '32px',
+                width: '100%',
+                textAlign: 'center',
                 zIndex: 10000
               }}>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B0FF92" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{animation: 'bounceArrow 2s ease-in-out infinite', transform: 'rotate(-90deg)'}}>
