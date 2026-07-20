@@ -577,7 +577,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
             </div>
           ))}
         </div>
-        {projectName === 'Beacon' && showRightContent && (
+        {projectName === 'Beacon' && (
           <div style={{
             position: 'absolute',
             bottom: '40px',
