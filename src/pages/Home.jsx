@@ -462,6 +462,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
               lineHeight: 1.1,
               margin: '0',
               paddingLeft: '8px',
+              whiteSpace: 'nowrap',
               textShadow: '0 0 40px rgba(176,255,146,0.15), 0 0 120px rgba(176,255,146,0.08)'
             }}>
               Sin ops en la oscuridad
