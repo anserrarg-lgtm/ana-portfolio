@@ -411,6 +411,8 @@ function VerProductoBtn({ texto = 'Ver producto' }) {
 function ProjectTransition({ color, onClose, projectName, projectColor }) {
   const [progress, setProgress] = React.useState(0)
   const [showRightContent, setShowRightContent] = React.useState(false)
+  const [closing, setClosing] = React.useState(false)
+  const [closeProgress, setCloseProgress] = React.useState(0)
 
   React.useEffect(() => {
     let start = null
@@ -432,7 +434,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
         position: 'fixed',
         top: 0,
         left: 0,
-        width: `${progress * 63}vw`,
+        width: closing ? `${(1 - closeProgress) * 63}vw` : `${progress * 63}vw`,
         height: '100vh',
         background: color,
         zIndex: 9999,
@@ -521,7 +523,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
         position: 'fixed',
         top: 0,
         right: 0,
-        width: `${100 - progress * 63}vw`,
+        width: closing ? `${100 - (1 - closeProgress) * 63}vw` : `${100 - progress * 63}vw`,
         height: '100vh',
         background: '#F5F2EE',
         zIndex: 9999,
@@ -600,7 +602,23 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
       </div>
       {progress >= 1 && (
         <div
-          onClick={onClose}
+          onClick={() => {
+            setClosing(true)
+            let start = null
+            const duration = 800
+            const animate = (timestamp) => {
+              if (!start) start = timestamp
+              const elapsed = timestamp - start
+              const p = Math.min(1, elapsed / duration)
+              setCloseProgress(p)
+              if (p < 1) requestAnimationFrame(animate)
+              else {
+                setClosing(false)
+                onClose()
+              }
+            }
+            requestAnimationFrame(animate)
+          }}
           style={{
             position: 'fixed',
             top: '24px',
