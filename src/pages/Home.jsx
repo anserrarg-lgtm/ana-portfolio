@@ -528,7 +528,8 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   gap:'8px',
                   marginTop:'120px',
                   marginBottom:'120px',
-                  justifyContent:'center'
+                  justifyContent:'center',
+                  width: `${progress * 63}vw`
                 }}>
                   {[
                     { label:'Vendor', icon: <Building2 size={28} color="rgba(255,255,255,0.5)" strokeWidth={1}/> },
