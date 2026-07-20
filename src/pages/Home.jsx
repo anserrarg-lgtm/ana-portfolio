@@ -519,7 +519,6 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                 <span style={{color:'#7B58F8'}}>Nació porque distintas personas describían el mismo problema desde perspectivas diferentes.</span><br/>
                 <br/>
                 <span style={{color:'#7B58F8'}}>Cada entrevista iluminó una pieza distinta.</span><br/>
-                <br/>
                 <span style={{color:'#B0FF92'}}>Mi trabajo fue unirlas.</span>
               </p>
               <div style={{marginTop:'30px', paddingLeft:'8px'}}>
