@@ -533,7 +533,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   display:'flex',
                   alignItems:'flex-start',
                   gap:'8px',
-                  marginTop:'60px',
+                  marginTop:'100px',
                   marginBottom:'60px',
                   justifyContent:'center',
                   width: `${progress * 63}vw`
