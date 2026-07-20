@@ -24,6 +24,11 @@ body {
   }
 }
 
+@keyframes bounceArrow {
+  0%, 100% { transform: translateY(0px) }
+  50% { transform: translateY(-6px) }
+}
+
 .nav-link {
   text-decoration: none;
   position: relative;
