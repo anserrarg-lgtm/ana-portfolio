@@ -1,4 +1,5 @@
 import React from 'react'
+import { ArrowDown } from 'lucide-react'
 import anaPhoto from '../assets/ana.png'
 import theavelingPhoto from '../assets/theaveling.png'
 import pipelinePhoto from '../assets/pipeline.png'
@@ -491,15 +492,11 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                 textAlign: 'center',
                 zIndex: 10000
               }}>
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#B0FF92" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{animation:'bounceArrow 2s ease-in-out infinite', flexShrink:0}}>
-                  <line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/>
-                </svg>
+                <ArrowDown size={32} color="#B0FF92" strokeWidth={1} style={{animation:'bounceArrow 2s ease-in-out infinite', flexShrink:0}}/>
                 <p style={{fontFamily:"'DM Sans', sans-serif", fontWeight:300, fontSize:'22px', color:'rgba(255,255,255,0.5)', whiteSpace:'nowrap', margin:0, textAlign:'center', width:'100%', display:'block'}}>
                   Antes de enseñarte lo que hice... déjame mostrarte el mundo que tuve que entender.
                 </p>
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#B0FF92" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{animation:'bounceArrow 2s ease-in-out infinite', flexShrink:0}}>
-                  <line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/>
-                </svg>
+                <ArrowDown size={32} color="#B0FF92" strokeWidth={1} style={{animation:'bounceArrow 2s ease-in-out infinite', flexShrink:0}}/>
               </div>
               <p style={{
                 fontFamily: "'Satoshi', sans-serif",
