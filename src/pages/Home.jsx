@@ -534,7 +534,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                       <span style={{
                         fontFamily:"'DM Sans', sans-serif",
                         fontWeight: item === 'CAM' ? 700 : 300,
-                        fontSize:'16px',
+                        fontSize:'24px',
                         color: item === 'CAM' ? '#B0FF92' : 'rgba(255,255,255,0.5)'
                       }}>{item}</span>
                       {i < 4 && (
