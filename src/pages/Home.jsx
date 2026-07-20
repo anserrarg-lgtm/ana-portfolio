@@ -531,19 +531,19 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   width: `${progress * 63}vw`
                 }}>
                   {[
-                    { label:'Vendor', icon: <Building2 size={28} color="#7B58F8" strokeWidth={1}/>, color: 'rgba(255,255,255,0.5)' },
-                    { label:'Asesor', icon: <Phone size={28} color="#7B58F8" strokeWidth={1}/>, color: 'rgba(255,255,255,0.5)' },
-                    { label:'CAM', icon: <Settings2 size={28} color="#B0FF92" strokeWidth={1}/>, color: '#B0FF92', highlight: true },
-                    { label:'Partners', icon: <Handshake size={28} color="#7B58F8" strokeWidth={1}/>, color: 'rgba(255,255,255,0.5)' },
-                    { label:'Cliente', icon: <User size={28} color="#7B58F8" strokeWidth={1}/>, color: 'rgba(255,255,255,0.5)' }
+                    { label:'Vendor', icon: <Building2 size={40} color="#7B58F8" strokeWidth={1}/>, color: 'rgba(255,255,255,0.5)' },
+                    { label:'Asesor', icon: <Phone size={40} color="#7B58F8" strokeWidth={1}/>, color: 'rgba(255,255,255,0.5)' },
+                    { label:'CAM', icon: <Settings2 size={40} color="#B0FF92" strokeWidth={1}/>, color: '#B0FF92', highlight: true },
+                    { label:'Partners', icon: <Handshake size={40} color="#7B58F8" strokeWidth={1}/>, color: 'rgba(255,255,255,0.5)' },
+                    { label:'Cliente', icon: <User size={40} color="#7B58F8" strokeWidth={1}/>, color: 'rgba(255,255,255,0.5)' }
                   ].map((item, i) => (
                     <React.Fragment key={i}>
                       <div style={{display:'flex', flexDirection:'column', alignItems:'center', gap:'8px'}}>
                         {item.icon}
-                        <span style={{fontFamily:"'DM Sans', sans-serif", fontWeight: item.color === '#B0FF92' ? 700 : 300, fontSize:'24px', color: item.color}}>{item.label}</span>
+                        <span style={{fontFamily:"'DM Sans', sans-serif", fontWeight: item.color === '#B0FF92' ? 700 : 300, fontSize:'32px', color: item.color}}>{item.label}</span>
                       </div>
                       {i < 4 && (
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="1.5" strokeLinecap="round" style={{marginTop:'12px'}}>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="1.5" strokeLinecap="round" style={{marginTop:'12px'}}>
                           <line x1="5" y1="12" x2="19" y2="12"/>
                           <polyline points="12 5 19 12 12 19"/>
                         </svg>
