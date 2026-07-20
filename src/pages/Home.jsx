@@ -413,6 +413,9 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
   const [showRightContent, setShowRightContent] = React.useState(false)
   const [closing, setClosing] = React.useState(false)
   const [closeProgress, setCloseProgress] = React.useState(0)
+  const ellосRef = React.useRef(null)
+  const [ellosTyping, setEllosTyping] = React.useState('')
+  const [ellosStarted, setEllosStarted] = React.useState(false)
 
   React.useEffect(() => {
     let start = null
@@ -427,6 +430,29 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
     }
     requestAnimationFrame(animate)
   }, [])
+
+  React.useEffect(() => {
+    const el = ellосRef.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !ellosStarted) {
+          setEllosStarted(true)
+          let i = 0
+          const text = 'Ellos ya sabían hacer seguimiento pero las herramientas los obligaban a ir a buscar lo que debería llegar solo.'
+          const interval = setInterval(() => {
+            if (i < text.length) {
+              setEllosTyping(text.slice(0, i + 1))
+              i++
+            } else clearInterval(interval)
+          }, 25)
+        }
+      },
+      { threshold: 0.5 }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [ellosStarted])
 
   return (
     <>
@@ -596,16 +622,19 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                     En ecosistemas de venta por canal B2B, una vez que una oportunidad pasa al partner, el CAM pierde visibilidad sobre su estado real. No sabe si el partner la está trabajando, si está bloqueada o si ya se cerró. Para saberlo, tiene que salir a buscar esa información entre múltiples herramientas y conversaciones, un proceso manual que consume tiempo y que no siempre da una respuesta clara.
                   </p>
                 </div>
-                <p style={{
+                <p ref={ellосRef} style={{
                   fontFamily:"'IBM Plex Mono', monospace",
                   fontWeight:150,
-                  fontSize:'16px',
+                  fontSize:'14px',
                   color:'rgba(255,255,255,0.5)',
-                  textAlign:'justify',
-                  marginTop:'80px',
-                  width:'60%'
+                  marginTop:'120px',
+                  width:'60%',
+                  lineHeight:1.8
                 }}>
-                  Ellos ya sabían hacer seguimiento pero las herramientas los obligaban a ir a buscar lo que debería llegar solo.
+                  {ellosTyping}
+                  {ellosTyping.length < 'Ellos ya sabían hacer seguimiento pero las herramientas los obligaban a ir a buscar lo que debería llegar solo.'.length && ellosStarted && (
+                    <span style={{display:'inline-block', width:'1px', height:'13px', background:'rgba(255,255,255,0.5)', marginLeft:'2px', animation:'blink 1s step-end infinite'}}/>
+                  )}
                 </p>
                 <p style={{
                   fontFamily:"'IBM Plex Mono', monospace",
