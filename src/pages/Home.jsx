@@ -585,15 +585,19 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
             opacity: showRightContent ? 1 : 0,
             transition: 'opacity 0.6s ease 0.5s'
           }}>
-            <div style={{overflow:'hidden'}}>
-              <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontSize:'12px', fontWeight:300, color:'#888', marginBottom:'4px', transform: showRightContent ? 'translateY(0)' : 'translateY(-100%)', transition: 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)'}}>Completado</p>
-            </div>
-            <div style={{overflow:'hidden'}}>
-              <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontSize:'14px', fontWeight:600, color:'#1A1A1A', marginBottom:'2px', transform: showRightContent ? 'translateY(0)' : 'translateY(-100%)', transition: 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)'}}>Product Designer</p>
-            </div>
-            <div style={{overflow:'hidden'}}>
-              <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontSize:'13px', fontWeight:300, color:'#1A1A1A', transform: showRightContent ? 'translateY(0)' : 'translateY(-100%)', transition: 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)'}}>3 meses · 2026</p>
-            </div>
+            {['Completado', 'Product Designer', '3 meses · 2026'].map((text, i) => (
+              <div key={i} style={{overflow:'hidden'}}>
+                <p style={{
+                  fontFamily:"'Plus Jakarta Sans', sans-serif",
+                  fontSize: i === 0 ? '12px' : i === 1 ? '14px' : '13px',
+                  fontWeight: i === 1 ? 600 : 300,
+                  color: i === 0 ? '#888' : '#1A1A1A',
+                  marginBottom: i < 2 ? '4px' : '0',
+                  transform: showRightContent ? 'translateY(0)' : 'translateY(-100%)',
+                  transition: `transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) ${i * 80}ms`
+                }}>{text}</p>
+              </div>
+            ))}
           </div>
         )}
         {showRightContent && (
