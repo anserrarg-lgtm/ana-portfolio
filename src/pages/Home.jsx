@@ -471,8 +471,8 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
               <p style={{
                 fontFamily: "'Satoshi', sans-serif",
                 fontWeight: 300,
-                fontSize: '16px',
-                color: 'rgba(255,255,255,0.2)',
+                fontSize: '20px',
+                color: 'rgba(255,255,255,0.5)',
                 marginTop: '24px',
                 paddingLeft: '8px',
                 whiteSpace: 'nowrap'
@@ -482,8 +482,8 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
               <p style={{
                 fontFamily: "'Satoshi', sans-serif",
                 fontWeight: 300,
-                fontSize: '20px',
-                color: 'rgba(255,255,255,0.5)',
+                fontSize: '16px',
+                color: 'rgba(255,255,255,0.2)',
                 marginTop: '16px',
                 paddingLeft: '8px',
                 whiteSpace: 'nowrap',
