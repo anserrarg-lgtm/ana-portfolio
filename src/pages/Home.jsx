@@ -515,7 +515,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
               <p style={{
                 fontFamily: "'DM Sans', sans-serif",
                 fontWeight: 300,
-                fontSize: '18px',
+                fontSize: '14px',
                 color: 'rgba(255,255,255,0.5)',
                 lineHeight: 1.7,
                 marginTop: '32px',
