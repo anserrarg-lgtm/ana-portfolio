@@ -515,7 +515,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
               <p style={{
                 fontFamily: "'DM Sans', sans-serif",
                 fontWeight: 300,
-                fontSize: '14px',
+                fontSize: '16px',
                 color: 'rgba(255,255,255,0.5)',
                 lineHeight: 1.7,
                 marginTop: '32px',
@@ -562,7 +562,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                 <p style={{
                   fontFamily:"'DM Sans', sans-serif",
                   fontWeight:300,
-                  fontSize:'14px',
+                  fontSize:'16px',
                   color:'rgba(255,255,255,0.5)',
                   lineHeight:1.6,
                   width:'90%',
@@ -598,7 +598,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                 <p style={{
                   fontFamily:"'DM Sans', sans-serif",
                   fontWeight:300,
-                  fontSize:'14px',
+                  fontSize:'16px',
                   color:'rgba(255,255,255,0.5)',
                   textAlign:'justify',
                   marginTop:'40px',
@@ -609,7 +609,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                 <p style={{
                   fontFamily:"'DM Sans', sans-serif",
                   fontWeight:300,
-                  fontSize:'14px',
+                  fontSize:'16px',
                   color:'#B0FF92',
                   marginTop:'4px',
                   width:'60%'
