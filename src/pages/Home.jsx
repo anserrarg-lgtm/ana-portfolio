@@ -430,7 +430,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
 
   return (
     <>
-      <div style={{
+      <div className="left-panel" style={{
         position: 'fixed',
         top: 0,
         left: 0,
@@ -438,7 +438,8 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
         height: '100vh',
         background: color,
         zIndex: 9999,
-        transition: 'none'
+        transition: 'none',
+        overflowY: 'auto'
       }}>
         <div style={{
           position: 'absolute',

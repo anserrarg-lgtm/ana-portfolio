@@ -95,3 +95,11 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+.left-panel::-webkit-scrollbar {
+  display: none;
+}
+.left-panel {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
