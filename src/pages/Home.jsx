@@ -596,8 +596,8 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   </p>
                 </div>
                 <p style={{
-                  fontFamily:"'DM Sans', sans-serif",
-                  fontWeight:300,
+                  fontFamily:"'IBM Plex Mono', monospace",
+                  fontWeight:150,
                   fontSize:'16px',
                   color:'rgba(255,255,255,0.5)',
                   textAlign:'justify',
