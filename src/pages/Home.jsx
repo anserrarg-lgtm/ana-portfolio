@@ -516,9 +516,9 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
               }}>
                 <span style={{color:'#B0FF92'}}>Beacon no nació porque alguien pidiera una herramienta.</span><br/>
                 <br/>
-                Nació porque distintas personas describían el mismo problema desde perspectivas diferentes.<br/>
+                <span style={{color:'#7B58F8'}}>Nació porque distintas personas describían el mismo problema desde perspectivas diferentes.</span><br/>
                 <br/>
-                Cada entrevista iluminó una pieza distinta.<br/>
+                <span style={{color:'#7B58F8'}}>Cada entrevista iluminó una pieza distinta.</span><br/>
                 <br/>
                 <span style={{color:'#B0FF92'}}>Mi trabajo fue unirlas.</span>
               </p>
