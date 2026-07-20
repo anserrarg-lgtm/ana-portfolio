@@ -541,7 +541,6 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                     <React.Fragment key={i}>
                       <div style={{display:'flex', flexDirection:'column', alignItems:'center', gap:'8px'}}>
                         {item.icon}
-                        {item.icon}
                         <span style={{fontFamily:"'DM Sans', sans-serif", fontWeight: item.color === '#B0FF92' ? 700 : 300, fontSize:'24px', color: item.color}}>{item.label}</span>
                       </div>
                       {i < 4 && (
