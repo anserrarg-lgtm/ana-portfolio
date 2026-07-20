@@ -585,9 +585,15 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
             opacity: showRightContent ? 1 : 0,
             transition: 'opacity 0.6s ease 0.5s'
           }}>
-            <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontSize:'12px', fontWeight:300, color:'#888', marginBottom:'4px'}}>Completado</p>
-            <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontSize:'14px', fontWeight:600, color:'#1A1A1A', marginBottom:'2px'}}>Product Designer</p>
-            <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontSize:'13px', fontWeight:300, color:'#1A1A1A'}}>3 meses · 2026</p>
+            <div style={{overflow:'hidden'}}>
+              <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontSize:'12px', fontWeight:300, color:'#888', marginBottom:'4px', transform: showRightContent ? 'translateY(0)' : 'translateY(-100%)', transition: 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)'}}>Completado</p>
+            </div>
+            <div style={{overflow:'hidden'}}>
+              <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontSize:'14px', fontWeight:600, color:'#1A1A1A', marginBottom:'2px', transform: showRightContent ? 'translateY(0)' : 'translateY(-100%)', transition: 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)'}}>Product Designer</p>
+            </div>
+            <div style={{overflow:'hidden'}}>
+              <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontSize:'13px', fontWeight:300, color:'#1A1A1A', transform: showRightContent ? 'translateY(0)' : 'translateY(-100%)', transition: 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)'}}>3 meses · 2026</p>
+            </div>
           </div>
         )}
         {showRightContent && (
