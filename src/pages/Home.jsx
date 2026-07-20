@@ -491,6 +491,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                 gap: '16px',
                 marginTop: '32px',
                 width: '100%',
+                maxWidth: `${progress * 63}vw`,
                 textAlign: 'center',
                 zIndex: 10000
               }}>
