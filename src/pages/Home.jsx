@@ -522,23 +522,31 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
               <div style={{marginTop:'30px', paddingLeft:'8px'}}>
                 <div style={{
                   display:'flex',
-                  alignItems:'center',
+                  alignItems:'flex-start',
                   gap:'8px',
                   marginTop:'120px',
                   marginBottom:'120px',
-                  flexWrap:'wrap',
                   justifyContent:'center'
                 }}>
-                  {['Vendor', 'Asesor', 'CAM', 'Partners', 'Cliente'].map((item, i) => (
+                  {[
+                    { label:'Vendor', icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="1.5" strokeLinecap="round"><rect x="2" y="7" width="20" height="14" rx="1"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg> },
+                    { label:'Asesor', icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#B0FF92" strokeWidth="1.5" strokeLinecap="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18"/></svg>, highlight: true },
+                    { label:'CAM', icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#B0FF92" strokeWidth="1.5" strokeLinecap="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18"/></svg>, highlight: true },
+                    { label:'Partners', icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="1.5" strokeLinecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> },
+                    { label:'Cliente', icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="1.5" strokeLinecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/><path d="M17 11l1 1 3-3"/></svg> }
+                  ].map((item, i) => (
                     <React.Fragment key={i}>
-                      <span style={{
-                        fontFamily:"'DM Sans', sans-serif",
-                        fontWeight: item === 'CAM' ? 700 : 300,
-                        fontSize:'24px',
-                        color: item === 'CAM' ? '#B0FF92' : 'rgba(255,255,255,0.5)'
-                      }}>{item}</span>
+                      <div style={{display:'flex', flexDirection:'column', alignItems:'center', gap:'8px'}}>
+                        {item.icon}
+                        <span style={{
+                          fontFamily:"'DM Sans', sans-serif",
+                          fontWeight: item.highlight ? 700 : 300,
+                          fontSize:'24px',
+                          color: item.highlight ? '#B0FF92' : 'rgba(255,255,255,0.5)'
+                        }}>{item.label}</span>
+                      </div>
                       {i < 4 && (
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="1.5" strokeLinecap="round">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="1.5" strokeLinecap="round" style={{marginTop:'12px'}}>
                           <line x1="5" y1="12" x2="19" y2="12"/>
                           <polyline points="12 5 19 12 12 19"/>
                         </svg>
