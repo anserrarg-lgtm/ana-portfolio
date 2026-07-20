@@ -504,6 +504,24 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                 </p>
                 <ArrowDown size={64} color="#B0FF92" strokeWidth={1.5} style={{animation:'bounceArrow 2s ease-in-out infinite', flexShrink:0, transform:'rotate(-90deg)'}}/>
               </div>
+              <p style={{
+                fontFamily: "'DM Sans', sans-serif",
+                fontWeight: 300,
+                fontSize: '18px',
+                color: 'rgba(255,255,255,0.5)',
+                lineHeight: 1.7,
+                marginTop: '32px',
+                paddingLeft: '8px',
+                maxWidth: '500px'
+              }}>
+                Beacon no nació porque alguien pidiera una herramienta.<br/>
+                <br/>
+                Nació porque distintas personas describían el mismo problema desde perspectivas diferentes.<br/>
+                <br/>
+                Cada entrevista iluminó una pieza distinta.<br/>
+                <br/>
+                Mi trabajo fue unirlas.
+              </p>
             </>
           )}
           {projectName === 'Theaveling' && (
