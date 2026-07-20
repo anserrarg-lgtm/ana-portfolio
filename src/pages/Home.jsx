@@ -470,7 +470,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
               </p>
               <p style={{
                 fontFamily: "'Satoshi', sans-serif",
-                fontWeight: 620,
+                fontWeight: 300,
                 fontSize: '20px',
                 color: '#F5F7F7',
                 marginTop: '16px',
