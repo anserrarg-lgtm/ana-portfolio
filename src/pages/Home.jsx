@@ -526,20 +526,13 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
               <div style={{marginTop:'30px', paddingLeft:'8px'}}>
                 <p style={{
                   fontFamily:"'DM Sans', sans-serif",
-                  fontWeight:700,
-                  fontSize:'30px',
-                  color:'#F5F7F7',
-                  marginBottom:'8px'
-                }}>CAM:</p>
-                <p style={{
-                  fontFamily:"'DM Sans', sans-serif",
                   fontWeight:300,
                   fontSize:'20px',
                   color:'rgba(255,255,255,0.5)',
                   lineHeight:1.6,
                   maxWidth:'480px'
                 }}>
-                  Channer Account Manager, un rol estratégico que escala las ventas indirectas potenciando a la red de distribuidores, revendedores y aliados de negocio.
+                  <span style={{fontWeight:700, color:'#F5F7F7'}}>CAM:</span> Channel Account Manager, un rol estratégico que escala las ventas indirectas potenciando a la red de distribuidores, revendedores y aliados de negocio.
                 </p>
                 <div style={{
                   display:'flex',
