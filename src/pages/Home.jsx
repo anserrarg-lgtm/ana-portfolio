@@ -14,6 +14,7 @@ import beaconMockup from '../assets/mockup-beacon.png'
 import capturePipeline from '../assets/capture-pipeline.png'
 import cardBeacon from '../assets/card-beacon.png'
 import cardTheaveling from '../assets/card-theaveling.png'
+import procesoBea1 from '../assets/proceso-beacon-1.png'
 
 function TypingText({ text, speed = 50 }) {
   const [displayed, setDisplayed] = React.useState('')
@@ -482,17 +483,29 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
 
   return (
     <>
-      <div className="left-panel" style={{
+      <div style={{
         position: 'fixed',
         top: 0,
         left: 0,
-        width: closing ? `${(1 - closeProgress) * 63}vw` : `${progress * 63}vw`,
+        width: `${progress * 60}vw`,
         height: '100vh',
         background: color,
         zIndex: 9999,
         transition: 'none',
+        overflow: 'hidden'
+      }}/>
+      <div className="left-panel" style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '60vw',
+        height: '100vh',
+        zIndex: 10000,
         overflowY: 'auto',
-        overflowX: 'hidden'
+        overflowX: 'hidden',
+        opacity: progress > 0.1 ? 1 : 0,
+        clipPath: `inset(0 ${Math.max(0, 100 - progress * 100)}% 0 0)`,
+        transition: 'none'
       }}>
         <div style={{
           position: 'absolute',
@@ -548,14 +561,14 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                 gap: '4px',
                 marginTop: '32px',
                 width: '100%',
-                maxWidth: `${progress * 63}vw`,
+                maxWidth: '60vw',
                 textAlign: 'center',
                 zIndex: 10000
               }}>
                 <p style={{
-                  fontFamily:"'DM Sans', sans-serif",
+                  fontFamily:"'Satoshi', sans-serif",
                   fontWeight:300,
-                  fontSize:'26px',
+                  fontSize:'32px',
                   color:'rgba(255,255,255,0.5)',
                   textAlign:'left',
                   lineHeight:1.5
@@ -563,7 +576,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   Antes de enseñarte lo que hice...<br/>
                   déjame mostrarte el mundo que tuve que entender.
                 </p>
-                <ArrowDown size={72} color="#B0FF92" strokeWidth={1.5} style={{animation:'bounceArrow 2s ease-in-out infinite', flexShrink:0, transform:'rotate(-90deg)'}}/>
+                <ArrowDown size={100} color="#B0FF92" strokeWidth={1.5} style={{animation:'bounceArrow 2s ease-in-out infinite', flexShrink:0, transform:'rotate(-90deg)', marginTop:'8px', verticalAlign:'middle'}}/>
               </div>
               <p style={{
                 fontFamily: "'DM Sans', sans-serif",
@@ -589,7 +602,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   marginTop:'100px',
                   marginBottom:'60px',
                   justifyContent:'center',
-                  width: `${progress * 63}vw`
+                  width: '100%'
                 }}>
                   {[
                     { label:'Vendor', icon: <Building2 size={32} color="#7B58F8" strokeWidth={1}/>, color: 'rgba(255,255,255,0.5)' },
@@ -601,7 +614,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                     <React.Fragment key={i}>
                       <div style={{display:'flex', flexDirection:'column', alignItems:'center', gap:'8px'}}>
                         {item.icon}
-                        <span style={{fontFamily:"'DM Sans', sans-serif", fontWeight: item.color === '#B0FF92' ? 700 : 300, fontSize:'20px', color: item.color}}>{item.label}</span>
+                        <span style={{fontFamily:"'Satoshi', sans-serif", fontWeight: item.color === '#B0FF92' ? 700 : 300, fontSize:'20px', color: item.color}}>{item.label}</span>
                       </div>
                       {i < 4 && (
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="1.5" strokeLinecap="round" style={{marginTop:'12px'}}>
@@ -613,7 +626,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   ))}
                 </div>
                 <p style={{
-                  fontFamily:"'DM Sans', sans-serif",
+                  fontFamily:"'Satoshi', sans-serif",
                   fontWeight:300,
                   fontSize:'16px',
                   color:'rgba(255,255,255,0.5)',
@@ -628,7 +641,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                 </p>
                 <div style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
                   <p style={{
-                    fontFamily:"'DM Sans', sans-serif",
+                    fontFamily:"'Satoshi', sans-serif",
                     fontWeight:700,
                     fontSize:'30px',
                     color:'#F5F7F7',
@@ -637,21 +650,22 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                     width:'80%'
                   }}>PROBLEMA:</p>
                   <p style={{
-                    fontFamily:"'DM Sans', sans-serif",
+                    fontFamily:"'Satoshi', sans-serif",
                     fontWeight:300,
                     fontSize:'16px',
                     color:'rgba(255,255,255,0.5)',
                     textAlign:'center',
                     marginTop:'40px',
-                    width:'80%'
+                    width:'80%',
+                    maxWidth:'55vw'
                   }}>
                     En ecosistemas de venta por canal B2B, una vez que una oportunidad pasa al partner, el CAM pierde visibilidad sobre su estado real. No sabe si el partner la está trabajando, si está bloqueada o si ya se cerró. Para saberlo, tiene que salir a buscar esa información entre múltiples herramientas y conversaciones, un proceso manual que consume tiempo y que no siempre da una respuesta clara.
                   </p>
                 </div>
-                <p style={{fontFamily:"'DM Sans', sans-serif", fontWeight:300, fontSize:'16px', color:'rgba(255,255,255,0.5)', marginTop:'120px', lineHeight:1.8, textAlign:'left', paddingLeft:'8px', whiteSpace:'nowrap'}}>
+                <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:300, fontSize:'16px', color:'rgba(255,255,255,0.5)', marginTop:'120px', lineHeight:1.8, textAlign:'left', paddingLeft:'8px', whiteSpace:'nowrap'}}>
                   Ellos ya sabían hacer seguimiento pero las herramientas los obligaban a ir a buscar lo que debería llegar solo.
                 </p>
-                <p style={{fontFamily:"'DM Sans', sans-serif", fontWeight:300, fontSize:'16px', color:'#B0FF92', marginTop:'4px', width:'60%', lineHeight:1.8, textAlign:'left', paddingLeft:'8px'}}>
+                <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:300, fontSize:'16px', color:'#B0FF92', marginTop:'4px', width:'80%', lineHeight:1.8, textAlign:'left', paddingLeft:'8px'}}>
                   Los usuarios no querían más seguimiento, querían recuperar la visibilidad.
                 </p>
                 <p ref={insightRef} style={{
@@ -660,7 +674,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   fontSize:'14px',
                   color:'rgba(255,255,255,0.5)',
                   marginTop:'40px',
-                  width:'60%',
+                  width:'80%',
                   lineHeight:1.8
                 }}>
                   {insightTyping}
@@ -668,6 +682,54 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                     <span style={{display:'inline-block', width:'1px', height:'13px', background:'rgba(255,255,255,0.5)', marginLeft:'2px', animation:'blink 1s step-end infinite'}}/>
                   )}
                 </p>
+                <div style={{
+                  display:'flex',
+                  justifyContent:'center',
+                  marginTop:'120px',
+                  width:'100%'
+                }}>
+                  <img src={procesoBea1} style={{width:'80%', borderRadius:'12px', display:'block'}} onError={(e) => console.log('Error loading:', e.target.src)} />
+                </div>
+                <div style={{marginTop:'120px', paddingLeft:'8px'}}>
+                  <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:300, fontSize:'32px', color:'rgba(255,255,255,0.5)', marginBottom:'60px'}}>
+                    Hablé con quienes viven este problema.
+                  </p>
+                  <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:300, fontSize:'16px', color:'rgba(255,255,255,0.8)', lineHeight:1.8, marginBottom:'60px', maxWidth:'55vw', textAlign:'center', textShadow:'0 0 20px rgba(255,255,255,0.1)'}}>
+                    "Las herramientas que usamos no están optimizadas para que esa búsqueda se realice de una manera rápida."
+                  </p>
+                  <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:300, fontSize:'16px', color:'rgba(255,255,255,0.8)', lineHeight:1.8, marginBottom:'60px', maxWidth:'55vw', textAlign:'center', textShadow:'0 0 20px rgba(255,255,255,0.1)'}}>
+                    "Si hubiese una manera donde se nos notifique, por medio de las herramientas que usamos, que ya una venta está generando atribución, en lugar de nosotros tener que buscar, sería beneficioso."
+                  </p>
+                  <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:300, fontSize:'16px', color:'rgba(255,255,255,0.8)', lineHeight:1.8, textAlign:'center', textShadow:'0 0 20px rgba(255,255,255,0.1)'}}>
+                    "Si no se cierra en un marco de tiempo, ese dinero de la venta no nos atribuye a nosotros."
+                  </p>
+                  <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:300, fontSize:'32px', color:'rgba(255,255,255,0.5)', lineHeight:1.2, marginTop:'120px', maxWidth:'55vw'}}>
+                    Eso fue lo primero que quedó claro. Lo siguiente era comprobar si el mercado ya había resuelto ese problema.
+                  </p>
+                  <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:700, fontSize:'20px', color:'#F5F7F7', marginTop:'60px'}}>
+                    ¿Qué aprendí de las entrevistas?
+                  </p>
+                  <div style={{marginTop:'60px', display:'flex', flexDirection:'column', gap:'40px', width:'80%', alignItems:'center', marginLeft:'auto', marginRight:'auto'}}>
+                    <div style={{display:'flex', gap:'16px', alignItems:'flex-start'}}>
+                      <span style={{fontFamily:"'IBM Plex Mono', monospace", fontWeight:300, fontSize:'16px', color:'#B0FF92', flexShrink:0}}>01</span>
+                      <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:300, fontSize:'16px', color:'rgba(255,255,255,0.5)', lineHeight:1.8, margin:0}}>El problema no era gestionar más oportunidades. Era saber cuáles necesitaban atención.</p>
+                    </div>
+                    <div style={{display:'flex', gap:'16px', alignItems:'flex-start'}}>
+                      <span style={{fontFamily:"'IBM Plex Mono', monospace", fontWeight:300, fontSize:'16px', color:'#B0FF92', flexShrink:0}}>02</span>
+                      <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:300, fontSize:'16px', color:'rgba(255,255,255,0.5)', lineHeight:1.8, margin:0}}>El seguimiento dependía de buscar información en varias herramientas desconectadas.</p>
+                    </div>
+                    <div style={{display:'flex', gap:'16px', alignItems:'flex-start'}}>
+                      <span style={{fontFamily:"'IBM Plex Mono', monospace", fontWeight:300, fontSize:'16px', color:'#B0FF92', flexShrink:0}}>03</span>
+                      <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:300, fontSize:'16px', color:'rgba(255,255,255,0.5)', lineHeight:1.8, margin:0}}>Cada minuto dedicado a verificar un deal era tiempo que dejaban de invertir en vender.</p>
+                    </div>
+                  </div>
+                  <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:300, fontSize:'32px', color:'rgba(255,255,255,0.5)', marginTop:'120px', lineHeight:1.2}}>
+                    Pensé que alguien ya habría resuelto esto.
+                  </p>
+                  <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:300, fontSize:'16px', color:'rgba(255,255,255,0.5)', lineHeight:1.8, marginTop:'60px', width:'70%', textAlign:'center', marginLeft:'auto', marginRight:'auto'}}>
+                    Encontré plataformas especializadas en gestión de partners como Allbound, PartnerStack, Crossbeam e Impartner. Todas abordaban parte del problema, pero la mayoría estaban orientadas hacia el partner, ofrecían funcionalidades demasiado complejas, requerían una alta adopción o seguían dependiendo de actualizaciones manuales para mantener la visibilidad del pipeline.
+                  </p>
+                </div>
               </div>
             </>
           )}
@@ -689,7 +751,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
         position: 'fixed',
         top: 0,
         right: 0,
-        width: closing ? `${(1 - closeProgress) * 37}vw` : `${100 - progress * 63}vw`,
+        width: closing ? `${(1 - closeProgress) * 40}vw` : `${100 - progress * 60}vw`,
         height: '100vh',
         background: '#F5F2EE',
         zIndex: 9999,
