@@ -420,6 +420,8 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
   const [insightTyping, setInsightTyping] = React.useState('')
   const [insightStarted, setInsightStarted] = React.useState(false)
   const insightRef = React.useRef(null)
+  const imageRef = React.useRef(null)
+  const contentRef = React.useRef(null)
 
   React.useEffect(() => {
     let start = null
@@ -481,6 +483,13 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
     return () => observer.disconnect()
   }, [insightStarted])
 
+  React.useEffect(() => {
+    if (!contentRef.current) return
+    const imagePos = imageRef.current ? imageRef.current.offsetTop : 600
+    const targetScroll = imagePos * (1 - progress)
+    contentRef.current.scrollTop = targetScroll
+  }, [progress])
+
   return (
     <>
       <div style={{
@@ -494,7 +503,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
         transition: 'none',
         overflow: 'hidden'
       }}/>
-      <div className="left-panel" style={{
+      <div ref={contentRef} className="left-panel" style={{
         position: 'fixed',
         top: 0,
         left: 0,
@@ -688,7 +697,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   marginTop:'120px',
                   width:'100%'
                 }}>
-                  <img src={procesoBea1} style={{width:'80%', borderRadius:'12px', display:'block'}} onError={(e) => console.log('Error loading:', e.target.src)} />
+                  <img ref={imageRef} src={procesoBea1} style={{width:'80%', borderRadius:'12px', display:'block'}} onError={(e) => console.log('Error loading:', e.target.src)} />
                 </div>
                 <div style={{marginTop:'120px', paddingLeft:'8px'}}>
                   <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:300, fontSize:'32px', color:'rgba(255,255,255,0.5)', marginBottom:'60px'}}>
