@@ -414,6 +414,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
   const [showRightContent, setShowRightContent] = React.useState(false)
   const [closing, setClosing] = React.useState(false)
   const [closeProgress, setCloseProgress] = React.useState(0)
+  const [mounted, setMounted] = React.useState(false)
   const ellосRef = React.useRef(null)
   const [ellosTyping, setEllosTyping] = React.useState('')
   const [ellosStarted, setEllosStarted] = React.useState(false)
@@ -439,6 +440,10 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
     }
 
     setTimeout(() => requestAnimationFrame(animate), 50)
+  }, [])
+
+  React.useEffect(() => {
+    setTimeout(() => setMounted(true), 800)
   }, [])
 
   React.useEffect(() => {
@@ -484,11 +489,10 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
   }, [progress, insightStarted])
 
   React.useEffect(() => {
-    if (!contentRef.current) return
-    const imagePos = imageRef.current ? imageRef.current.offsetTop : 600
-    const targetScroll = imagePos * (1 - progress)
-    contentRef.current.scrollTop = targetScroll
-  }, [progress])
+    if (!mounted || !contentRef.current || !imageRef.current) return
+    const imagePos = imageRef.current.offsetTop
+    contentRef.current.scrollTop = imagePos * (1 - progress)
+  }, [progress, mounted])
 
   return (
     <>
@@ -514,7 +518,8 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
         overflowX: 'hidden',
         opacity: progress > 0.1 ? 1 : 0,
         clipPath: `inset(0 ${Math.max(0, 100 - progress * 100)}% 0 0)`,
-        transition: 'none'
+        transition: 'none',
+        padding: '0 40px 0 8px'
       }}>
         <div style={{
           position: 'absolute',
@@ -596,11 +601,16 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                 lineHeight: 1.7,
                 marginTop: '32px',
                 paddingLeft: '8px',
-                width: '90%',
-                maxWidth: '70%',
-                textAlign: 'justify'
+                width: '95%'
               }}>
-                <span style={{color:'#B0FF92'}}>Beacon no nació porque alguien pidiera una herramienta. Nació porque distintas personas</span><span style={{color:'rgba(255,255,255,0.5)'}}> describían el mismo problema desde perspectivas diferentes.</span>
+                <span style={{color:'#B0FF92'}}>Beacon no nació porque alguien pidiera una herramienta. Nació porque distintas personas</span>
+                <span style={{color:'rgba(255,255,255,0.5)'}}> describían el mismo problema desde perspectivas diferentes.</span>
+              </p>
+              <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.7, marginTop:'32px', paddingLeft:'8px', whiteSpace:'nowrap'}}>
+                Cada entrevista iluminó una pieza distinta. <span style={{color:'#B0FF92'}}>Mi trabajo fue unirlas.</span>
+              </p>
+              <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.7, marginTop:'40px', paddingLeft:'8px', width:'80%'}}>
+                <span style={{fontWeight:700, fontSize:'30px', color:'#F5F7F7'}}>C.A.M. </span>Channel Account Manager, un rol estratégico que escala las ventas indirectas potenciando a la red de distribuidores, revendedores y aliados de negocio.
               </p>
               <div style={{marginTop:'30px', paddingLeft:'8px'}}>
                 <div style={{
@@ -633,20 +643,6 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                     </React.Fragment>
                   ))}
                 </div>
-                <p style={{
-                  fontFamily:"'Plus Jakarta Sans', sans-serif",
-                  fontWeight:300,
-                  fontSize:'18px',
-                  color:'rgba(255,255,255,0.5)',
-                  lineHeight:1.6,
-                  width:'90%',
-                  marginTop:'24px',
-                  maxWidth: '70%',
-                  textAlign: 'justify'
-                }}>
-                  <span style={{fontWeight:700, fontSize:'30px', color:'#F5F7F7'}}>CAM: </span>
-                  Channel Account Manager, un rol estratégico que escala las ventas indirectas potenciando a la red de distribuidores, revendedores y aliados de negocio.
-                </p>
                 <div style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
                   <p style={{
                     fontFamily:"'Satoshi', sans-serif",
@@ -670,7 +666,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                     En ecosistemas de venta por canal B2B, una vez que una oportunidad pasa al partner, el CAM pierde visibilidad sobre su estado real. No sabe si el partner la está trabajando, si está bloqueada o si ya se cerró. Para saberlo, tiene que salir a buscar esa información entre múltiples herramientas y conversaciones, un proceso manual que consume tiempo y que no siempre da una respuesta clara.
                   </p>
                 </div>
-                <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:100, fontSize:'18px', color:'rgba(255,255,255,0.5)', marginTop:'120px', lineHeight:1.8, textAlign:'left', paddingLeft:'8px', whiteSpace:'nowrap'}}>
+                <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:100, fontSize:'18px', color:'rgba(255,255,255,0.5)', marginTop:'120px', lineHeight:1.8, textAlign:'left', paddingLeft:'8px', maxWidth:'80%'}}>
                   Ellos ya sabían hacer seguimiento pero las herramientas los obligaban a ir a buscar lo que debería llegar solo.
                 </p>
                 <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontVariationSettings: "'wght' 150", fontWeight:150, fontSize:'18px', color:'#B0FF92', marginTop:'4px', width:'80%', lineHeight:1.8, textAlign:'left', paddingLeft:'8px'}}>
@@ -702,15 +698,19 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:300, fontSize:'32px', color:'rgba(255,255,255,0.5)', marginBottom:'60px'}}>
                     Hablé con quienes viven este problema.
                   </p>
-                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontVariationSettings: "'wght' 150", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.8)', lineHeight:1.8, marginBottom:'60px', maxWidth:'55vw', textAlign:'center', textShadow:'0 0 20px rgba(255,255,255,0.1)'}}>
-                    "Las herramientas que usamos no están optimizadas para que esa búsqueda se realice de una manera rápida."
-                  </p>
-                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontVariationSettings: "'wght' 150", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.8)', lineHeight:1.8, marginBottom:'60px', maxWidth:'55vw', textAlign:'center', textShadow:'0 0 20px rgba(255,255,255,0.1)'}}>
-                    "Si hubiese una manera donde se nos notifique, por medio de las herramientas que usamos, que ya una venta está generando atribución, en lugar de nosotros tener que buscar, sería beneficioso."
-                  </p>
-                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontVariationSettings: "'wght' 150", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.8)', lineHeight:1.8, textAlign:'center', textShadow:'0 0 20px rgba(255,255,255,0.1)'}}>
-                    "Si no se cierra en un marco de tiempo, ese dinero de la venta no nos atribuye a nosotros."
-                  </p>
+                  <span style={{fontFamily:"'Didact Gothic', sans-serif", fontSize:'200px', fontWeight:700, color:'transparent', WebkitTextStroke:'2px #B0FF92', lineHeight:0.5, display:'block', marginBottom:'-10px'}}>❝</span>
+                  <div style={{display:'flex', flexDirection:'row', gap:'40px', alignItems:'flex-start'}}>
+                    <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontVariationSettings: "'wght' 150", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.8)', lineHeight:1.8, marginBottom:'60px', width:'30%', textAlign:'center', textShadow:'0 0 20px rgba(255,255,255,0.1)'}}>
+                      "Las herramientas que usamos no están optimizadas para que esa búsqueda se realice de una manera rápida."
+                    </p>
+                    <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontVariationSettings: "'wght' 150", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.8)', lineHeight:1.8, marginBottom:'60px', width:'30%', textAlign:'center', textShadow:'0 0 20px rgba(255,255,255,0.1)'}}>
+                      "Si hubiese una manera donde se nos notifique, por medio de las herramientas que usamos, que ya una venta está generando atribución, en lugar de nosotros tener que buscar, sería beneficioso."
+                    </p>
+                    <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontVariationSettings: "'wght' 150", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.8)', lineHeight:1.8, width:'30%', textAlign:'center', textShadow:'0 0 20px rgba(255,255,255,0.1)'}}>
+                      "Si no se cierra en un marco de tiempo, ese dinero de la venta no nos atribuye a nosotros."
+                    </p>
+                  </div>
+                  <span style={{fontFamily:"'Didact Gothic', sans-serif", fontSize:'200px', fontWeight:700, color:'transparent', WebkitTextStroke:'2px #B0FF92', lineHeight:0.5, display:'block', textAlign:'right', marginTop:'-10px', paddingRight:'40px'}}>❞</span>
                   <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:300, fontSize:'32px', color:'rgba(255,255,255,0.5)', lineHeight:1.2, marginTop:'120px', maxWidth:'55vw'}}>
                     Eso fue lo primero que quedó claro. Lo siguiente era comprobar si el mercado ya había resuelto ese problema.
                   </p>
@@ -759,11 +759,12 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
         position: 'fixed',
         top: 0,
         right: 0,
-        width: closing ? `${(1 - closeProgress) * 40}vw` : `${(100 - progress * 60)}vw`,
+        width: closing ? `${(1 - closeProgress) * 40}vw` : `${Math.max(0, (100 - progress * 60))}vw`,
         height: '100vh',
         background: '#F5F2EE',
         zIndex: 9999,
-        transition: 'none'
+        transition: 'none',
+        visibility: progress > 0.05 ? 'visible' : 'hidden'
       }}>
         <div style={{overflow:'hidden'}}>
           <p style={{
