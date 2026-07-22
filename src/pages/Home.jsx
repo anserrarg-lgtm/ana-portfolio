@@ -424,17 +424,21 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
   const contentRef = React.useRef(null)
 
   React.useEffect(() => {
-    let start = null
-    const duration = 800
-    const animate = (timestamp) => {
-      if (!start) start = timestamp
-      const elapsed = timestamp - start
+    const startTime = performance.now()
+    const duration = 500
+
+    const animate = (currentTime) => {
+      const elapsed = currentTime - startTime
       const p = Math.min(1, elapsed / duration)
       setProgress(p)
-      if (p >= 1) setShowRightContent(true)
-      if (p < 1) requestAnimationFrame(animate)
+      if (p < 1) {
+        requestAnimationFrame(animate)
+      } else {
+        setShowRightContent(true)
+      }
     }
-    requestAnimationFrame(animate)
+
+    setTimeout(() => requestAnimationFrame(animate), 50)
   }, [])
 
   React.useEffect(() => {
@@ -460,28 +464,24 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
     return () => observer.disconnect()
   }, [ellosStarted])
 
+  const insightIntervalRef = React.useRef(null)
   React.useEffect(() => {
-    const el = insightRef.current
-    if (!el) return
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && !insightStarted) {
-          setInsightStarted(true)
-          let i = 0
-          const text = '// insight: Los usuarios no querían más seguimiento. Querían recuperar la visibilidad.'
-          const interval = setInterval(() => {
-            if (i < text.length) {
-              setInsightTyping(text.slice(0, i + 1))
-              i++
-            } else clearInterval(interval)
-          }, 30)
-        }
-      },
-      { threshold: 0.5 }
-    )
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [insightStarted])
+    if (insightStarted || !insightRef.current || !contentRef.current) return
+    const insightTop = insightRef.current.offsetTop
+    const containerHeight = contentRef.current.clientHeight
+    const currentScroll = contentRef.current.scrollTop
+    if (currentScroll + containerHeight > insightTop) {
+      setInsightStarted(true)
+      let i = 0
+      const text = '// insight: Los usuarios no querían más seguimiento. Querían recuperar la visibilidad.'
+      insightIntervalRef.current = setInterval(() => {
+        if (i < text.length) {
+          setInsightTyping(text.slice(0, i + 1))
+          i++
+        } else clearInterval(insightIntervalRef.current)
+      }, 25)
+    }
+  }, [progress, insightStarted])
 
   React.useEffect(() => {
     if (!contentRef.current) return
@@ -537,7 +537,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
             <>
               <div style={{position: 'relative'}}>
                 <p style={{
-                  fontFamily: "'Satoshi', sans-serif",
+                  fontFamily: "'Plus Jakarta Sans', sans-serif",
                   fontWeight: 100,
                   fontSize: '72px',
                   color: '#F5F7F7',
@@ -575,7 +575,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                 zIndex: 10000
               }}>
                 <p style={{
-                  fontFamily:"'Satoshi', sans-serif",
+                  fontFamily:"'Plus Jakarta Sans', sans-serif",
                   fontWeight:300,
                   fontSize:'32px',
                   color:'rgba(255,255,255,0.5)',
@@ -588,9 +588,10 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                 <ArrowDown size={100} color="#B0FF92" strokeWidth={1.5} style={{animation:'bounceArrow 2s ease-in-out infinite', flexShrink:0, transform:'rotate(-90deg)', marginTop:'8px', verticalAlign:'middle'}}/>
               </div>
               <p style={{
-                fontFamily: "'DM Sans', sans-serif",
-                fontWeight: 300,
-                fontSize: '16px',
+                fontFamily: "'Plus Jakarta Sans', sans-serif",
+                fontVariationSettings: "'wght' 150",
+                fontWeight: 150,
+                fontSize: '18px',
                 color: 'rgba(255,255,255,0.5)',
                 lineHeight: 1.7,
                 marginTop: '32px',
@@ -599,9 +600,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                 maxWidth: '70%',
                 textAlign: 'justify'
               }}>
-                <span style={{color:'#B0FF92'}}>Beacon no nació porque alguien pidiera una herramienta. </span><span style={{color:'rgba(255,255,255,0.5)'}}>Nació porque distintas personas describían el mismo problema desde perspectivas diferentes.</span><br/>
-                <br/>
-                <span style={{color:'rgba(255,255,255,0.5)'}}>Cada entrevista iluminó una pieza distinta.</span> <span style={{color:'#B0FF92'}}>Mi trabajo fue unirlas.</span>
+                <span style={{color:'#B0FF92'}}>Beacon no nació porque alguien pidiera una herramienta. Nació porque distintas personas</span><span style={{color:'rgba(255,255,255,0.5)'}}> describían el mismo problema desde perspectivas diferentes.</span>
               </p>
               <div style={{marginTop:'30px', paddingLeft:'8px'}}>
                 <div style={{
@@ -623,7 +622,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                     <React.Fragment key={i}>
                       <div style={{display:'flex', flexDirection:'column', alignItems:'center', gap:'8px'}}>
                         {item.icon}
-                        <span style={{fontFamily:"'Satoshi', sans-serif", fontWeight: item.color === '#B0FF92' ? 700 : 300, fontSize:'20px', color: item.color}}>{item.label}</span>
+                        <span style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight: item.color === '#B0FF92' ? 700 : 300, fontSize:'20px', color: item.color}}>{item.label}</span>
                       </div>
                       {i < 4 && (
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="1.5" strokeLinecap="round" style={{marginTop:'12px'}}>
@@ -635,9 +634,9 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   ))}
                 </div>
                 <p style={{
-                  fontFamily:"'Satoshi', sans-serif",
+                  fontFamily:"'Plus Jakarta Sans', sans-serif",
                   fontWeight:300,
-                  fontSize:'16px',
+                  fontSize:'18px',
                   color:'rgba(255,255,255,0.5)',
                   lineHeight:1.6,
                   width:'90%',
@@ -659,9 +658,9 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                     width:'80%'
                   }}>PROBLEMA:</p>
                   <p style={{
-                    fontFamily:"'Satoshi', sans-serif",
+                    fontFamily:"'Plus Jakarta Sans', sans-serif",
                     fontWeight:300,
-                    fontSize:'16px',
+                    fontSize:'18px',
                     color:'rgba(255,255,255,0.5)',
                     textAlign:'center',
                     marginTop:'40px',
@@ -671,10 +670,10 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                     En ecosistemas de venta por canal B2B, una vez que una oportunidad pasa al partner, el CAM pierde visibilidad sobre su estado real. No sabe si el partner la está trabajando, si está bloqueada o si ya se cerró. Para saberlo, tiene que salir a buscar esa información entre múltiples herramientas y conversaciones, un proceso manual que consume tiempo y que no siempre da una respuesta clara.
                   </p>
                 </div>
-                <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:300, fontSize:'16px', color:'rgba(255,255,255,0.5)', marginTop:'120px', lineHeight:1.8, textAlign:'left', paddingLeft:'8px', whiteSpace:'nowrap'}}>
+                <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:100, fontSize:'18px', color:'rgba(255,255,255,0.5)', marginTop:'120px', lineHeight:1.8, textAlign:'left', paddingLeft:'8px', whiteSpace:'nowrap'}}>
                   Ellos ya sabían hacer seguimiento pero las herramientas los obligaban a ir a buscar lo que debería llegar solo.
                 </p>
-                <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:300, fontSize:'16px', color:'#B0FF92', marginTop:'4px', width:'80%', lineHeight:1.8, textAlign:'left', paddingLeft:'8px'}}>
+                <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontVariationSettings: "'wght' 150", fontWeight:150, fontSize:'18px', color:'#B0FF92', marginTop:'4px', width:'80%', lineHeight:1.8, textAlign:'left', paddingLeft:'8px'}}>
                   Los usuarios no querían más seguimiento, querían recuperar la visibilidad.
                 </p>
                 <p ref={insightRef} style={{
@@ -700,19 +699,19 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   <img ref={imageRef} src={procesoBea1} style={{width:'80%', borderRadius:'12px', display:'block'}} onError={(e) => console.log('Error loading:', e.target.src)} />
                 </div>
                 <div style={{marginTop:'120px', paddingLeft:'8px'}}>
-                  <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:300, fontSize:'32px', color:'rgba(255,255,255,0.5)', marginBottom:'60px'}}>
+                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:300, fontSize:'32px', color:'rgba(255,255,255,0.5)', marginBottom:'60px'}}>
                     Hablé con quienes viven este problema.
                   </p>
-                  <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:300, fontSize:'16px', color:'rgba(255,255,255,0.8)', lineHeight:1.8, marginBottom:'60px', maxWidth:'55vw', textAlign:'center', textShadow:'0 0 20px rgba(255,255,255,0.1)'}}>
+                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontVariationSettings: "'wght' 150", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.8)', lineHeight:1.8, marginBottom:'60px', maxWidth:'55vw', textAlign:'center', textShadow:'0 0 20px rgba(255,255,255,0.1)'}}>
                     "Las herramientas que usamos no están optimizadas para que esa búsqueda se realice de una manera rápida."
                   </p>
-                  <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:300, fontSize:'16px', color:'rgba(255,255,255,0.8)', lineHeight:1.8, marginBottom:'60px', maxWidth:'55vw', textAlign:'center', textShadow:'0 0 20px rgba(255,255,255,0.1)'}}>
+                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontVariationSettings: "'wght' 150", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.8)', lineHeight:1.8, marginBottom:'60px', maxWidth:'55vw', textAlign:'center', textShadow:'0 0 20px rgba(255,255,255,0.1)'}}>
                     "Si hubiese una manera donde se nos notifique, por medio de las herramientas que usamos, que ya una venta está generando atribución, en lugar de nosotros tener que buscar, sería beneficioso."
                   </p>
-                  <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:300, fontSize:'16px', color:'rgba(255,255,255,0.8)', lineHeight:1.8, textAlign:'center', textShadow:'0 0 20px rgba(255,255,255,0.1)'}}>
+                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontVariationSettings: "'wght' 150", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.8)', lineHeight:1.8, textAlign:'center', textShadow:'0 0 20px rgba(255,255,255,0.1)'}}>
                     "Si no se cierra en un marco de tiempo, ese dinero de la venta no nos atribuye a nosotros."
                   </p>
-                  <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:300, fontSize:'32px', color:'rgba(255,255,255,0.5)', lineHeight:1.2, marginTop:'120px', maxWidth:'55vw'}}>
+                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:300, fontSize:'32px', color:'rgba(255,255,255,0.5)', lineHeight:1.2, marginTop:'120px', maxWidth:'55vw'}}>
                     Eso fue lo primero que quedó claro. Lo siguiente era comprobar si el mercado ya había resuelto ese problema.
                   </p>
                   <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:700, fontSize:'20px', color:'#F5F7F7', marginTop:'60px'}}>
@@ -720,22 +719,22 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   </p>
                   <div style={{marginTop:'60px', display:'flex', flexDirection:'column', gap:'40px', width:'80%', alignItems:'center', marginLeft:'auto', marginRight:'auto'}}>
                     <div style={{display:'flex', gap:'16px', alignItems:'flex-start'}}>
-                      <span style={{fontFamily:"'IBM Plex Mono', monospace", fontWeight:300, fontSize:'16px', color:'#B0FF92', flexShrink:0}}>01</span>
-                      <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:300, fontSize:'16px', color:'rgba(255,255,255,0.5)', lineHeight:1.8, margin:0}}>El problema no era gestionar más oportunidades. Era saber cuáles necesitaban atención.</p>
+                      <span style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontVariationSettings: "'wght' 150", fontWeight:150, fontSize:'18px', color:'#B0FF92', flexShrink:0}}>01</span>
+                      <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontVariationSettings: "'wght' 150", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.8, margin:0}}>El problema no era gestionar más oportunidades. Era saber cuáles necesitaban atención.</p>
                     </div>
                     <div style={{display:'flex', gap:'16px', alignItems:'flex-start'}}>
-                      <span style={{fontFamily:"'IBM Plex Mono', monospace", fontWeight:300, fontSize:'16px', color:'#B0FF92', flexShrink:0}}>02</span>
-                      <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:300, fontSize:'16px', color:'rgba(255,255,255,0.5)', lineHeight:1.8, margin:0}}>El seguimiento dependía de buscar información en varias herramientas desconectadas.</p>
+                      <span style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontVariationSettings: "'wght' 150", fontWeight:150, fontSize:'18px', color:'#B0FF92', flexShrink:0}}>02</span>
+                      <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontVariationSettings: "'wght' 150", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.8, margin:0}}>El seguimiento dependía de buscar información en varias herramientas desconectadas.</p>
                     </div>
                     <div style={{display:'flex', gap:'16px', alignItems:'flex-start'}}>
-                      <span style={{fontFamily:"'IBM Plex Mono', monospace", fontWeight:300, fontSize:'16px', color:'#B0FF92', flexShrink:0}}>03</span>
-                      <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:300, fontSize:'16px', color:'rgba(255,255,255,0.5)', lineHeight:1.8, margin:0}}>Cada minuto dedicado a verificar un deal era tiempo que dejaban de invertir en vender.</p>
+                      <span style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontVariationSettings: "'wght' 150", fontWeight:150, fontSize:'18px', color:'#B0FF92', flexShrink:0}}>03</span>
+                      <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontVariationSettings: "'wght' 150", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.8, margin:0}}>Cada minuto dedicado a verificar un deal era tiempo que dejaban de invertir en vender.</p>
                     </div>
                   </div>
-                  <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:300, fontSize:'32px', color:'rgba(255,255,255,0.5)', marginTop:'120px', lineHeight:1.2}}>
+                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:300, fontSize:'32px', color:'rgba(255,255,255,0.5)', marginTop:'120px', lineHeight:1.2}}>
                     Pensé que alguien ya habría resuelto esto.
                   </p>
-                  <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:300, fontSize:'16px', color:'rgba(255,255,255,0.5)', lineHeight:1.8, marginTop:'60px', width:'70%', textAlign:'center', marginLeft:'auto', marginRight:'auto'}}>
+                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontVariationSettings: "'wght' 150", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.8, marginTop:'60px', width:'70%', textAlign:'center', marginLeft:'auto', marginRight:'auto'}}>
                     Encontré plataformas especializadas en gestión de partners como Allbound, PartnerStack, Crossbeam e Impartner. Todas abordaban parte del problema, pero la mayoría estaban orientadas hacia el partner, ofrecían funcionalidades demasiado complejas, requerían una alta adopción o seguían dependiendo de actualizaciones manuales para mantener la visibilidad del pipeline.
                   </p>
                 </div>
@@ -760,7 +759,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
         position: 'fixed',
         top: 0,
         right: 0,
-        width: closing ? `${(1 - closeProgress) * 40}vw` : `${100 - progress * 60}vw`,
+        width: closing ? `${(1 - closeProgress) * 40}vw` : `${(100 - progress * 60)}vw`,
         height: '100vh',
         background: '#F5F2EE',
         zIndex: 9999,
@@ -1100,6 +1099,8 @@ export default function Home() {
           zoomProgressRef.current = 1
           setZoomProgress(1)
           setPhase('zooming')
+          wheelLockRef.current = false
+          setTimeout(() => { wheelLockRef.current = true }, 100)
           const rewind = () => {
             zoomProgressRef.current = Math.max(0, zoomProgressRef.current - 0.02)
             setZoomProgress(zoomProgressRef.current)
@@ -1562,10 +1563,12 @@ export default function Home() {
 
       {projectTransition && (
         <ProjectTransition
+          key={projectTransition}
           color={projectTransition === 'beacon' ? '#121716' : '#112C2C'}
           projectName={projectTransition === 'beacon' ? 'Beacon' : 'Theaveling'}
           projectColor={projectTransition === 'beacon' ? '#121716' : '#112C2C'}
           onClose={() => {
+            setPhase('projects')
             setProjectTransition(null)
             setProjectsText('> Projects/')
             setShowSubtitle(true)
