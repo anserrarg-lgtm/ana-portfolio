@@ -415,6 +415,21 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
   const [closing, setClosing] = React.useState(false)
   const [closeProgress, setCloseProgress] = React.useState(0)
   const [mounted, setMounted] = React.useState(false)
+  const [quoteIndex, setQuoteIndex] = React.useState(0)
+
+  const quotes = [
+    [
+      '"Las herramientas que usamos no están optimizadas para que esa búsqueda se realice de una manera rápida."',
+      '"Si hubiese una manera donde se nos notifique, por medio de las herramientas que usamos, que ya una venta está generando atribución, en lugar de nosotros tener que buscar, sería beneficioso."',
+      '"Si no se cierra en un marco de tiempo, ese dinero de la venta no nos atribuye a nosotros."'
+    ],
+    [
+      '"Lo mas frustrante es que el cliente o el partner no respondan seguido o no mantengan la conversación activa. Muchas oportunidades se caen por eso"',
+      '"Si me ha pasado, no he podido reclamar lo de esa compra y queda cerrada como lost, pierdo esa opp, pierdo tambien para mis métricas. Por eso intento tener cuidado."',
+      '"Yo personalmente manejo partner grandes, muchas opps quedan perdidas porque no me da el tiempo de revisar cada una con un manager diferente, entonces podría reorganizar mejor"'
+    ]
+  ]
+
   const ellосRef = React.useRef(null)
   const [ellosTyping, setEllosTyping] = React.useState('')
   const [ellosStarted, setEllosStarted] = React.useState(false)
@@ -610,7 +625,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                 Cada entrevista iluminó una pieza distinta. <span style={{color:'#B0FF92'}}>Mi trabajo fue unirlas.</span>
               </p>
               <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.7, marginTop:'40px', paddingLeft:'8px', width:'80%'}}>
-                <span style={{fontWeight:700, fontSize:'30px', color:'#F5F7F7'}}>C.A.M. </span>Channel Account Manager, un rol estratégico que escala las ventas indirectas potenciando a la red de distribuidores, revendedores y aliados de negocio.
+                <span style={{fontWeight:500, fontSize:'30px', color:'#F5F7F7'}}>C.A.M. </span>Channel Account Manager, un rol estratégico que escala las ventas indirectas potenciando a la red de distribuidores, revendedores y aliados de negocio.
               </p>
               <div style={{marginTop:'30px', paddingLeft:'8px'}}>
                 <div style={{
@@ -646,13 +661,13 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                 <div style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
                   <p style={{
                     fontFamily:"'Satoshi', sans-serif",
-                    fontWeight:700,
+                    fontWeight:500,
                     fontSize:'30px',
                     color:'#F5F7F7',
                     marginTop:'80px',
                     textAlign:'center',
                     width:'80%'
-                  }}>PROBLEMA:</p>
+                  }}>El punto ciego del pipeline.</p>
                   <p style={{
                     fontFamily:"'Plus Jakarta Sans', sans-serif",
                     fontWeight:300,
@@ -661,7 +676,8 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                     textAlign:'center',
                     marginTop:'40px',
                     width:'80%',
-                    maxWidth:'55vw'
+                    maxWidth:'55vw',
+                    lineHeight:2
                   }}>
                     En ecosistemas de venta por canal B2B, una vez que una oportunidad pasa al partner, el CAM pierde visibilidad sobre su estado real. No sabe si el partner la está trabajando, si está bloqueada o si ya se cerró. Para saberlo, tiene que salir a buscar esa información entre múltiples herramientas y conversaciones, un proceso manual que consume tiempo y que no siempre da una respuesta clara.
                   </p>
@@ -698,23 +714,41 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:300, fontSize:'32px', color:'rgba(255,255,255,0.5)', marginBottom:'60px'}}>
                     Hablé con quienes viven este problema.
                   </p>
-                  <span style={{fontFamily:"'Didact Gothic', sans-serif", fontSize:'200px', fontWeight:700, color:'transparent', WebkitTextStroke:'2px #B0FF92', lineHeight:0.5, display:'block', marginBottom:'-10px'}}>❝</span>
-                  <div style={{display:'flex', flexDirection:'row', gap:'40px', alignItems:'flex-start'}}>
-                    <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontVariationSettings: "'wght' 150", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.8)', lineHeight:1.8, marginBottom:'60px', width:'30%', textAlign:'center', textShadow:'0 0 20px rgba(255,255,255,0.1)'}}>
-                      "Las herramientas que usamos no están optimizadas para que esa búsqueda se realice de una manera rápida."
-                    </p>
-                    <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontVariationSettings: "'wght' 150", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.8)', lineHeight:1.8, marginBottom:'60px', width:'30%', textAlign:'center', textShadow:'0 0 20px rgba(255,255,255,0.1)'}}>
-                      "Si hubiese una manera donde se nos notifique, por medio de las herramientas que usamos, que ya una venta está generando atribución, en lugar de nosotros tener que buscar, sería beneficioso."
-                    </p>
-                    <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontVariationSettings: "'wght' 150", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.8)', lineHeight:1.8, width:'30%', textAlign:'center', textShadow:'0 0 20px rgba(255,255,255,0.1)'}}>
-                      "Si no se cierra en un marco de tiempo, ese dinero de la venta no nos atribuye a nosotros."
-                    </p>
+                  <span style={{fontFamily:"'Didact Gothic', sans-serif", fontSize:'200px', fontWeight:700, color:'transparent', WebkitTextStroke:'0.1px #B0FF92', lineHeight:0.5, display:'block', marginBottom:'-10px'}}>❝</span>
+                  <div style={{width:'90%', marginTop:'60px'}}>
+                    <div style={{display:'flex', flexDirection:'row', gap:'40px', alignItems:'flex-start'}}>
+                      {quotes[quoteIndex].map((quote, i) => (
+                        <p key={i} style={{
+                          fontFamily:"'Plus Jakarta Sans', sans-serif",
+                          fontWeight:150,
+                          fontSize:'18px',
+                          color:'rgba(255,255,255,0.8)',
+                          lineHeight:1.8,
+                          width:'33%',
+                          textShadow:'0 0 20px rgba(255,255,255,0.1)'
+                        }}>{quote}
+                          <span style={{display:'inline-block', width:'6px', height:'6px', borderRadius:'50%', background:'#B0FF92', boxShadow:'0 0 6px #B0FF92', marginLeft:'6px', verticalAlign:'middle'}}/>
+                        </p>
+                      ))}
+                    </div>
+                    <div style={{display:'flex', gap:'12px', marginTop:'24px'}}>
+                      <div onClick={() => setQuoteIndex(i => Math.max(0, i-1))} style={{width:'36px', height:'36px', border:'1px solid rgba(255,255,255,0.3)', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer', flexShrink:0}}>
+                        <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
+                          <path d="M12 7H2M2 7L6 3M2 7L6 11" stroke="rgba(255,255,255,0.5)" strokeWidth="1.5" strokeLinecap="round"/>
+                        </svg>
+                      </div>
+                      <div onClick={() => setQuoteIndex(i => Math.min(quotes.length-1, i+1))} style={{width:'36px', height:'36px', border:'1px solid rgba(255,255,255,0.3)', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer', flexShrink:0}}>
+                        <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
+                          <path d="M2 7H12M12 7L8 3M12 7L8 11" stroke="rgba(255,255,255,0.5)" strokeWidth="1.5" strokeLinecap="round"/>
+                        </svg>
+                      </div>
+                    </div>
                   </div>
-                  <span style={{fontFamily:"'Didact Gothic', sans-serif", fontSize:'200px', fontWeight:700, color:'transparent', WebkitTextStroke:'2px #B0FF92', lineHeight:0.5, display:'block', textAlign:'right', marginTop:'-10px', paddingRight:'40px'}}>❞</span>
+                  <span style={{fontFamily:"'Didact Gothic', sans-serif", fontSize:'200px', fontWeight:700, color:'transparent', WebkitTextStroke:'0.1px #B0FF92', lineHeight:0.5, display:'block', textAlign:'right', marginTop:'-10px', paddingRight:'40px'}}>❞</span>
                   <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:300, fontSize:'32px', color:'rgba(255,255,255,0.5)', lineHeight:1.2, marginTop:'120px', maxWidth:'55vw'}}>
                     Eso fue lo primero que quedó claro. Lo siguiente era comprobar si el mercado ya había resuelto ese problema.
                   </p>
-                  <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:700, fontSize:'20px', color:'#F5F7F7', marginTop:'60px'}}>
+                  <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:500, fontSize:'30px', color:'#F5F7F7', marginTop:'60px'}}>
                     ¿Qué aprendí de las entrevistas?
                   </p>
                   <div style={{marginTop:'60px', display:'flex', flexDirection:'column', gap:'40px', width:'80%', alignItems:'center', marginLeft:'auto', marginRight:'auto'}}>
