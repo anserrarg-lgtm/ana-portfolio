@@ -416,6 +416,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
   const [closeProgress, setCloseProgress] = React.useState(0)
   const [mounted, setMounted] = React.useState(false)
   const [quoteIndex, setQuoteIndex] = React.useState(0)
+  const [activeSection, setActiveSection] = React.useState(0)
 
   const quotes = [
     [
@@ -749,7 +750,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                     Eso fue lo primero que quedó claro. Lo siguiente era comprobar si el mercado ya había resuelto ese problema.
                   </p>
                   <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:500, fontSize:'30px', color:'#F5F7F7', marginTop:'60px'}}>
-                    ¿Qué aprendí de las entrevistas?
+                    Lo que empezó a repetirse.
                   </p>
                   <div style={{marginTop:'60px', display:'flex', flexDirection:'column', gap:'40px', width:'80%', alignItems:'center', marginLeft:'auto', marginRight:'auto'}}>
                     <div style={{display:'flex', gap:'16px', alignItems:'flex-start'}}>
@@ -768,8 +769,8 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:300, fontSize:'32px', color:'rgba(255,255,255,0.5)', marginTop:'120px', lineHeight:1.2}}>
                     Pensé que alguien ya habría resuelto esto.
                   </p>
-                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontVariationSettings: "'wght' 150", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.8, marginTop:'60px', width:'70%', textAlign:'center', marginLeft:'auto', marginRight:'auto'}}>
-                    Encontré plataformas especializadas en gestión de partners como Allbound, PartnerStack, Crossbeam e Impartner. Todas abordaban parte del problema, pero la mayoría estaban orientadas hacia el partner, ofrecían funcionalidades demasiado complejas, requerían una alta adopción o seguían dependiendo de actualizaciones manuales para mantener la visibilidad del pipeline.
+                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.8, marginTop:'60px', width:'90%', textAlign:'left'}}>
+                    Encontré herramientas como <span style={{color:'#7B58F8', fontWeight: 600, fontStyle: 'normal'}}>Allbound, PartnerStack, Crossbeam e Impartner</span> que abordaban parte del problema. Sin embargo, la mayoría estaban enfocadas en gestionar el ecosistema de partners, requerían una alta adopción o seguían dependiendo de actualizaciones manuales. <span style={{color:'#B0FF92'}}>La necesidad seguía siendo la misma: recuperar la visibilidad del pipeline sin tener que salir a buscarla.</span>
                   </p>
                 </div>
               </div>
@@ -800,6 +801,29 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
         transition: 'none',
         visibility: progress > 0.05 ? 'visible' : 'hidden'
       }}>
+        <div style={{
+          position: 'absolute',
+          top: '50%',
+          left: '20px',
+          transform: 'translateY(-50%)',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '0'
+        }}>
+          {['Context', 'Discovery', 'Insights', 'Opportunity', 'Strategy', 'Design', 'Development', 'Impact', 'Learnings'].map((item, i) => (
+            <div key={i} style={{display:'flex', alignItems:'center', gap:'8px', padding:'6px 0'}}>
+              <div style={{width: activeSection === i ? '2px' : '1px', height:'20px', background: activeSection === i ? '#1A1A1A' : 'rgba(26,26,26,0.3)'}}/>
+              <p style={{
+                fontFamily:"'Plus Jakarta Sans', sans-serif",
+                fontSize:'14px',
+                fontWeight: activeSection === i ? 700 : 300,
+                color:'#1A1A1A',
+                cursor:'pointer',
+                letterSpacing:'0.05em'
+              }} onClick={() => setActiveSection(i)}>{item}</p>
+            </div>
+          ))}
+        </div>
         <div style={{overflow:'hidden'}}>
           <p style={{
             position: 'absolute',
@@ -823,9 +847,10 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
           top: '120px',
           left: '20px',
           display: 'flex',
-          flexDirection: 'column',
-          gap: '0',
-          marginTop: '8px'
+          flexDirection: 'row',
+          gap: '8px',
+          marginTop: '8px',
+          flexWrap: 'wrap'
         }}>
           {(projectName === 'Beacon' ?
             ['Channel Sales', 'B2B', 'Pipeline', 'Partners', 'Visibilidad'] :
@@ -835,14 +860,14 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
               <p style={{
                 fontFamily: "'Plus Jakarta Sans', sans-serif",
                 fontSize: '16px',
-                fontWeight: 700,
+                fontWeight: 500,
                 color: '#1A1A1A',
                 lineHeight: 1.2,
                 overflow: 'hidden',
                 transform: closing ? 'translateY(-100%)' : showRightContent ? 'translateY(0)' : 'translateY(-100%)',
                 transition: `transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) ${i * 60}ms`
               }}>
-                {tag}
+                ✳ {tag}
               </p>
             </div>
           ))}
