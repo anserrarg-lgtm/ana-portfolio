@@ -417,6 +417,8 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
   const [mounted, setMounted] = React.useState(false)
   const [quoteIndex, setQuoteIndex] = React.useState(0)
   const [activeSection, setActiveSection] = React.useState(0)
+  const [imageVisible, setImageVisible] = React.useState(false)
+  const [arrowStep, setArrowStep] = React.useState(-1)
 
   const quotes = [
     [
@@ -509,6 +511,24 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
     const imagePos = imageRef.current.offsetTop
     contentRef.current.scrollTop = imagePos * (1 - progress)
   }, [progress, mounted])
+
+  React.useEffect(() => {
+    if (!imageRef.current || imageVisible) return
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) setImageVisible(true)
+      },
+      { threshold: 0.2, root: contentRef.current }
+    )
+    observer.observe(imageRef.current)
+    return () => observer.disconnect()
+  }, [imageVisible])
+
+  React.useEffect(() => {
+    if (progress < 1 || arrowStep >= 3) return
+    const timer = setTimeout(() => setArrowStep(s => s + 1), 500)
+    return () => clearTimeout(timer)
+  }, [arrowStep, progress])
 
   return (
     <>
@@ -619,14 +639,16 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                 paddingLeft: '8px',
                 width: '95%'
               }}>
-                <span style={{color:'#B0FF92'}}>Beacon no nació porque alguien pidiera una herramienta. Nació porque distintas personas</span>
-                <span style={{color:'rgba(255,255,255,0.5)'}}> describían el mismo problema desde perspectivas diferentes.</span>
+                <span style={{color:'rgba(255,255,255,0.5)'}}>Beacon no nació porque alguien pidiera una herramienta. </span><span style={{color:'#B0FF92'}}>Nació porque distintas</span><br/><span style={{color:'#B0FF92'}}>personas describían el mismo problema desde perspectivas diferentes.</span>
               </p>
-              <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.7, marginTop:'32px', paddingLeft:'8px', whiteSpace:'nowrap'}}>
+              <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.7, marginTop:'12px', paddingLeft:'8px', whiteSpace:'nowrap'}}>
                 Cada entrevista iluminó una pieza distinta. <span style={{color:'#B0FF92'}}>Mi trabajo fue unirlas.</span>
               </p>
-              <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.7, marginTop:'40px', paddingLeft:'8px', width:'80%'}}>
-                <span style={{fontWeight:500, fontSize:'30px', color:'#F5F7F7'}}>C.A.M. </span>Channel Account Manager, un rol estratégico que escala las ventas indirectas potenciando a la red de distribuidores, revendedores y aliados de negocio.
+              <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', marginTop:'60px', paddingLeft:'8px', width:'80%'}}>
+                <span style={{fontWeight:500, fontSize:'30px', color:'#F5F7F7'}}>C.A.M. </span>Un Channel Account Manager es el responsable de coordinar ventas a través de partners y distribuidores.
+              </p>
+              <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', marginTop:'16px', paddingLeft:'8px', width:'80%'}}>
+                Su trabajo no termina cuando entrega una oportunidad. En realidad, ahí empieza la parte más difícil: seguir siendo visible dentro del proceso.
               </p>
               <div style={{marginTop:'30px', paddingLeft:'8px'}}>
                 <div style={{
@@ -636,7 +658,12 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   marginTop:'100px',
                   marginBottom:'60px',
                   justifyContent:'center',
-                  width: '100%'
+                  width: 'fit-content',
+                  border: '1px solid rgba(255,255,255,0.15)',
+                  borderRadius: '12px',
+                  padding: '16px',
+                  marginLeft: 'auto',
+                  marginRight: 'auto'
                 }}>
                   {[
                     { label:'Vendor', icon: <Building2 size={32} color="#7B58F8" strokeWidth={1}/>, color: 'rgba(255,255,255,0.5)' },
@@ -651,37 +678,50 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                         <span style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight: item.color === '#B0FF92' ? 700 : 300, fontSize:'20px', color: item.color}}>{item.label}</span>
                       </div>
                       {i < 4 && (
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="1.5" strokeLinecap="round" style={{marginTop:'12px'}}>
-                          <line x1="5" y1="12" x2="19" y2="12"/>
-                          <polyline points="12 5 19 12 12 19"/>
+                        <svg width="40" height="16" viewBox="0 0 40 16" fill="none" style={{marginTop:'12px', flexShrink:0}}>
+                          <line x1="0" y1="8" x2="34" y2="8" stroke="#F5F7F7" strokeWidth="3" strokeLinecap="round"/>
+                          <polyline points="28 3 34 8 28 13" stroke="#F5F7F7" strokeWidth="3" strokeLinecap="round" fill="none"/>
                         </svg>
                       )}
                     </React.Fragment>
                   ))}
                 </div>
-                <div style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
+                <div style={{display:'flex', flexDirection:'column', alignItems:'flex-start'}}>
                   <p style={{
                     fontFamily:"'Satoshi', sans-serif",
                     fontWeight:500,
                     fontSize:'30px',
                     color:'#F5F7F7',
-                    marginTop:'80px',
-                    textAlign:'center',
+                    marginTop:'40px',
+                    textAlign:'left',
                     width:'80%'
                   }}>El punto ciego del pipeline.</p>
-                  <p style={{
-                    fontFamily:"'Plus Jakarta Sans', sans-serif",
-                    fontWeight:300,
-                    fontSize:'18px',
-                    color:'rgba(255,255,255,0.5)',
-                    textAlign:'center',
-                    marginTop:'40px',
-                    width:'80%',
-                    maxWidth:'55vw',
-                    lineHeight:2
-                  }}>
-                    En ecosistemas de venta por canal B2B, una vez que una oportunidad pasa al partner, el CAM pierde visibilidad sobre su estado real. No sabe si el partner la está trabajando, si está bloqueada o si ya se cerró. Para saberlo, tiene que salir a buscar esa información entre múltiples herramientas y conversaciones, un proceso manual que consume tiempo y que no siempre da una respuesta clara.
+                  <div style={{width:'50%', height:'1px', background:'linear-gradient(to right, rgba(176,255,146,0.3), transparent)', marginTop:'16px'}}/>
+                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.7, marginTop:'40px', width:'80%', textAlign:'left', alignSelf:'flex-start'}}>
+                    En ecosistemas de venta por canal B2B, una vez que una oportunidad pasa al partner, el CAM pierde visibilidad sobre su estado real.
                   </p>
+                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.7, marginTop:'24px', width:'80%'}}>
+                    No sabe si la oportunidad sigue activa, si está bloqueada o si ya se cerró.
+                  </p>
+                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.7, marginTop:'24px', width:'80%', textAlign:'left', alignSelf:'flex-start'}}>
+                    Para averiguarlo tiene que reconstruir manualmente la historia del deal entre CRMs, correos, dashboards y conversaciones.
+                  </p>
+                  <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'48px', marginTop:'120px', width:'90%', marginLeft:'20px', marginRight:'auto', position:'relative'}}>
+                    <div style={{position:'absolute', top:0, bottom:0, left:'50%', width:'1px', background:'linear-gradient(to bottom, transparent, rgba(255,255,255,0.15), transparent)'}}/>
+                    <div style={{position:'absolute', left:0, right:0, top:'50%', height:'1px', background:'linear-gradient(to right, transparent, rgba(255,255,255,0.15), transparent)'}}/>
+                    {[
+                      { num:'15 min', label:'Seguimiento manual por oportunidad.', desc:'Tiempo promedio que un CAM invierte verificando el estado de un solo deal entre diferentes herramientas.' },
+                      { num:'70–80', label:'Oportunidades activas simultáneas.', desc:'Un volumen que hace prácticamente imposible mantener el seguimiento de forma manual.' },
+                      { num:'2 meses', label:'Ventana para registrar la atribución.', desc:'Si una venta no se registra a tiempo, la comisión puede perderse aunque el trabajo comercial ya se haya realizado.' },
+                      { num:'USD 400K', label:'Valor potencial del pipeline.', desc:'Una sola oportunidad puede representar cientos de miles de dólares dentro del ecosistema B2B.' }
+                    ].map((item, i) => (
+                      <div key={i} style={{display:'flex', flexDirection:'column', alignItems:'center', textAlign:'center'}}>
+                        <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:700, fontSize:'48px', color:'#B0FF92', lineHeight:1}}>{item.num}</p>
+                        <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:600, fontSize:'18px', color:'#7B58F8', marginTop:'8px'}}>{item.label}</p>
+                        <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'16px', color:'rgba(255,255,255,0.5)', marginTop:'4px', lineHeight:1.7}}>{item.desc}</p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
                 <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:100, fontSize:'18px', color:'rgba(255,255,255,0.5)', marginTop:'120px', lineHeight:1.8, textAlign:'left', paddingLeft:'8px', maxWidth:'80%'}}>
                   Ellos ya sabían hacer seguimiento pero las herramientas los obligaban a ir a buscar lo que debería llegar solo.
@@ -709,7 +749,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   marginTop:'120px',
                   width:'100%'
                 }}>
-                  <img ref={imageRef} src={procesoBea1} style={{width:'80%', borderRadius:'12px', display:'block'}} onError={(e) => console.log('Error loading:', e.target.src)} />
+                  <img ref={imageRef} src={procesoBea1} style={{width:'80%', borderRadius:'12px', display:'block', opacity: imageVisible ? 1 : 0, transform: imageVisible ? 'translateY(0)' : 'translateY(30px)', transition: 'opacity 0.8s ease, transform 0.8s ease'}} onError={(e) => console.log('Error loading:', e.target.src)} />
                 </div>
                 <div style={{marginTop:'120px', paddingLeft:'8px'}}>
                   <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:300, fontSize:'32px', color:'rgba(255,255,255,0.5)', marginBottom:'60px'}}>
@@ -754,15 +794,15 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   </p>
                   <div style={{marginTop:'60px', display:'flex', flexDirection:'column', gap:'40px', width:'80%', alignItems:'center', marginLeft:'auto', marginRight:'auto'}}>
                     <div style={{display:'flex', gap:'16px', alignItems:'flex-start'}}>
-                      <span style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontVariationSettings: "'wght' 150", fontWeight:150, fontSize:'18px', color:'#B0FF92', flexShrink:0}}>01</span>
+                      <span style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontVariationSettings: "'wght' 150", fontWeight:150, fontSize:'36px', color:'#B0FF92', flexShrink:0}}>01</span>
                       <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontVariationSettings: "'wght' 150", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.8, margin:0}}>El problema no era gestionar más oportunidades. Era saber cuáles necesitaban atención.</p>
                     </div>
                     <div style={{display:'flex', gap:'16px', alignItems:'flex-start'}}>
-                      <span style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontVariationSettings: "'wght' 150", fontWeight:150, fontSize:'18px', color:'#B0FF92', flexShrink:0}}>02</span>
+                      <span style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontVariationSettings: "'wght' 150", fontWeight:150, fontSize:'36px', color:'#B0FF92', flexShrink:0}}>02</span>
                       <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontVariationSettings: "'wght' 150", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.8, margin:0}}>El seguimiento dependía de buscar información en varias herramientas desconectadas.</p>
                     </div>
                     <div style={{display:'flex', gap:'16px', alignItems:'flex-start'}}>
-                      <span style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontVariationSettings: "'wght' 150", fontWeight:150, fontSize:'18px', color:'#B0FF92', flexShrink:0}}>03</span>
+                      <span style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontVariationSettings: "'wght' 150", fontWeight:150, fontSize:'36px', color:'#B0FF92', flexShrink:0}}>03</span>
                       <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontVariationSettings: "'wght' 150", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.8, margin:0}}>Cada minuto dedicado a verificar un deal era tiempo que dejaban de invertir en vender.</p>
                     </div>
                   </div>
@@ -770,7 +810,13 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                     Pensé que alguien ya habría resuelto esto.
                   </p>
                   <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.8, marginTop:'60px', width:'90%', textAlign:'left'}}>
-                    Encontré herramientas como <span style={{color:'#7B58F8', fontWeight: 600, fontStyle: 'normal'}}>Allbound, PartnerStack, Crossbeam e Impartner</span> que abordaban parte del problema. Sin embargo, la mayoría estaban enfocadas en gestionar el ecosistema de partners, requerían una alta adopción o seguían dependiendo de actualizaciones manuales. <span style={{color:'#B0FF92'}}>La necesidad seguía siendo la misma: recuperar la visibilidad del pipeline sin tener que salir a buscarla.</span>
+                    Encontré herramientas como <span style={{color:'#7B58F8', fontWeight:600}}>Allbound, PartnerStack, Crossbeam e Impartner</span> que abordaban parte del problema. Sin embargo, la mayoría estaban enfocadas en gestionar el ecosistema de partners, requerían una alta adopción o seguían dependiendo de actualizaciones manuales. <span style={{color:'rgba(255,255,255,0.5)'}}>Ninguna resolvía el problema del C.A.M: </span><span style={{color:'#B0FF92'}}>devolverle la visibilidad sobre sus oportunidades sin obligarlo a reconstruir manualmente qué había pasado con cada una.</span>
+                  </p>
+                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.7, marginTop:'24px', width:'80%'}}>
+                    Ninguna responde la pregunta que más importaba.
+                  </p>
+                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'#B0FF92', marginTop:'4px', width:'80%'}}>
+                    ¿Qué pasó con este deal?
                   </p>
                 </div>
               </div>
@@ -810,7 +856,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
           flexDirection: 'column',
           gap: '0'
         }}>
-          {['Context', 'Discovery', 'Insights', 'Opportunity', 'Strategy', 'Design', 'Development', 'Impact', 'Learnings'].map((item, i) => (
+          {['Discovery', 'Strategy', 'Design', 'Build', 'Impact'].map((item, i) => (
             <div key={i} style={{display:'flex', alignItems:'center', gap:'8px', padding:'6px 0'}}>
               <div style={{width: activeSection === i ? '2px' : '1px', height:'20px', background: activeSection === i ? '#1A1A1A' : 'rgba(26,26,26,0.3)'}}/>
               <p style={{
