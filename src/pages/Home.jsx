@@ -19,6 +19,7 @@ import mockupBeacon from '../assets/mockup-beacon.png'
 import partnerstack from '../assets/partnerstack.png'
 import crossbeam from '../assets/crossbeam.png'
 import impartner from '../assets/impartner.png'
+import demoBeacon from '../assets/demo-beacon.mp4'
 
 function TypingText({ text, speed = 50 }) {
   const [displayed, setDisplayed] = React.useState('')
@@ -576,7 +577,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
             count++
             setIsCarouselTransitioning(true)
             setTimeout(() => {
-              setBrandIndex(i => (i + 1) % 4)
+              setBrandIndex(i => (i + 1) % 5)
               setTimeout(() => setIsCarouselTransitioning(false), 50)
             }, 300)
             if (count >= 2) clearInterval(timer)
@@ -890,23 +891,56 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   </p>
                   <div className="brand-carousel" style={{width:'100%', marginTop:'-90px'}}>
                     <div style={{position:'relative', width:'100%', height:'55vw', overflow:'hidden', borderRadius:'12px'}}>
-                      {[partnerstack, crossbeam, impartner, mockupBeacon].map((src, i) => (
-                        <img key={i} src={src} style={{
-                          position:'absolute',
-                          top:0, left:0,
-                          width:'100%',
-                          height:'100%',
-                          objectFit:'contain',
-                          padding:'24px',
-                          filter: isCarouselTransitioning ? 'blur(4px) brightness(0.8)' : 'none',
-                          transform: isCarouselTransitioning ? 'translateX(20px)' : 'translateX(0)',
-                          transition: 'filter 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease',
-                          opacity: brandIndex === i ? (isCarouselTransitioning ? 0.3 : 1) : 0
-                        }}/>
+                      {[partnerstack, crossbeam, impartner, mockupBeacon, demoBeacon].map((src, i) => (
+                        i === 4 ? (
+                          <div key={i} style={{
+                            position:'absolute', top:0, left:0, width:'100%', height:'100%',
+                            opacity: brandIndex === i ? 1 : 0,
+                            transition:'opacity 0.4s ease',
+                            borderRadius:'16px',
+                            overflow:'hidden',
+                            background:'#0D1117',
+                            display:'flex',
+                            alignItems:'center',
+                            justifyContent:'center',
+                            padding:'20px'
+                          }}>
+                            <div style={{
+                              width:'80%',
+                              borderRadius:'12px',
+                              overflow:'hidden',
+                              boxShadow:'0 0 40px rgba(176,255,146,0.15)'
+                            }}>
+                              <div style={{
+                                background:'#1E2433',
+                                padding:'8px 12px',
+                                display:'flex',
+                                gap:'6px',
+                                alignItems:'center'
+                              }}>
+                                <div style={{width:'10px',height:'10px',borderRadius:'50%',background:'#FF5F57'}}/>
+                                <div style={{width:'10px',height:'10px',borderRadius:'50%',background:'#FFBD2E'}}/>
+                                <div style={{width:'10px',height:'10px',borderRadius:'50%',background:'#28C840'}}/>
+                              </div>
+                              <video autoPlay loop muted playsInline style={{width:'100%', display:'block'}}>
+                                <source src={demoBeacon} type="video/mp4"/>
+                              </video>
+                            </div>
+                          </div>
+                        ) : (
+                          <img key={i} src={src} style={{
+                            position:'absolute', top:0, left:0, width:'100%', height:'100%',
+                            objectFit:'contain', padding:'24px',
+                            opacity: brandIndex === i ? (isCarouselTransitioning ? 0.3 : 1) : 0,
+                            filter: isCarouselTransitioning ? 'blur(4px) brightness(0.8)' : 'none',
+                            transform: isCarouselTransitioning ? 'translateX(20px)' : 'translateX(0)',
+                            transition:'filter 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease'
+                          }}/>
+                        )
                       ))}
                     </div>
                     <div style={{display:'flex', gap:'8px', justifyContent:'center', marginTop:'-110px'}}>
-                      {[0,1,2,3].map(i => (
+                      {[0,1,2,3,4].map(i => (
                         <div key={i} onClick={() => {
                           setIsCarouselTransitioning(true)
                           setTimeout(() => {
