@@ -15,6 +15,7 @@ import capturePipeline from '../assets/capture-pipeline.png'
 import cardBeacon from '../assets/card-beacon.png'
 import cardTheaveling from '../assets/card-theaveling.png'
 import procesoBea1 from '../assets/proceso-beacon-1.png'
+import mockupBeacon from '../assets/mockup-beacon.png'
 import partnerstack from '../assets/partnerstack.png'
 import crossbeam from '../assets/crossbeam.png'
 import impartner from '../assets/impartner.png'
@@ -427,6 +428,8 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
   const [checkVisible, setCheckVisible] = React.useState(false)
   const checkRef = React.useRef(null)
   const [brandIndex, setBrandIndex] = React.useState(0)
+  const [isCarouselTransitioning, setIsCarouselTransitioning] = React.useState(false)
+  const brandAutoRef = React.useRef(false)
 
   const quotes = [
     [
@@ -563,10 +566,28 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
   }, [checkVisible])
 
   React.useEffect(() => {
-    const timer = setInterval(() => {
-      setBrandIndex(i => (i + 1) % 3)
-    }, 2000)
-    return () => clearInterval(timer)
+    if (brandAutoRef.current) return
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !brandAutoRef.current) {
+          brandAutoRef.current = true
+          let count = 0
+          const timer = setInterval(() => {
+            count++
+            setIsCarouselTransitioning(true)
+            setTimeout(() => {
+              setBrandIndex(i => (i + 1) % 4)
+              setTimeout(() => setIsCarouselTransitioning(false), 50)
+            }, 300)
+            if (count >= 2) clearInterval(timer)
+          }, 2000)
+        }
+      },
+      { threshold: 0.3, root: contentRef.current }
+    )
+    const el = document.querySelector('.brand-carousel')
+    if (el) observer.observe(el)
+    return () => observer.disconnect()
   }, [])
 
   return (
@@ -865,17 +886,11 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                     Pensé que alguien ya habría resuelto esto.
                   </p>
                   <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.8, marginTop:'60px', width:'90%', textAlign:'left'}}>
-                    Encontré herramientas como <span style={{color:'#7B58F8', fontWeight:600}}>PartnerStack, Crossbeam e Impartner</span> que abordaban parte del problema. Sin embargo, la mayoría estaban enfocadas en gestionar el ecosistema de partners, requerían una alta adopción o seguían dependiendo de actualizaciones manuales. <span style={{color:'rgba(255,255,255,0.5)'}}>Ninguna resolvía el problema del C.A.M: </span><span style={{color:'#B0FF92'}}>devolverle la visibilidad sobre sus oportunidades sin obligarlo a reconstruir manualmente qué había pasado con cada una.</span>
+                    Encontré herramientas muy buenas.<br/><span style={{color:'#B0FF92'}}>Pero descubrí que todas estaban optimizadas para resolver problemas diferentes.</span><br/>Y ahí entendí cuál era realmente el espacio de Beacon.
                   </p>
-                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.7, marginTop:'24px', width:'80%'}}>
-                    Ninguna responde la pregunta que más importaba.
-                  </p>
-                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'#B0FF92', marginTop:'4px', width:'80%'}}>
-                    ¿Qué pasó con este deal?
-                  </p>
-                  <div style={{width:'100%', marginTop:'-90px'}}>
+                  <div className="brand-carousel" style={{width:'100%', marginTop:'-90px'}}>
                     <div style={{position:'relative', width:'100%', height:'55vw', overflow:'hidden', borderRadius:'12px'}}>
-                      {[partnerstack, crossbeam, impartner].map((src, i) => (
+                      {[partnerstack, crossbeam, impartner, mockupBeacon].map((src, i) => (
                         <img key={i} src={src} style={{
                           position:'absolute',
                           top:0, left:0,
@@ -883,19 +898,29 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                           height:'100%',
                           objectFit:'contain',
                           padding:'24px',
-                          opacity: brandIndex === i ? 1 : 0,
-                          transition:'opacity 0.6s ease'
+                          filter: isCarouselTransitioning ? 'blur(4px) brightness(0.8)' : 'none',
+                          transform: isCarouselTransitioning ? 'translateX(20px)' : 'translateX(0)',
+                          transition: 'filter 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease',
+                          opacity: brandIndex === i ? (isCarouselTransitioning ? 0.3 : 1) : 0
                         }}/>
                       ))}
                     </div>
                     <div style={{display:'flex', gap:'8px', justifyContent:'center', marginTop:'-110px'}}>
-                      {[0,1,2].map(i => (
-                        <div key={i} onClick={() => setBrandIndex(i)} style={{
-                          width: brandIndex === i ? '20px' : '6px',
-                          height:'6px',
-                          borderRadius:'3px',
+                      {[0,1,2,3].map(i => (
+                        <div key={i} onClick={() => {
+                          setIsCarouselTransitioning(true)
+                          setTimeout(() => {
+                            setBrandIndex(i)
+                            setTimeout(() => setIsCarouselTransitioning(false), 50)
+                          }, 300)
+                        }} style={{
+                          width: brandIndex === i ? '28px' : '10px',
+                          height:'10px',
+                          borderRadius:'4px',
                           background: brandIndex === i ? '#B0FF92' : 'rgba(255,255,255,0.3)',
                           cursor:'pointer',
+                          zIndex: 10,
+                          position: 'relative',
                           transition:'all 0.3s ease'
                         }}/>
                       ))}
