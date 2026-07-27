@@ -419,6 +419,10 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
   const [activeSection, setActiveSection] = React.useState(0)
   const [imageVisible, setImageVisible] = React.useState(false)
   const [arrowStep, setArrowStep] = React.useState(-1)
+  const [diagramVisible, setDiagramVisible] = React.useState(false)
+  const diagramRef = React.useRef(null)
+  const [checkVisible, setCheckVisible] = React.useState(false)
+  const checkRef = React.useRef(null)
 
   const quotes = [
     [
@@ -518,7 +522,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
       (entries) => {
         if (entries[0].isIntersecting) setImageVisible(true)
       },
-      { threshold: 0.2, root: contentRef.current }
+      { threshold: 0, root: contentRef.current }
     )
     observer.observe(imageRef.current)
     return () => observer.disconnect()
@@ -529,6 +533,30 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
     const timer = setTimeout(() => setArrowStep(s => s + 1), 500)
     return () => clearTimeout(timer)
   }, [arrowStep, progress])
+
+  React.useEffect(() => {
+    if (!diagramRef.current || diagramVisible) return
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) setDiagramVisible(true)
+      },
+      { threshold: 0.3, root: contentRef.current }
+    )
+    observer.observe(diagramRef.current)
+    return () => observer.disconnect()
+  }, [diagramVisible])
+
+  React.useEffect(() => {
+    if (!checkRef.current || checkVisible) return
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) setCheckVisible(true)
+      },
+      { threshold: 0.5, root: contentRef.current }
+    )
+    observer.observe(checkRef.current)
+    return () => observer.disconnect()
+  }, [checkVisible])
 
   return (
     <>
@@ -651,7 +679,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                 Su trabajo no termina cuando entrega una oportunidad. En realidad, ahí empieza la parte más difícil: seguir siendo visible dentro del proceso.
               </p>
               <div style={{marginTop:'30px', paddingLeft:'8px'}}>
-                <div style={{
+                <div ref={diagramRef} style={{
                   display:'flex',
                   alignItems:'flex-start',
                   gap:'8px',
@@ -662,8 +690,14 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   border: '1px solid rgba(255,255,255,0.15)',
                   borderRadius: '12px',
                   padding: '16px',
+                  background: 'rgba(255,255,255,0.05)',
+                  backdropFilter: 'blur(10px)',
+                  boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
                   marginLeft: 'auto',
-                  marginRight: 'auto'
+                  marginRight: 'auto',
+                  opacity: diagramVisible ? 1 : 0,
+                  transform: diagramVisible ? 'scale(1)' : 'scale(0.95)',
+                  transition: 'opacity 0.6s ease, transform 0.6s ease'
                 }}>
                   {[
                     { label:'Vendor', icon: <Building2 size={32} color="#7B58F8" strokeWidth={1}/>, color: 'rgba(255,255,255,0.5)' },
@@ -696,7 +730,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                     textAlign:'left',
                     width:'80%'
                   }}>El punto ciego del pipeline.</p>
-                  <div style={{width:'50%', height:'1px', background:'linear-gradient(to right, rgba(176,255,146,0.3), transparent)', marginTop:'16px'}}/>
+                  <div style={{width:'50%', height:'1px', background:'linear-gradient(to right, rgba(176,255,146,0.3), transparent)', marginTop:'16px', marginLeft:'-40px'}}/>
                   <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.7, marginTop:'40px', width:'80%', textAlign:'left', alignSelf:'flex-start'}}>
                     En ecosistemas de venta por canal B2B, una vez que una oportunidad pasa al partner, el CAM pierde visibilidad sobre su estado real.
                   </p>
@@ -713,12 +747,12 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                       { num:'15 min', label:'Seguimiento manual por oportunidad.', desc:'Tiempo promedio que un CAM invierte verificando el estado de un solo deal entre diferentes herramientas.' },
                       { num:'70–80', label:'Oportunidades activas simultáneas.', desc:'Un volumen que hace prácticamente imposible mantener el seguimiento de forma manual.' },
                       { num:'2 meses', label:'Ventana para registrar la atribución.', desc:'Si una venta no se registra a tiempo, la comisión puede perderse aunque el trabajo comercial ya se haya realizado.' },
-                      { num:'USD 400K', label:'Valor potencial del pipeline.', desc:'Una sola oportunidad puede representar cientos de miles de dólares dentro del ecosistema B2B.' }
+                      { num:'USD 400K', label:'Valor de una sola oportunidad.', desc:'Un deal puede representar cientos de miles de dólares y perderse simplemente por falta de visibilidad.' }
                     ].map((item, i) => (
                       <div key={i} style={{display:'flex', flexDirection:'column', alignItems:'center', textAlign:'center'}}>
                         <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:700, fontSize:'48px', color:'#B0FF92', lineHeight:1}}>{item.num}</p>
-                        <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:600, fontSize:'18px', color:'#7B58F8', marginTop:'8px'}}>{item.label}</p>
-                        <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'16px', color:'rgba(255,255,255,0.5)', marginTop:'4px', lineHeight:1.7}}>{item.desc}</p>
+                        <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:300, fontSize:'18px', color:'#7B58F8', marginTop:'8px'}}>{item.label}</p>
+                        <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'14px', color:'rgba(255,255,255,0.5)', marginTop:'4px', lineHeight:1.7}}>{item.desc}</p>
                       </div>
                     ))}
                   </div>
@@ -749,14 +783,17 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   marginTop:'120px',
                   width:'100%'
                 }}>
-                  <img ref={imageRef} src={procesoBea1} style={{width:'80%', borderRadius:'12px', display:'block', opacity: imageVisible ? 1 : 0, transform: imageVisible ? 'translateY(0)' : 'translateY(30px)', transition: 'opacity 0.8s ease, transform 0.8s ease'}} onError={(e) => console.log('Error loading:', e.target.src)} />
+                  <img ref={imageRef} src={procesoBea1} style={{width:'80%', borderRadius:'12px', display:'block', opacity: imageVisible ? 1 : 0, transform: imageVisible ? 'translateY(0)' : 'translateY(60px)', transition: 'opacity 0.3s ease, transform 0.3s ease'}} onError={(e) => console.log('Error loading:', e.target.src)} />
                 </div>
                 <div style={{marginTop:'120px', paddingLeft:'8px'}}>
-                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:300, fontSize:'32px', color:'rgba(255,255,255,0.5)', marginBottom:'60px'}}>
+                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:300, fontSize:'32px', color:'rgba(255,255,255,0.5)', marginBottom:'8px'}}>
                     Hablé con quienes viven este problema.
                   </p>
-                  <span style={{fontFamily:"'Didact Gothic', sans-serif", fontSize:'200px', fontWeight:700, color:'transparent', WebkitTextStroke:'0.1px #B0FF92', lineHeight:0.5, display:'block', marginBottom:'-10px'}}>❝</span>
-                  <div style={{width:'90%', marginTop:'60px'}}>
+                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.7, marginTop:'4px', width:'80%', whiteSpace:'nowrap'}}>
+                    No quería empezar dibujando pantallas.<br/>Primero necesitaba entender si el problema era realmente tan grande como parecía.
+                  </p>
+                  <span style={{fontFamily:"'Didact Gothic', sans-serif", fontSize:'200px', fontWeight:700, color:'transparent', WebkitTextStroke:'0.1px #B0FF92', lineHeight:0.5, display:'block', marginBottom:'-40px', marginTop:'60px'}}>❝</span>
+                  <div style={{width:'90%', marginTop:'60px', paddingLeft:'40px'}}>
                     <div style={{display:'flex', flexDirection:'row', gap:'40px', alignItems:'flex-start'}}>
                       {quotes[quoteIndex].map((quote, i) => (
                         <p key={i} style={{
@@ -786,37 +823,50 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                     </div>
                   </div>
                   <span style={{fontFamily:"'Didact Gothic', sans-serif", fontSize:'200px', fontWeight:700, color:'transparent', WebkitTextStroke:'0.1px #B0FF92', lineHeight:0.5, display:'block', textAlign:'right', marginTop:'-10px', paddingRight:'40px'}}>❞</span>
-                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:300, fontSize:'32px', color:'rgba(255,255,255,0.5)', lineHeight:1.2, marginTop:'120px', maxWidth:'55vw'}}>
-                    Eso fue lo primero que quedó claro. Lo siguiente era comprobar si el mercado ya había resuelto ese problema.
+                  <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:500, fontSize:'32px', color:'rgba(255,255,255,0.5)', marginTop:'120px'}}>
+                    {'Eso fue lo primero que quedó claro.'}
+                    <span ref={checkRef} style={{opacity: checkVisible ? 1 : 0, transition:'opacity 0.5s ease'}}>
+                      <svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="#B0FF92" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{display:'inline-block', marginLeft:'8px', verticalAlign:'middle'}}>
+                        <polyline points="4 12 9 17 20 6" strokeDasharray="35" strokeDashoffset={checkVisible ? "0" : "35"} style={{transition:'stroke-dashoffset 1s ease 0.2s'}}/>
+                      </svg>
+                    </span>
                   </p>
-                  <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:500, fontSize:'30px', color:'#F5F7F7', marginTop:'60px'}}>
+                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', marginTop:'8px'}}>
+                    Lo siguiente era comprobar si el mercado ya había resuelto ese problema.
+                  </p>
+                  <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:500, fontSize:'30px', color:'#F5F7F7', marginTop:'160px'}}>
                     Lo que empezó a repetirse.
                   </p>
-                  <div style={{marginTop:'60px', display:'flex', flexDirection:'column', gap:'40px', width:'80%', alignItems:'center', marginLeft:'auto', marginRight:'auto'}}>
-                    <div style={{display:'flex', gap:'16px', alignItems:'flex-start'}}>
-                      <span style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontVariationSettings: "'wght' 150", fontWeight:150, fontSize:'36px', color:'#B0FF92', flexShrink:0}}>01</span>
-                      <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontVariationSettings: "'wght' 150", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.8, margin:0}}>El problema no era gestionar más oportunidades. Era saber cuáles necesitaban atención.</p>
-                    </div>
-                    <div style={{display:'flex', gap:'16px', alignItems:'flex-start'}}>
-                      <span style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontVariationSettings: "'wght' 150", fontWeight:150, fontSize:'36px', color:'#B0FF92', flexShrink:0}}>02</span>
-                      <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontVariationSettings: "'wght' 150", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.8, margin:0}}>El seguimiento dependía de buscar información en varias herramientas desconectadas.</p>
-                    </div>
-                    <div style={{display:'flex', gap:'16px', alignItems:'flex-start'}}>
-                      <span style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontVariationSettings: "'wght' 150", fontWeight:150, fontSize:'36px', color:'#B0FF92', flexShrink:0}}>03</span>
-                      <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontVariationSettings: "'wght' 150", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.8, margin:0}}>Cada minuto dedicado a verificar un deal era tiempo que dejaban de invertir en vender.</p>
-                    </div>
+                  <div style={{width:'50%', height:'1px', background:'linear-gradient(to right, rgba(176,255,146,0.3), transparent)', marginTop:'16px', marginLeft:'-40px'}}/>
+                  <div style={{display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:'24px', marginTop:'60px', width:'90%', marginLeft:'24px'}}>
+                    {[
+                      {num:'01', text:'El problema no era gestionar más oportunidades. Era saber cuáles necesitaban atención.'},
+                      {num:'02', text:'El seguimiento dependía de buscar información en varias herramientas desconectadas.'},
+                      {num:'03', text:'Cada minuto dedicado a verificar un deal era tiempo que dejaban de invertir en vender.'}
+                    ].map((item, i) => (
+                      <div key={i} style={{position:'relative', display:'flex', flexDirection:'column', gap:'16px', border:'1px solid rgba(255,255,255,0.15)', borderRadius:'12px', padding:'24px', paddingTop:'40px', background:'rgba(255,255,255,0.05)', backdropFilter:'blur(10px)', boxShadow:'0 8px 32px rgba(0,0,0,0.3)'}}>
+                        <span style={{position:'absolute', top:'-20px', left:'16px', color:'#B0FF92', fontSize:'36px', fontWeight:700, fontFamily:"'Plus Jakarta Sans', sans-serif"}}>{item.num}</span>
+                        <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.8)', lineHeight:1.8, margin:0}}>{item.text}</p>
+                      </div>
+                    ))}
                   </div>
                   <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:300, fontSize:'32px', color:'rgba(255,255,255,0.5)', marginTop:'120px', lineHeight:1.2}}>
                     Pensé que alguien ya habría resuelto esto.
                   </p>
                   <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.8, marginTop:'60px', width:'90%', textAlign:'left'}}>
-                    Encontré herramientas como <span style={{color:'#7B58F8', fontWeight:600}}>Allbound, PartnerStack, Crossbeam e Impartner</span> que abordaban parte del problema. Sin embargo, la mayoría estaban enfocadas en gestionar el ecosistema de partners, requerían una alta adopción o seguían dependiendo de actualizaciones manuales. <span style={{color:'rgba(255,255,255,0.5)'}}>Ninguna resolvía el problema del C.A.M: </span><span style={{color:'#B0FF92'}}>devolverle la visibilidad sobre sus oportunidades sin obligarlo a reconstruir manualmente qué había pasado con cada una.</span>
+                    Encontré herramientas como <span style={{color:'#7B58F8', fontWeight:600}}>PartnerStack, Crossbeam e Impartner</span> que abordaban parte del problema. Sin embargo, la mayoría estaban enfocadas en gestionar el ecosistema de partners, requerían una alta adopción o seguían dependiendo de actualizaciones manuales. <span style={{color:'rgba(255,255,255,0.5)'}}>Ninguna resolvía el problema del C.A.M: </span><span style={{color:'#B0FF92'}}>devolverle la visibilidad sobre sus oportunidades sin obligarlo a reconstruir manualmente qué había pasado con cada una.</span>
                   </p>
                   <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.7, marginTop:'24px', width:'80%'}}>
                     Ninguna responde la pregunta que más importaba.
                   </p>
                   <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'#B0FF92', marginTop:'4px', width:'80%'}}>
                     ¿Qué pasó con este deal?
+                  </p>
+                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:300, fontSize:'32px', color:'rgba(255,255,255,0.5)', marginTop:'120px', lineHeight:1.2}}>
+                    En ese momento dejé de pensar en funcionalidades.
+                  </p>
+                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', marginTop:'16px', lineHeight:1.7}}>
+                    Empecé a definir exactamente qué producto necesitaba existir.
                   </p>
                 </div>
               </div>
@@ -859,14 +909,18 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
           {['Discovery', 'Strategy', 'Design', 'Build', 'Impact'].map((item, i) => (
             <div key={i} style={{display:'flex', alignItems:'center', gap:'8px', padding:'6px 0'}}>
               <div style={{width: activeSection === i ? '2px' : '1px', height:'20px', background: activeSection === i ? '#1A1A1A' : 'rgba(26,26,26,0.3)'}}/>
-              <p style={{
-                fontFamily:"'Plus Jakarta Sans', sans-serif",
-                fontSize:'14px',
-                fontWeight: activeSection === i ? 700 : 300,
-                color:'#1A1A1A',
-                cursor:'pointer',
-                letterSpacing:'0.05em'
-              }} onClick={() => setActiveSection(i)}>{item}</p>
+              <div style={{overflow:'hidden'}}>
+                <p style={{
+                  fontFamily:"'Plus Jakarta Sans', sans-serif",
+                  fontSize:'14px',
+                  fontWeight: activeSection === i ? 700 : 300,
+                  color:'#1A1A1A',
+                  cursor:'pointer',
+                  letterSpacing:'0.05em',
+                  transform: closing ? 'translateY(-100%)' : showRightContent ? 'translateY(0)' : 'translateY(-100%)',
+                  transition: `transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) ${i * 60}ms`
+                }} onClick={() => setActiveSection(i)}>{item}</p>
+              </div>
             </div>
           ))}
         </div>
