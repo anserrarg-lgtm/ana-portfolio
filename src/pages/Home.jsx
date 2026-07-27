@@ -1313,8 +1313,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                     ))}
                   </div>
                   <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.8, marginTop:'40px', width:'80%'}}>
-                    Cuando ese flujo funcionó de principio a fin,<br/>
-                    Beacon estaba listo para empezar.
+                    Cuando ese flujo funcionó de principio a fin, Beacon estaba listo para empezar.
                   </p>
                   <div style={{height:'1px', background:'rgba(255,255,255,0.1)', marginTop:'80px', marginBottom:'0'}}/>
                   <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:500, fontSize:'30px', color:'#F5F7F7', marginTop:'40px', textAlign:'left', width:'80%'}}>
@@ -1343,11 +1342,91 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                       </div>
                     ))}
                   </div>
-                  <div style={{height:'1px',background:'rgba(255,255,255,0.15)',marginTop:'80px'}}/>
                   <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:500, fontSize:'30px', color:'#F5F7F7', marginTop:'120px', textAlign:'left', width:'80%'}}>
                     ¿Qué cambia con Beacon?
                   </p>
                   <div style={{width:'70%', height:'1px', background:'linear-gradient(to right, rgba(176,255,146,0.3), transparent)', marginTop:'16px', marginLeft:'-40px'}}/>
+                  <div style={{
+                    display:'grid',
+                    gridTemplateColumns:'1fr 1fr',
+                    gap:'0',
+                    marginTop:'60px',
+                    width:'90%',
+                    position:'relative',
+                    marginLeft:'20px'
+                  }}>
+                    <div style={{position:'absolute', top:0, bottom:0, left:'50%', width:'1px', background:'linear-gradient(to bottom, transparent, rgba(255,255,255,0.15), transparent)'}}/>
+                    <div style={{position:'absolute', left:0, right:0, top:'50%', height:'1px', background:'linear-gradient(to right, transparent, rgba(255,255,255,0.15), transparent)'}}/>
+                    {[
+                      {num:'13.3 h', label:'Recuperadas al mes por CAM.', desc:'Al automatizar el seguimiento y centralizar la visibilidad del pipeline.'},
+                      {num:'1 clic', label:'Para conocer el estado de un deal.', desc:'En lugar de revisar múltiples herramientas y conversaciones.'},
+                      {num:'0 cuentas', label:'Que el partner necesita crear.', desc:'Toda la interacción ocurre desde un email, reduciendo la fricción de adopción.'},
+                      {num:'100 %', label:'De Pulse Checks contextualizados con IA.', desc:'Cada mensaje se adapta automáticamente al estado de la oportunidad.'}
+                    ].map((item, i) => (
+                      <div key={i} style={{padding:'32px', display:'flex', flexDirection:'column', gap:'8px'}}>
+                        <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:700, fontSize:'48px', color:'#B0FF92', lineHeight:1, margin:0}}>{item.num}</p>
+                        <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:600, fontSize:'16px', color:'#7B58F8', margin:0}}>{item.label}</p>
+                        <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'14px', color:'rgba(255,255,255,0.5)', lineHeight:1.6, margin:0}}>{item.desc}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.5, marginTop:'40px', width:'85%'}}>
+                    Beacon no busca vender más.<br/><span style={{color:'#B0FF92'}}>Busca devolver el tiempo y la visibilidad que permiten vender mejor.</span>
+                  </p>
+                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:300, fontSize:'32px', color:'rgba(255,255,255,0.5)', marginTop:'120px', lineHeight:1.2}}>
+                    Beacon me enseñó que un buen producto no nace<br/>de tener más funcionalidades.
+                  </p>
+                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', marginTop:'8px', lineHeight:1.7}}>
+                    Nace de eliminar las fricciones correctas.
+                  </p>
+                  <div style={{display:'flex', flexDirection:'column', gap:'24px', marginTop:'80px', width:'fit-content', minWidth:'300px', marginLeft:'auto', marginRight:'auto'}}>
+                    {[
+                      {num:'01', text:'Investigar bien\nevita construir de más.'},
+                      {num:'02', text:'La IA acelera la ejecución.\n\nEl criterio sigue siendo humano.'},
+                      {num:'03', text:'La parte más difícil no fue diseñar Beacon.\n\nFue decidir qué podía esperar a la siguiente versión.'}
+                    ].map((item, i) => (
+                      <div key={i} style={{position:'relative', paddingTop:'20px'}}>
+                        <span style={{position:'absolute', top:'-10px', left:'16px', color:'#B0FF92', fontSize:'36px', fontWeight:700, fontFamily:"'Plus Jakarta Sans', sans-serif"}}>{item.num}</span>
+                        <div style={{
+                          padding:'24px',
+                          background:'rgba(255,255,255,0.05)',
+                          backdropFilter:'blur(10px)',
+                          border:'1px solid rgba(255,255,255,0.15)',
+                          borderRadius:'12px',
+                          boxShadow:'0 8px 32px rgba(0,0,0,0.3)'
+                        }}>
+                          <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.8)', lineHeight:1.5, margin:0, whiteSpace:'pre-line', textAlign:'center'}}>{item.text}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div style={{marginTop:'120px', paddingBottom:'80px', display:'flex', flexDirection:'column', alignItems:'center', gap:'24px'}}>
+                    <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:300, fontSize:'32px', color:'rgba(255,255,255,0.5)', textAlign:'center'}}>
+                      Explora otros proyectos
+                    </p>
+                    <div
+                      onClick={() => {
+                        onClose()
+                      }}
+                      style={{
+                        display:'inline-flex',
+                        alignItems:'center',
+                        cursor:'pointer',
+                        border:'1px solid rgba(255,255,255,0.3)',
+                        height:'36px',
+                        padding:'0 16px',
+                        gap:'8px',
+                        transition:'all 0.3s ease'
+                      }}
+                      onMouseEnter={e => e.currentTarget.style.borderColor='rgba(255,255,255,0.7)'}
+                      onMouseLeave={e => e.currentTarget.style.borderColor='rgba(255,255,255,0.3)'}
+                    >
+                      <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
+                        <path d="M12 7H2M2 7L6 3M2 7L6 11" stroke="#F5F7F7" strokeWidth="1.5" strokeLinecap="round"/>
+                      </svg>
+                      <span style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontSize:'13px', fontWeight:400, color:'#F5F7F7'}}>Volver a proyectos</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </>
