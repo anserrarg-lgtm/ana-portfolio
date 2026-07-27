@@ -1823,17 +1823,7 @@ export default function Home() {
         return
       }
 
-      if (phase === 'projects' && !showBeaconCard && e.deltaY > 0) {
-        if (!showBeaconT && !showTheaT) {
-          setAboutPhase('black')
-          setTimeout(() => setAboutPhase('white'), 2400)
-          return
-        }
-        e.preventDefault()
-        return
-      }
-
-      if (phase === 'projects' && e.deltaY > 0 && !showBeaconT && !showTheaT) {
+      if (phase === 'projects' && e.deltaY > 0 && showBeaconCard && !showBeaconT && !showTheaT) {
         setAboutPhase('black')
         setTimeout(() => setAboutPhase('white'), 1800)
         return
@@ -2046,7 +2036,13 @@ export default function Home() {
       )}
 
       {(phase === 'projects' || (phase === 'zooming' && zoomProgress > 0.8)) && (
-        <div className="projects-overlay" style={{
+        <div className="projects-overlay" onScroll={(e) => {
+          const el = e.currentTarget
+          if (el.scrollTop + el.clientHeight >= el.scrollHeight - 10) {
+            setAboutPhase('black')
+            setTimeout(() => setAboutPhase('white'), 1800)
+          }
+        }} style={{
           position:'fixed',
           top:0,
           left:0,
@@ -2059,7 +2055,7 @@ export default function Home() {
           justifyContent:'flex-start',
           alignItems:'stretch',
           padding:'0 80px',
-          overflowY:'scroll',
+          overflowY:'auto',
           touchAction:'pan-y'
         }}>
           <div style={{
