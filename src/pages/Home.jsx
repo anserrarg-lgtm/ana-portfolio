@@ -15,6 +15,9 @@ import capturePipeline from '../assets/capture-pipeline.png'
 import cardBeacon from '../assets/card-beacon.png'
 import cardTheaveling from '../assets/card-theaveling.png'
 import procesoBea1 from '../assets/proceso-beacon-1.png'
+import partnerstack from '../assets/partnerstack.png'
+import crossbeam from '../assets/crossbeam.png'
+import impartner from '../assets/impartner.png'
 
 function TypingText({ text, speed = 50 }) {
   const [displayed, setDisplayed] = React.useState('')
@@ -423,6 +426,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
   const diagramRef = React.useRef(null)
   const [checkVisible, setCheckVisible] = React.useState(false)
   const checkRef = React.useRef(null)
+  const [brandIndex, setBrandIndex] = React.useState(0)
 
   const quotes = [
     [
@@ -557,6 +561,13 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
     observer.observe(checkRef.current)
     return () => observer.disconnect()
   }, [checkVisible])
+
+  React.useEffect(() => {
+    const timer = setInterval(() => {
+      setBrandIndex(i => (i + 1) % 3)
+    }, 2000)
+    return () => clearInterval(timer)
+  }, [])
 
   return (
     <>
@@ -862,6 +873,34 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'#B0FF92', marginTop:'4px', width:'80%'}}>
                     ¿Qué pasó con este deal?
                   </p>
+                  <div style={{width:'100%', marginTop:'-90px'}}>
+                    <div style={{position:'relative', width:'100%', height:'55vw', overflow:'hidden', borderRadius:'12px'}}>
+                      {[partnerstack, crossbeam, impartner].map((src, i) => (
+                        <img key={i} src={src} style={{
+                          position:'absolute',
+                          top:0, left:0,
+                          width:'100%',
+                          height:'100%',
+                          objectFit:'contain',
+                          padding:'24px',
+                          opacity: brandIndex === i ? 1 : 0,
+                          transition:'opacity 0.6s ease'
+                        }}/>
+                      ))}
+                    </div>
+                    <div style={{display:'flex', gap:'8px', justifyContent:'center', marginTop:'-110px'}}>
+                      {[0,1,2].map(i => (
+                        <div key={i} onClick={() => setBrandIndex(i)} style={{
+                          width: brandIndex === i ? '20px' : '6px',
+                          height:'6px',
+                          borderRadius:'3px',
+                          background: brandIndex === i ? '#B0FF92' : 'rgba(255,255,255,0.3)',
+                          cursor:'pointer',
+                          transition:'all 0.3s ease'
+                        }}/>
+                      ))}
+                    </div>
+                  </div>
                   <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:300, fontSize:'32px', color:'rgba(255,255,255,0.5)', marginTop:'120px', lineHeight:1.2}}>
                     En ese momento dejé de pensar en funcionalidades.
                   </p>
