@@ -37,6 +37,11 @@ body {
   50% { transform: translateY(-6px) }
 }
 
+@keyframes slideHandIn {
+  from { transform: translateY(-50%) translateX(80px); opacity: 0; }
+  to { transform: translateY(-50%) translateX(0); opacity: 1; }
+}
+
 .nav-link {
   text-decoration: none;
   position: relative;

@@ -20,6 +20,9 @@ import partnerstack from '../assets/partnerstack.png'
 import crossbeam from '../assets/crossbeam.png'
 import impartner from '../assets/impartner.png'
 import demoBeacon from '../assets/demo-beacon.mp4'
+import pipelineImg from '../assets/pipeline.png'
+import notificacionesImg from '../assets/Notificaciones.png'
+import pulsecheckImg from '../assets/Pulsecheck.png'
 
 function TypingText({ text, speed = 50 }) {
   const [displayed, setDisplayed] = React.useState('')
@@ -431,6 +434,11 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
   const [brandIndex, setBrandIndex] = React.useState(0)
   const [isCarouselTransitioning, setIsCarouselTransitioning] = React.useState(false)
   const brandAutoRef = React.useRef(false)
+  const [dotHovered, setDotHovered] = React.useState(false)
+  const [dotPressed, setDotPressed] = React.useState(false)
+  const [slideOffset, setSlideOffset] = React.useState(0)
+  const [slideIndex, setSlideIndex] = React.useState(0)
+  const slideTimerRef = React.useRef(null)
 
   const quotes = [
     [
@@ -1050,6 +1058,77 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'#B0FF92', lineHeight:1.7, marginTop:'40px', width:'80%'}}>
                     La primera decisión fue dejar de pensar en listas.
                   </p>
+                  <div style={{position:'relative', marginTop:'8px', height:'40px', width:'100%'}}>
+                    <>
+                      <div
+                        style={{
+                          position:'absolute',
+                          right:'40px',
+                          top:'50%',
+                          transform:'translateY(-50%)',
+                          width:'10px',
+                          height:'10px',
+                          borderRadius:'50%',
+                          background:'rgba(255,255,255,0.9)',
+                          boxShadow:'0 0 8px rgba(255,255,255,0.7)',
+                          cursor:'pointer',
+                          zIndex:3
+                        }}
+                      onMouseEnter={() => setDotHovered(true)}
+                      onMouseDown={() => {
+                        setDotPressed(true)
+                        setSlideIndex(0)
+                        slideTimerRef.current = setInterval(() => {
+                          setSlideIndex(i => (i + 1) % 3)
+                        }, 1200)
+                      }}
+                      onMouseUp={() => {
+                        setDotPressed(false)
+                        setSlideIndex(0)
+                        clearInterval(slideTimerRef.current)
+                      }}
+                      onMouseLeave={() => {
+                        setDotPressed(false)
+                        setDotHovered(false)
+                        setSlideIndex(0)
+                        clearInterval(slideTimerRef.current)
+                      }}
+                    />
+                    {dotHovered && (
+                      <div style={{position:'absolute', right:'0px', top:'120%', transform:'translateY(-50%)', display:'flex', alignItems:'center', animation:'slideHandIn 0.6s cubic-bezier(0.4,0,0.2,1) forwards', pointerEvents:'none', zIndex:4}}>
+                        <img src="/src/assets/hand-pinch.png" style={{width:'60px', filter:'invert(1)', display:'block'}}/>
+                        <div style={{width:'24px', height:'20px', background:'rgba(255,255,255,0.9)', borderRadius:'0 6px 8px 0', marginLeft:'-6px', marginTop:'40px', transform:'rotate(15deg)'}}/>
+                      </div>
+                    )}
+                    </>
+                  </div>
+                  {dotPressed && (
+                    <div style={{
+                      position:'fixed',
+                      top:'10%',
+                      left:'2%',
+                      width:'58vw',
+                      height:'80vh',
+                      zIndex:99999,
+                      display:'flex',
+                      alignItems:'center',
+                      justifyContent:'center',
+                      pointerEvents:'none'
+                    }}>
+                      {[pipelineImg, notificacionesImg, pulsecheckImg].map((src, i) => (
+                        <img key={i} src={src} style={{
+                          position:'absolute',
+                          width:'90%',
+                          height:'90%',
+                          objectFit:'contain',
+                          borderRadius:'16px',
+                          opacity: slideIndex === i ? 1 : 0,
+                          transform: slideIndex === i ? 'translateX(0)' : 'translateX(60px)',
+                          transition:'opacity 0.4s ease, transform 0.4s ease'
+                        }}/>
+                      ))}
+                    </div>
+                  )}
                   <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.8, marginTop:'24px', width:'80%'}}>
                     Cuando generé las primeras pantallas con IA obtuve un dashboard bastante genérico. Las oportunidades seguían apareciendo en una lista con etiquetas de estado. Era una interfaz correcta, pero no resolvía el problema que acababa de descubrir durante las entrevistas.<br/><br/>
                     El CAM no necesitaba leer ochenta oportunidades una por una.<br/>
