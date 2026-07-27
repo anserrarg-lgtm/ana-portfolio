@@ -1026,7 +1026,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                     )}
                   </div>
                   <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:300, fontSize:'32px', color:'rgba(255,255,255,0.5)', marginTop:'120px', lineHeight:1.2}}>
-                    Antes de diseñar, necesitaba comprobar que el producto tenía sentido.
+                    Antes de diseñar, validé la oportunidad utilizando un framework de Discovery para asegurarme de que el producto respondía a un problema real.
                   </p>
                   <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:500, fontSize:'30px', color:'#F5F7F7', marginTop:'40px', lineHeight:1.2}}>
                     Seis preguntas que guiaron la definición del producto.
@@ -1040,6 +1040,23 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                       </div>
                     ))}
                   </div>
+                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'#B0FF92', lineHeight:1.7, marginTop:'40px', width:'80%'}}>
+                    Ya sabía qué problema resolver. Ahora tenía que decidir cómo hacerlo.
+                  </p>
+                  <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:500, fontSize:'30px', color:'#F5F7F7', marginTop:'80px', textAlign:'left', width:'80%'}}>
+                    Diseñando Beacon
+                  </p>
+                  <div style={{width:'70%', height:'1px', background:'linear-gradient(to right, rgba(176,255,146,0.3), transparent)', marginTop:'16px', marginLeft:'-40px'}}/>
+                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'#B0FF92', lineHeight:1.7, marginTop:'40px', width:'80%'}}>
+                    La primera decisión fue dejar de pensar en listas.
+                  </p>
+                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.8, marginTop:'24px', width:'80%'}}>
+                    Cuando generé las primeras pantallas con IA obtuve un dashboard bastante genérico. Las oportunidades seguían apareciendo en una lista con etiquetas de estado. Era una interfaz correcta, pero no resolvía el problema que acababa de descubrir durante las entrevistas.<br/><br/>
+                    El CAM no necesitaba leer ochenta oportunidades una por una.<br/>
+                    Necesitaba entender el estado de su pipeline con un solo vistazo.<br/><br/>
+                    <span style={{color:'#B0FF92'}}>Ahí apareció el Kanban.</span><br/><br/>
+                    En ese momento entendí que las columnas no debían representar etapas comerciales, sino el nivel de atención que requería cada oportunidad.
+                  </p>
                 </div>
               </div>
             </>
