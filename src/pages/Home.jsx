@@ -580,7 +580,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
               setBrandIndex(i => (i + 1) % 5)
               setTimeout(() => setIsCarouselTransitioning(false), 50)
             }, 300)
-            if (count >= 2) clearInterval(timer)
+            if (count >= 4) clearInterval(timer)
           }, 2000)
         }
       },
@@ -886,11 +886,31 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:300, fontSize:'32px', color:'rgba(255,255,255,0.5)', marginTop:'120px', lineHeight:1.2}}>
                     Pensé que alguien ya habría resuelto esto.
                   </p>
-                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.8, marginTop:'60px', width:'90%', textAlign:'left'}}>
+                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.8, marginTop:'12px', width:'90%', textAlign:'left'}}>
                     Encontré herramientas muy buenas.<br/><span style={{color:'#B0FF92'}}>Pero descubrí que todas estaban optimizadas para resolver problemas diferentes.</span><br/>Y ahí entendí cuál era realmente el espacio de Beacon.
                   </p>
-                  <div className="brand-carousel" style={{width:'100%', marginTop:'-90px'}}>
-                    <div style={{position:'relative', width:'100%', height:'55vw', overflow:'hidden', borderRadius:'12px'}}>
+                  <div className="brand-carousel" style={{width:'100%', marginTop:'-90px', position:'relative'}}>
+                    <div style={{display:'flex', gap:'8px', justifyContent:'flex-start', paddingLeft:'8px', position:'absolute', top:'110px', left:'8px', zIndex:2}}>
+                      {[0,1,2,3,4].map(i => (
+                        <div key={i} onClick={() => {
+                          setIsCarouselTransitioning(true)
+                          setTimeout(() => {
+                            setBrandIndex(i)
+                            setTimeout(() => setIsCarouselTransitioning(false), 50)
+                          }, 300)
+                        }} style={{
+                          width: brandIndex === i ? '28px' : '10px',
+                          height:'10px',
+                          borderRadius:'4px',
+                          background: brandIndex === i ? '#B0FF92' : 'rgba(255,255,255,0.3)',
+                          cursor:'pointer',
+                          zIndex: 10,
+                          position: 'relative',
+                          transition:'all 0.3s ease'
+                        }}/>
+                      ))}
+                    </div>
+                    <div style={{position:'relative', width:'100%', height:'55vw', overflow:'hidden', borderRadius:'12px', marginTop:'16px'}}>
                       {[partnerstack, crossbeam, impartner, mockupBeacon, demoBeacon].map((src, i) => (
                         i === 4 ? (
                           <div key={i} style={{
@@ -899,7 +919,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                             transition:'opacity 0.4s ease',
                             borderRadius:'16px',
                             overflow:'hidden',
-                            background:'#0D1117',
+                            background:'transparent',
                             display:'flex',
                             alignItems:'center',
                             justifyContent:'center',
@@ -909,7 +929,8 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                               width:'80%',
                               borderRadius:'12px',
                               overflow:'hidden',
-                              boxShadow:'0 0 40px rgba(176,255,146,0.15)'
+                              boxShadow:'0 0 40px rgba(176,255,146,0.15)',
+                              marginLeft: '-5%'
                             }}>
                               <div style={{
                                 background:'#1E2433',
@@ -939,33 +960,86 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                         )
                       ))}
                     </div>
-                    <div style={{display:'flex', gap:'8px', justifyContent:'center', marginTop:'-110px'}}>
-                      {[0,1,2,3,4].map(i => (
-                        <div key={i} onClick={() => {
-                          setIsCarouselTransitioning(true)
-                          setTimeout(() => {
-                            setBrandIndex(i)
-                            setTimeout(() => setIsCarouselTransitioning(false), 50)
-                          }, 300)
-                        }} style={{
-                          width: brandIndex === i ? '28px' : '10px',
-                          height:'10px',
-                          borderRadius:'4px',
-                          background: brandIndex === i ? '#B0FF92' : 'rgba(255,255,255,0.3)',
-                          cursor:'pointer',
-                          zIndex: 10,
-                          position: 'relative',
-                          transition:'all 0.3s ease'
-                        }}/>
-                      ))}
-                    </div>
+                    {brandIndex !== 3 && brandIndex !== 4 && (
+                      <div style={{
+                        marginTop:'-130px',
+                        background:'rgba(255,255,255,0.05)',
+                        backdropFilter:'blur(10px)',
+                        border:'1px solid rgba(255,255,255,0.1)',
+                        borderRadius:'12px',
+                        position:'relative',
+                        zIndex:1,
+                        display:'grid',
+                        gridTemplateColumns:'1fr 1fr 1fr',
+                        overflow:'hidden',
+                        width:'90%',
+                        marginLeft:'3%',
+                        marginRight:'auto',
+                        transform: isCarouselTransitioning ? 'translateX(-20px)' : 'translateX(0)',
+                        opacity: isCarouselTransitioning ? 0 : 1,
+                        transition: 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease'
+                      }}>
+                        <div style={{position:'absolute', top:0, bottom:0, left:'33.3%', width:'1px', background:'linear-gradient(to bottom, transparent, rgba(255,255,255,0.1), transparent)'}}/>
+                        <div style={{position:'absolute', top:0, bottom:0, left:'66.6%', width:'1px', background:'linear-gradient(to bottom, transparent, rgba(255,255,255,0.1), transparent)'}}/>
+                        {[
+                          {icon:'✓', value: brandIndex === 0 ? 'Automatiza afiliados y pagos.' : brandIndex === 1 ? 'Descubre oportunidades compartidas.' : brandIndex === 2 ? 'Gestiona programas de partners.' : brandIndex === 3 ? 'Beacon fue diseñado alrededor de una única pregunta.' : ''},
+                          {icon:'✔', value: brandIndex === 0 ? 'Excelente para SaaS.' : brandIndex === 1 ? 'Muy bueno para generar negocio.' : brandIndex === 2 ? 'Procesos corporativos.' : brandIndex === 3 ? '¿Qué necesita saber el CAM ahora mismo para tomar la siguiente decisión?' : ''},
+                          {icon:'✖', value: brandIndex === 0 ? 'El seguimiento operativo no es su prioridad.' : brandIndex === 1 ? 'No dice qué pasó con un deal existente.' : brandIndex === 2 ? 'Depende de que todos alimenten el sistema.' : ''}
+                        ].map((col, i) => (
+                          <div key={i} style={{padding:'10px 16px', display:'flex', alignItems:'center', gap:'8px'}}>
+                            <span style={{fontFamily:"'IBM Plex Mono', monospace", fontWeight:300, fontSize: col.icon === '✓' ? '16px' : '14px', color: col.icon === '✓' ? '#B0FF92' : col.icon === '✔' ? '#B0FF92' : '#FF6B35', lineHeight: col.icon === '✓' ? 1 : 'inherit', verticalAlign: 'middle', marginTop: col.icon === '✓' ? '0' : '0', flexShrink:0}}>{col.icon}</span>
+                            <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:300, fontSize:'14px', color:'#7B58F8', lineHeight:1.4, margin:0}}>{col.value}</p>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    {brandIndex === 3 && (
+                      <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.7, margin:'-130px auto 0', width:'80%', textAlign:'center'}}>
+                        Beacon fue diseñado alrededor de una única pregunta.<br/>
+                        <span style={{color:'#B0FF92'}}>¿Qué necesita saber el CAM ahora mismo para tomar la siguiente decisión?</span>
+                      </p>
+                    )}
+                    {brandIndex === 4 && (
+                      <div style={{
+                        marginTop:'-150px',
+                        padding:'10px 16px',
+                        background:'rgba(255,255,255,0.05)',
+                        backdropFilter:'blur(10px)',
+                        border:'1px solid rgba(255,255,255,0.1)',
+                        borderRadius:'12px',
+                        width:'90%',
+                        marginLeft:'3%',
+                        display:'grid',
+                        gridTemplateColumns:'1fr 1fr 1fr',
+                        overflow:'hidden',
+                        position:'relative'
+                      }}>
+                        <div style={{position:'absolute', top:0, bottom:0, left:'33.3%', width:'1px', background:'linear-gradient(to bottom, transparent, rgba(255,255,255,0.1), transparent)'}}/>
+                        <div style={{position:'absolute', top:0, bottom:0, left:'66.6%', width:'1px', background:'linear-gradient(to bottom, transparent, rgba(255,255,255,0.1), transparent)'}}/>
+                        {['Ver qué oportunidades requieren atención.', 'Saber cuándo actuar.', 'Recuperar la visibilidad sin perseguir información.'].map((text, i) => (
+                          <div key={i} style={{padding:'4px 16px', display:'flex', alignItems:'center', gap:'8px'}}>
+                            <span style={{color:'#B0FF92', fontSize:'16px', flexShrink:0}}>✓</span>
+                            <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:300, fontSize:'14px', color:'rgba(255,255,255,0.7)', lineHeight:1.4, margin:0}}>{text}</p>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                   <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:300, fontSize:'32px', color:'rgba(255,255,255,0.5)', marginTop:'120px', lineHeight:1.2}}>
-                    En ese momento dejé de pensar en funcionalidades.
+                    Antes de diseñar, necesitaba comprobar que el producto tenía sentido.
                   </p>
-                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', marginTop:'16px', lineHeight:1.7}}>
-                    Empecé a definir exactamente qué producto necesitaba existir.
+                  <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:500, fontSize:'30px', color:'#F5F7F7', marginTop:'40px', lineHeight:1.2}}>
+                    Seis preguntas que guiaron la definición del producto.
                   </p>
+                  <div style={{width:'70%', height:'1px', background:'linear-gradient(to right, rgba(176,255,146,0.3), transparent)', marginTop:'16px', marginLeft:'-40px'}}/>
+                  <div style={{display:'flex', flexDirection:'column', gap:'12px', marginTop:'24px', width:'80%'}}>
+                    {['¿Qué problema resuelve?', '¿Quién lo tiene?', '¿Cómo lo resuelven hoy?', '¿Qué existe?', '¿Qué oportunidad hay?', '¿Qué evidencia tengo?'].map((q, i) => (
+                      <div key={i} style={{display:'flex', alignItems:'center', gap:'12px'}}>
+                        <span style={{width:'6px', height:'6px', borderRadius:'50%', background:'#B0FF92', boxShadow:'0 0 6px #B0FF92, 0 0 12px rgba(176,255,146,0.4)', flexShrink:0, display:'inline-block'}}/>
+                        <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', margin:0}}>{q}</p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </>
