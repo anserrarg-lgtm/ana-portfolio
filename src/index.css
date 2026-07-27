@@ -126,3 +126,14 @@ body {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }
+
+@keyframes slideUpPanel {
+  from { transform: translateY(100vh); }
+  to { transform: translateY(0); }
+}
+
+@keyframes faviconPulse {
+  0% { opacity:1; transform:scale(1); }
+  50% { opacity:0.3; transform:scale(0.95); }
+  100% { opacity:1; transform:scale(1); }
+}

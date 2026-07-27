@@ -1500,7 +1500,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
           flexDirection: 'column',
           gap: '0'
         }}>
-          {['Contexto', 'Investigación', 'Insights', 'Mercado', 'Estrategia', 'MVP', 'Desarrollo con IA', 'Impacto', 'Aprendizajes'].map((item, i) => (
+          {['Contexto', 'Investigación', 'Discovery', 'Decisiones de producto', 'Diseño', 'IA aplicada', 'Impacto', 'Aprendizajes'].map((item, i) => (
             <div key={i} style={{display:'flex', alignItems:'center', gap:'8px', padding:'6px 0'}}>
               <div style={{overflow:'hidden'}}>
                 <div style={{width: activeSection === i ? '2px' : '1px', height:'20px', background: activeSection === i ? '#1A1A1A' : 'rgba(26,26,26,0.3)', transform: showRightContent ? 'translateY(0)' : 'translateY(-100%)', transition: 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)'}}/>
@@ -1678,6 +1678,7 @@ export default function Home() {
   const [theaHovered, setTheaHovered] = React.useState(false)
   const [beaconTyping, setBeaconTyping] = React.useState('')
   const [theaTyping, setTheaTyping] = React.useState('')
+  const [aboutPhase, setAboutPhase] = React.useState(null)
   const beaconIntervalRef = React.useRef(null)
   const theaIntervalRef = React.useRef(null)
   const notesCompleteRef = React.useRef(false)
@@ -1789,6 +1790,8 @@ export default function Home() {
 
   React.useEffect(() => {
     const handleWheel = (e) => {
+      if (aboutPhase) return
+
       if (phase === 'projects' && showBeaconT) {
         return
       }
@@ -1821,7 +1824,18 @@ export default function Home() {
       }
 
       if (phase === 'projects' && !showBeaconCard && e.deltaY > 0) {
+        if (!showBeaconT && !showTheaT) {
+          setAboutPhase('black')
+          setTimeout(() => setAboutPhase('white'), 2400)
+          return
+        }
         e.preventDefault()
+        return
+      }
+
+      if (phase === 'projects' && e.deltaY > 0 && !showBeaconT && !showTheaT) {
+        setAboutPhase('black')
+        setTimeout(() => setAboutPhase('white'), 1800)
         return
       }
 
@@ -1913,7 +1927,7 @@ export default function Home() {
           alignItems: 'stretch',
           background: '#F5F2EE'
         }}>
-          {['Intro', 'Proyectos'].map((link, i) => (
+          {['Intro', 'Proyectos', 'Sobre mí'].map((link, i) => (
             <a key={link} href={`#${link}`} className="nav-link" onClick={() => setActiveLink(link)} style={{
               padding: '8px 16px',
               borderLeft: i === 0 ? 'none' : '1px solid #1A1A1A',
@@ -2336,6 +2350,53 @@ export default function Home() {
             setShowTheaT(true)
           }}
         />
+      )}
+
+      {aboutPhase && (
+        <div style={{
+          position:'fixed',
+          top:0, left:0, width:'100vw', height:'100vh',
+          background: aboutPhase === 'black' ? '#000' : '#F5F2EE',
+          zIndex:9000,
+          display:'flex',
+          alignItems:'center',
+          justifyContent:'center',
+          animation: 'slideUpPanel 0.6s cubic-bezier(0.4,0,0.2,1) forwards'
+        }}>
+          {aboutPhase === 'black' && (
+            <img src="/favicon.png" style={{
+              width:'48px',
+              height:'48px',
+              opacity:1,
+              animation:'faviconPulse 0.8s ease-in-out forwards'
+            }}/>
+          )}
+          {aboutPhase === 'white' && (
+            <div style={{position:'absolute', top:'80px', left:'80px', right:'80px', height:'100vh', display:'flex', flexDirection:'column'}}>
+              <div style={{display:'flex', justifyContent:'space-between', alignItems:'flex-start'}}>
+                <h2 style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:600, fontSize:'90px', color:'#1A1A1A', lineHeight:1, margin:0}}>
+                  Sobre mí
+                </h2>
+                <button onClick={() => setAboutPhase(null)} style={{
+                  background:'transparent',
+                  border:'1px solid #1A1A1A',
+                  width:'36px',
+                  height:'36px',
+                  borderRadius:'50%',
+                  display:'flex',
+                  alignItems:'center',
+                  justifyContent:'center',
+                  cursor:'pointer',
+                  transition:'all 0.2s ease'
+                }} onMouseEnter={e => {e.currentTarget.style.background = '#1A1A1A'; e.currentTarget.style.color = '#F5F2EE'}} onMouseLeave={e => {e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#1A1A1A'}}>
+                  <svg width="16" height="16" viewBox="0 0 14 14" fill="none">
+                    <path d="M1 1L13 13M13 1L1 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       )}
     </div>
   )
