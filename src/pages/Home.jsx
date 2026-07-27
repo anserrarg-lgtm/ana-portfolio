@@ -483,6 +483,22 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
   const [colorStep, setColorStep] = React.useState(-1)
   const colorTimerRef = React.useRef(null)
   const colorRef = React.useRef(null)
+  const sec01Ref = React.useRef(null)
+  const sec02Ref = React.useRef(null)
+  const sec03Ref = React.useRef(null)
+  const sec04Ref = React.useRef(null)
+  const sec05Ref = React.useRef(null)
+  const sec06Ref = React.useRef(null)
+  const sec07Ref = React.useRef(null)
+  const sec08Ref = React.useRef(null)
+
+  const sectionRefs = [sec01Ref, sec02Ref, sec03Ref, sec04Ref, sec05Ref, sec06Ref, sec07Ref, sec08Ref]
+
+  const scrollToSection = (i) => {
+    if (sectionRefs[i].current && contentRef.current) {
+      contentRef.current.scrollTop = sectionRefs[i].current.offsetTop - 40
+    }
+  }
 
   const quotes = [
     [
@@ -749,7 +765,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                 textAlign: 'center',
                 zIndex: 10000
               }}>
-                <p style={{
+                <p ref={sec01Ref} style={{
                   fontFamily:"'Plus Jakarta Sans', sans-serif",
                   fontWeight:300,
                   fontSize:'32px',
@@ -892,7 +908,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   <img ref={imageRef} src={procesoBea1} style={{width:'80%', borderRadius:'12px', display:'block', opacity: imageVisible ? 1 : 0, transform: imageVisible ? 'translateY(0)' : 'translateY(60px)', transition: 'opacity 0.3s ease, transform 0.3s ease'}} onError={(e) => console.log('Error loading:', e.target.src)} />
                 </div>
                 <div style={{marginTop:'120px', paddingLeft:'8px'}}>
-                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:300, fontSize:'32px', color:'rgba(255,255,255,0.5)', marginBottom:'8px'}}>
+                  <p ref={sec02Ref} style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:300, fontSize:'32px', color:'rgba(255,255,255,0.5)', marginBottom:'8px'}}>
                     Hablé con quienes viven este problema.
                   </p>
                   <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.7, marginTop:'4px', width:'80%', whiteSpace:'nowrap'}}>
@@ -1098,7 +1114,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                       </div>
                     )}
                   </div>
-                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:300, fontSize:'32px', color:'rgba(255,255,255,0.5)', marginTop:'120px', lineHeight:1.2}}>
+                  <p ref={sec03Ref} style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:300, fontSize:'32px', color:'rgba(255,255,255,0.5)', marginTop:'120px', lineHeight:1.2}}>
                     Antes de diseñar, validé la oportunidad utilizando un framework de Discovery para asegurarme de que el producto respondía a un problema real.
                   </p>
                   <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:500, fontSize:'30px', color:'#F5F7F7', marginTop:'40px', lineHeight:1.2}}>
@@ -1120,7 +1136,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'#B0FF92', lineHeight:1.7, marginTop:'8px', width:'80%'}}>
                     Ya sabía qué problema resolver. Ahora tenía que decidir cómo hacerlo.
                   </p>
-                  <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:500, fontSize:'30px', color:'#F5F7F7', marginTop:'80px', textAlign:'left', width:'80%'}}>
+                  <p ref={sec04Ref} style={{fontFamily:"'Satoshi', sans-serif", fontWeight:500, fontSize:'30px', color:'#F5F7F7', marginTop:'80px', textAlign:'left', width:'80%'}}>
                     Diseñando Beacon
                   </p>
                   <div style={{width:'70%', height:'1px', background:'linear-gradient(to right, rgba(176,255,146,0.3), transparent)', marginTop:'16px', marginLeft:'-40px'}}/>
@@ -1214,7 +1230,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   </div>
                   <div style={{width:'100%', height:'1px', background:'rgba(255,255,255,0.1)', marginTop:'60px', display:'block'}}/>
                   <div style={{display:'flex', gap:'40px', alignItems:'flex-start', marginTop:'60px'}}>
-                    <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.8, marginTop:0, width:'80%', flex:1, paddingTop:'60px'}}>
+                    <p ref={sec05Ref} style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.8, marginTop:0, width:'80%', flex:1, paddingTop:'60px'}}>
                       <span style={{color:'#B0FF92'}}>La IA no diseñó Beacon. Aceleró su construcción.</span><br/><br/>
                       Utilicé Claude Code para transformar decisiones de producto<br/>en interfaces funcionales.<br/>
                       <span style={{display:'block', marginTop:'16px'}}>Las primeras propuestas fueron genéricas.</span><br/>
@@ -1316,7 +1332,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                     Cuando ese flujo funcionó de principio a fin, Beacon estaba listo para empezar.
                   </p>
                   <div style={{height:'1px', background:'rgba(255,255,255,0.1)', marginTop:'80px', marginBottom:'0'}}/>
-                  <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:500, fontSize:'30px', color:'#F5F7F7', marginTop:'40px', textAlign:'left', width:'80%'}}>
+                  <p ref={sec06Ref} style={{fontFamily:"'Satoshi', sans-serif", fontWeight:500, fontSize:'30px', color:'#F5F7F7', marginTop:'40px', textAlign:'left', width:'80%'}}>
                     Flujo de trabajo con IA
                   </p>
                   <div style={{width:'60%', height:'1px', background:'linear-gradient(to right, rgba(176,255,146,0.3), transparent)', marginTop:'12px', marginLeft:'-8px'}}/>
@@ -1342,7 +1358,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                       </div>
                     ))}
                   </div>
-                  <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:500, fontSize:'30px', color:'#F5F7F7', marginTop:'120px', textAlign:'left', width:'80%'}}>
+                  <p ref={sec07Ref} style={{fontFamily:"'Satoshi', sans-serif", fontWeight:500, fontSize:'30px', color:'#F5F7F7', marginTop:'120px', textAlign:'left', width:'80%'}}>
                     ¿Qué cambia con Beacon?
                   </p>
                   <div style={{width:'70%', height:'1px', background:'linear-gradient(to right, rgba(176,255,146,0.3), transparent)', marginTop:'16px', marginLeft:'-40px'}}/>
@@ -1373,7 +1389,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.5, marginTop:'40px', width:'85%'}}>
                     Beacon no busca vender más.<br/><span style={{color:'#B0FF92'}}>Busca devolver el tiempo y la visibilidad que permiten vender mejor.</span>
                   </p>
-                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:300, fontSize:'32px', color:'rgba(255,255,255,0.5)', marginTop:'120px', lineHeight:1.2}}>
+                  <p ref={sec08Ref} style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:300, fontSize:'32px', color:'rgba(255,255,255,0.5)', marginTop:'120px', lineHeight:1.2}}>
                     Beacon me enseñó que un buen producto no nace<br/>de tener más funcionalidades.
                   </p>
                   <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', marginTop:'8px', lineHeight:1.7}}>
@@ -1486,7 +1502,9 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
         }}>
           {['Contexto', 'Investigación', 'Insights', 'Mercado', 'Estrategia', 'MVP', 'Desarrollo con IA', 'Impacto', 'Aprendizajes'].map((item, i) => (
             <div key={i} style={{display:'flex', alignItems:'center', gap:'8px', padding:'6px 0'}}>
-              <div style={{width: activeSection === i ? '2px' : '1px', height:'20px', background: activeSection === i ? '#1A1A1A' : 'rgba(26,26,26,0.3)'}}/>
+              <div style={{overflow:'hidden'}}>
+                <div style={{width: activeSection === i ? '2px' : '1px', height:'20px', background: activeSection === i ? '#1A1A1A' : 'rgba(26,26,26,0.3)', transform: showRightContent ? 'translateY(0)' : 'translateY(-100%)', transition: 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)'}}/>
+              </div>
               <div style={{overflow:'hidden'}}>
                 <p style={{
                   fontFamily:"'Plus Jakarta Sans', sans-serif",
@@ -1497,7 +1515,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   letterSpacing:'0.05em',
                   transform: closing ? 'translateY(-100%)' : showRightContent ? 'translateY(0)' : 'translateY(-100%)',
                   transition: `transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) ${i * 60}ms`
-                }} onClick={() => setActiveSection(i)}>{item}</p>
+                }} onClick={() => {setActiveSection(i); scrollToSection(i)}}>{item}</p>
               </div>
             </div>
           ))}
