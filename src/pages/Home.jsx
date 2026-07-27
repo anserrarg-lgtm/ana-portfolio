@@ -20,9 +20,21 @@ import partnerstack from '../assets/partnerstack.png'
 import crossbeam from '../assets/crossbeam.png'
 import impartner from '../assets/impartner.png'
 import demoBeacon from '../assets/demo-beacon.mp4'
-import pipelineImg from '../assets/pipeline.png'
+import pipelineImg from '../assets/pipeline-orbit.png'
 import notificacionesImg from '../assets/Notificaciones.png'
 import pulsecheckImg from '../assets/Pulsecheck.png'
+import primeraImg from '../assets/primera.png'
+import segundaImg from '../assets/segunda.png'
+import terceraImg from '../assets/tercera.png'
+import cuartaImg from '../assets/cuarta.png'
+import logoGithub from '../assets/github.png'
+import logoTally from '../assets/tally.png'
+import logoChatgpt from '../assets/chatgpt.png'
+import logoNotebooklm from '../assets/notebooklm.png'
+import logoClaude from '../assets/claude.png'
+import logoLovable from '../assets/lovable.png'
+import logoGranola from '../assets/granola.png'
+import logoVercel from '../assets/vercel.png'
 
 function TypingText({ text, speed = 50 }) {
   const [displayed, setDisplayed] = React.useState('')
@@ -417,6 +429,33 @@ function VerProductoBtn({ texto = 'Ver producto' }) {
   )
 }
 
+function PulseButtons() {
+  const [active, setActive] = React.useState(0)
+  React.useEffect(() => {
+    const t = setInterval(() => setActive(i => (i + 1) % 3), 1500)
+    return () => clearInterval(t)
+  }, [])
+  return (
+    <div style={{display:'flex', flexDirection:'column', gap:'8px', flexShrink:0}}>
+      {['Deal cerrado', 'En negociación', 'Bloqueado'].map((label, i) => (
+        <div key={i} style={{
+          padding:'8px 16px',
+          borderRadius:'8px',
+          border: active === i ? '1px solid #B0FF92' : '1px solid rgba(255,255,255,0.2)',
+          color: active === i ? '#B0FF92' : 'rgba(255,255,255,0.4)',
+          fontFamily:"'Plus Jakarta Sans', sans-serif",
+          fontSize:'13px',
+          fontWeight: active === i ? 500 : 300,
+          transition:'all 0.3s ease',
+          background: active === i ? 'rgba(176,255,146,0.08)' : 'transparent',
+          cursor:'pointer',
+          transform: active === i ? 'scale(1.02)' : 'scale(1)'
+        }}>{label}</div>
+      ))}
+    </div>
+  )
+}
+
 function ProjectTransition({ color, onClose, projectName, projectColor }) {
   const [progress, setProgress] = React.useState(0)
   const [showRightContent, setShowRightContent] = React.useState(false)
@@ -439,6 +478,11 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
   const [slideOffset, setSlideOffset] = React.useState(0)
   const [slideIndex, setSlideIndex] = React.useState(0)
   const slideTimerRef = React.useRef(null)
+  const [discoveryVisible, setDiscoveryVisible] = React.useState(false)
+  const discoveryRef = React.useRef(null)
+  const [colorStep, setColorStep] = React.useState(-1)
+  const colorTimerRef = React.useRef(null)
+  const colorRef = React.useRef(null)
 
   const quotes = [
     [
@@ -563,6 +607,26 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
   }, [diagramVisible])
 
   React.useEffect(() => {
+    if (!discoveryRef.current || discoveryVisible) return
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) setDiscoveryVisible(true)
+      },
+      { threshold: 0.3, root: contentRef.current }
+    )
+    observer.observe(discoveryRef.current)
+    return () => observer.disconnect()
+  }, [discoveryVisible])
+
+  React.useEffect(() => {
+    setColorStep(0)
+    colorTimerRef.current = setInterval(() => {
+      setColorStep(s => (s + 1) % 4)
+    }, 2500)
+    return () => clearInterval(colorTimerRef.current)
+  }, [])
+
+  React.useEffect(() => {
     if (!checkRef.current || checkVisible) return
     const observer = new IntersectionObserver(
       (entries) => {
@@ -623,8 +687,9 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
         overflowX: 'hidden',
         opacity: progress > 0.1 ? 1 : 0,
         clipPath: `inset(0 ${Math.max(0, 100 - progress * 100)}% 0 0)`,
-        transition: 'none',
-        padding: '0 40px 0 8px'
+        filter: dotPressed ? 'blur(8px)' : 'none',
+        transition: 'filter 0.3s ease',
+        padding: '0'
       }}>
         <div style={{
           position: 'absolute',
@@ -741,11 +806,11 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   transition: 'opacity 0.6s ease, transform 0.6s ease'
                 }}>
                   {[
-                    { label:'Vendor', icon: <Building2 size={32} color="#7B58F8" strokeWidth={1}/>, color: 'rgba(255,255,255,0.5)' },
-                    { label:'Asesor', icon: <Phone size={32} color="#7B58F8" strokeWidth={1}/>, color: 'rgba(255,255,255,0.5)' },
-                    { label:'CAM', icon: <Settings2 size={32} color="#B0FF92" strokeWidth={1}/>, color: '#B0FF92', highlight: true },
-                    { label:'Partners', icon: <Handshake size={32} color="#7B58F8" strokeWidth={1}/>, color: 'rgba(255,255,255,0.5)' },
-                    { label:'Cliente', icon: <User size={32} color="#7B58F8" strokeWidth={1}/>, color: 'rgba(255,255,255,0.5)' }
+                    { label:'Vendor', icon: <Building2 size={32} color="#7B58F8" strokeWidth={1.5}/>, color: 'rgba(255,255,255,0.5)' },
+                    { label:'Asesor', icon: <Phone size={32} color="#7B58F8" strokeWidth={1.5}/>, color: 'rgba(255,255,255,0.5)' },
+                    { label:'CAM', icon: <Settings2 size={32} color="#B0FF92" strokeWidth={1.5}/>, color: '#B0FF92', highlight: true },
+                    { label:'Partners', icon: <Handshake size={32} color="#7B58F8" strokeWidth={1.5}/>, color: 'rgba(255,255,255,0.5)' },
+                    { label:'Cliente', icon: <User size={32} color="#7B58F8" strokeWidth={1.5}/>, color: 'rgba(255,255,255,0.5)' }
                   ].map((item, i) => (
                     <React.Fragment key={i}>
                       <div style={{display:'flex', flexDirection:'column', alignItems:'center', gap:'8px'}}>
@@ -1048,7 +1113,11 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                       </div>
                     ))}
                   </div>
-                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'#B0FF92', lineHeight:1.7, marginTop:'40px', width:'80%'}}>
+                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.8, marginTop:'40px', width:'80%'}}>
+                    Respondiendo a estas preguntas escribí la PRD y prioricé el MVP utilizando MoSCoW. La prioridad ya no era construir mucho.<br/>
+                    Era construir únicamente lo que eliminaba el problema principal.
+                  </p>
+                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'#B0FF92', lineHeight:1.7, marginTop:'8px', width:'80%'}}>
                     Ya sabía qué problema resolver. Ahora tenía que decidir cómo hacerlo.
                   </p>
                   <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:500, fontSize:'30px', color:'#F5F7F7', marginTop:'80px', textAlign:'left', width:'80%'}}>
@@ -1072,7 +1141,8 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                           background:'rgba(255,255,255,0.9)',
                           boxShadow:'0 0 8px rgba(255,255,255,0.7)',
                           cursor:'pointer',
-                          zIndex:3
+                          zIndex:3,
+                          animation: 'dotPulse 2s ease-in-out infinite'
                         }}
                       onMouseEnter={() => setDotHovered(true)}
                       onMouseDown={() => {
@@ -1080,7 +1150,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                         setSlideIndex(0)
                         slideTimerRef.current = setInterval(() => {
                           setSlideIndex(i => (i + 1) % 3)
-                        }, 1200)
+                        }, 2000)
                       }}
                       onMouseUp={() => {
                         setDotPressed(false)
@@ -1102,40 +1172,182 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                     )}
                     </>
                   </div>
-                  {dotPressed && (
-                    <div style={{
-                      position:'fixed',
-                      top:'10%',
-                      left:'2%',
-                      width:'58vw',
-                      height:'80vh',
-                      zIndex:99999,
-                      display:'flex',
-                      alignItems:'center',
-                      justifyContent:'center',
-                      pointerEvents:'none'
-                    }}>
-                      {[pipelineImg, notificacionesImg, pulsecheckImg].map((src, i) => (
-                        <img key={i} src={src} style={{
-                          position:'absolute',
-                          width:'90%',
-                          height:'90%',
-                          objectFit:'contain',
-                          borderRadius:'16px',
-                          opacity: slideIndex === i ? 1 : 0,
-                          transform: slideIndex === i ? 'translateX(0)' : 'translateX(60px)',
-                          transition:'opacity 0.4s ease, transform 0.4s ease'
-                        }}/>
-                      ))}
-                    </div>
-                  )}
-                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.8, marginTop:'24px', width:'80%'}}>
+                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.8, marginTop:'4px', width:'80%'}}>
                     Cuando generé las primeras pantallas con IA obtuve un dashboard bastante genérico. Las oportunidades seguían apareciendo en una lista con etiquetas de estado. Era una interfaz correcta, pero no resolvía el problema que acababa de descubrir durante las entrevistas.<br/><br/>
                     El CAM no necesitaba leer ochenta oportunidades una por una.<br/>
                     Necesitaba entender el estado de su pipeline con un solo vistazo.<br/><br/>
                     <span style={{color:'#B0FF92'}}>Ahí apareció el Kanban.</span><br/><br/>
                     En ese momento entendí que las columnas no debían representar etapas comerciales, sino el nivel de atención que requería cada oportunidad.
                   </p>
+                  <div style={{width:'100%', height:'1px', background:'rgba(255,255,255,0.1)', marginTop:'60px', display:'block'}}/>
+                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'#B0FF92', marginTop:'60px', lineHeight:1.2}}>
+                    Si el sistema podía preguntar, el CAM no debía hacerlo.
+                  </p>
+                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.8, marginTop:'24px', width:'80%'}}>
+                    Durante las entrevistas apareció una frase varias veces.
+                  </p>
+                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'16px', color:'rgba(255,255,255,0.5)', lineHeight:1.8, marginTop:'16px', width:'80%'}}>
+                    <span style={{color:'#B0FF92'}}>"</span>Si hubiese una manera donde se nos notifique...<span style={{color:'#B0FF92'}}>"</span>
+                  </p>
+                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.8, marginTop:'16px', width:'80%'}}>
+                    Ese comentario terminó convirtiéndose en la funcionalidad principal de Beacon.
+                  </p>
+                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'#B0FF92', marginTop:'60px'}}>
+                    Así nació el Pulse Check.
+                  </p>
+                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.8, marginTop:'24px', width:'80%'}}>
+                    En lugar de obligar al CAM a perseguir al partner, Beacon invierte el flujo: el sistema pregunta y la respuesta vuelve automáticamente al pipeline.
+                  </p>
+                  <div style={{width:'100%', height:'1px', background:'rgba(255,255,255,0.1)', marginTop:'60px', display:'block'}}/>
+                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.8, marginTop:'60px', width:'80%'}}>
+                    <span style={{color:'#B0FF92'}}>Reducir fricción también era una decisión de producto.</span><br/><br/>
+                    En un principio pensé en construir un portal para partners.<br/>
+                    Lo descarté rápidamente.<br/><br/>
+                    Pedirle al partner que aprendiera otra herramienta añadía exactamente la fricción que quería eliminar.<br/><br/>
+                    Por eso el partner responde desde un email, sin registrarse y sin crear una cuenta.
+                  </p>
+                  <div style={{display:'flex', alignItems:'center', gap:'40px', marginTop:'24px'}}>
+                    <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.8, marginTop:0, width:'auto'}}>
+                      <span style={{color:'#F5F7F7', fontWeight:400}}>Tres opciones.<br/>Un clic.<br/>Nada más.</span>
+                    </p>
+                    <PulseButtons/>
+                  </div>
+                  <div style={{width:'100%', height:'1px', background:'rgba(255,255,255,0.1)', marginTop:'60px', display:'block'}}/>
+                  <div style={{display:'flex', gap:'40px', alignItems:'flex-start', marginTop:'60px'}}>
+                    <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.8, marginTop:0, width:'80%', flex:1, paddingTop:'60px'}}>
+                      <span style={{color:'#B0FF92'}}>La IA no diseñó Beacon. Aceleró su construcción.</span><br/><br/>
+                      Utilicé Claude Code para transformar decisiones de producto<br/>en interfaces funcionales.<br/>
+                      <span style={{display:'block', marginTop:'16px'}}>Las primeras propuestas fueron genéricas.</span><br/>
+                      A partir de ahí fui iterando cada pantalla hasta que el producto<br/>reflejara el comportamiento que había identificado durante<br/>la investigación.<br/><br/>
+                      <span style={{color:'#B0FF92'}}>La IA ejecutó.<br/>Las decisiones fueron a partir del discovery.</span>
+                    </p>
+                    <div ref={discoveryRef} style={{
+                      display:'block',
+                      marginTop:'-20px',
+                      marginRight:'150px',
+                      border:'1px solid rgba(255,255,255,0.15)',
+                      borderRadius:'12px',
+                      padding:'16px 20px',
+                      background:'rgba(255,255,255,0.05)',
+                      backdropFilter:'blur(10px)',
+                      boxShadow:'0 8px 32px rgba(0,0,0,0.3)'
+                    }}>
+                      <div style={{display:'flex', flexDirection:'column', alignItems:'center', gap:'4px'}}>
+                        {[
+                          {label:'Idea', icon:<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7B58F8" strokeWidth="1.5" strokeLinecap="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>},
+                          {label:'Discovery', icon:<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7B58F8" strokeWidth="1.5" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>},
+                          {label:'Claude Code', icon:<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#B0FF92" strokeWidth="1.5" strokeLinecap="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>, highlight:true},
+                          {label:'Producto', icon:<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7B58F8" strokeWidth="1.5" strokeLinecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>},
+                          {label:'Feedback', icon:<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7B58F8" strokeWidth="1.5" strokeLinecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>},
+                          {label:'Iteración', icon:<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7B58F8" strokeWidth="1.5" strokeLinecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>}
+                        ].map((item, i, arr) => (
+                          <React.Fragment key={i}>
+                            <div style={{display:'flex', flexDirection:'column', alignItems:'center', gap:'6px'}}>
+                              {item.icon}
+                              <span style={{fontFamily:"'DM Sans', sans-serif", fontWeight: item.highlight ? 700 : 300, fontSize:'14px', color: item.highlight ? '#B0FF92' : 'rgba(255,255,255,0.6)'}}>{item.label}</span>
+                            </div>
+                            {i < arr.length - 1 && (
+                              <svg width="16" height="40" viewBox="0 0 16 40" fill="none">
+                                <line x1="8" y1="0" x2="8" y2="34" stroke="#F5F7F7" strokeWidth="3" strokeLinecap="round"/>
+                                <polyline points="3 28 8 34 13 28" stroke="#F5F7F7" strokeWidth="3" strokeLinecap="round" fill="none"/>
+                              </svg>
+                            )}
+                          </React.Fragment>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  <div style={{width:'100%', height:'1px', background:'rgba(255,255,255,0.1)', marginTop:'120px', display:'block'}}/>
+                  <div ref={colorRef} style={{position:'relative', display:'flex', gap:'40px', alignItems:'flex-start', marginTop:'0px'}}>
+                    <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'#F5F7F7', lineHeight:1.8, marginTop:'80px', flex:1, textShadow:'0 0 20px rgba(245,247,247,0.3)'}}>
+                      El color también tenía una función.<br/><br/>
+                      Al principio utilicé un semáforo tradicional.<br/>
+                      <span style={{color:'rgba(255,255,255,0.5)'}}>Rojo.</span> <span style={{color:'rgba(255,255,255,0.5)'}}>Amarillo.</span> <span style={{color:'rgba(255,255,255,0.5)'}}>Verde.</span><br/><br/>
+                      Pronto entendí que el rojo transmitía urgencia<br/>permanente en un producto que debía generar claridad.<br/><br/>
+                      Rediseñé completamente la paleta.<br/><br/>
+                      El verde comunica estabilidad.<br/>
+                      El morado representa espera.<br/>
+                      El azul confirma.<br/>
+                      El naranja indica que una oportunidad necesita<br/>atención, sin transmitir fracaso.
+                    </p>
+                    <div style={{position:'relative', width:'220px', height:'360px', flexShrink:0, marginTop:'170px', marginRight:'100px'}}>
+                      {[
+                        {src:primeraImg, color:'#7B58F8'},
+                        {src:segundaImg, color:'#B0FF92'},
+                        {src:terceraImg, color:'#4488ff'},
+                        {src:cuartaImg, color:'#FF6B35'}
+                      ].map((item, i) => (
+                        <div key={i} style={{
+                          position:'absolute',
+                          top:0,
+                          left:0,
+                          width:'220px',
+                          background:'rgba(255,255,255,0.04)',
+                          border:`1px solid ${item.color}40`,
+                          borderRadius:'12px',
+                          overflow:'hidden',
+                          boxShadow: colorStep === i ? `0 0 60px ${item.color}40, 0 0 120px ${item.color}20` : `0 0 20px ${item.color}15`,
+                          opacity: colorStep === i ? 1 : 0,
+                          transform: colorStep === i ? 'translateX(0) scale(1)' : 'translateX(20px) scale(0.97)',
+                          filter: colorStep === i ? 'blur(0px) brightness(1)' : 'blur(4px) brightness(0.8)',
+                          transition:'all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)'
+                        }}>
+                          <img src={item.src} style={{width:'100%', display:'block'}}/>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div style={{width:'100%', height:'1px', background:'rgba(255,255,255,0.1)', marginTop:'60px', display:'block'}}/>
+                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'#B0FF92', lineHeight:1.8, marginTop:'60px', width:'80%'}}>
+                    El MVP estuvo listo cuando...
+                  </p>
+                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.8, marginTop:'16px', width:'80%'}}>
+                    No cuando todas las funcionalidades existían. Sino cuando la promesa del producto<br/>ya podía cumplirse.
+                  </p>
+                  <div style={{display:'flex', flexDirection:'column', gap:'8px', marginTop:'60px', width:'80%'}}>
+                    {['Nueva oportunidad', 'Pulse Check', 'Respuesta', 'Pipeline actualizado', 'Notificación', 'Visibilidad recuperada'].map((item, i) => (
+                      <div key={i} style={{display:'flex', alignItems:'center', gap:'16px'}}>
+                        <span style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'#B0FF92', flexShrink:0, minWidth:'24px'}}>{String(i+1).padStart(2,'0')}</span>
+                        <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.8)', margin:0}}>{item}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.8, marginTop:'40px', width:'80%'}}>
+                    Cuando ese flujo funcionó de principio a fin,<br/>
+                    Beacon estaba listo para empezar.
+                  </p>
+                  <div style={{height:'1px', background:'rgba(255,255,255,0.1)', marginTop:'80px', marginBottom:'0'}}/>
+                  <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:500, fontSize:'30px', color:'#F5F7F7', marginTop:'40px', textAlign:'left', width:'80%'}}>
+                    Flujo de trabajo con IA
+                  </p>
+                  <div style={{width:'60%', height:'1px', background:'linear-gradient(to right, rgba(176,255,146,0.3), transparent)', marginTop:'12px', marginLeft:'-8px'}}/>
+                  <div style={{display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:'0', background:'rgba(255,255,255,0.05)', backdropFilter:'blur(10px)', boxShadow:'0 8px 32px rgba(0,0,0,0.3)', borderRadius:'12px', overflow:'hidden', marginTop:'40px', width:'90%', position:'relative', marginLeft:'20px'}}>
+                    <div style={{position:'absolute', top:0, bottom:0, left:'33.3%', width:'1px', background:'linear-gradient(to bottom, transparent, rgba(255,255,255,0.15), transparent)'}}/>
+                    <div style={{position:'absolute', top:0, bottom:0, left:'66.6%', width:'1px', background:'linear-gradient(to bottom, transparent, rgba(255,255,255,0.15), transparent)'}}/>
+                    <div style={{position:'absolute', left:0, right:0, top:'55%', height:'1px', background:'linear-gradient(to right, transparent, rgba(255,255,255,0.15), transparent)'}}/>
+                    {[
+                      {label:'Descubrimiento', logos:[logoNotebooklm, logoClaude]},
+                      {label:'Investigación', logos:[logoTally, logoGranola, logoChatgpt]},
+                      {label:'Definición', logos:[logoClaude]},
+                      {label:'Diseño', logos:[logoClaude, logoLovable]},
+                      {label:'Desarrollo', logos:[logoClaude, logoGithub]},
+                      {label:'Lanzamiento', logos:[logoVercel]}
+                    ].map((item, i) => (
+                      <div key={i} style={{background:'rgba(255,255,255,0.03)', padding:'16px', display:'flex', flexDirection:'column', gap:'12px'}}>
+                        <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'14px', color:'#B0FF92', margin:0}}>{item.label}</p>
+                        <div style={{display:'flex', gap:'8px', flexWrap:'wrap', alignItems:'center'}}>
+                          {item.logos.map((src, j) => (
+                            <img key={j} src={src} style={{height: (i === 1 && j === 2) ? '60px' : '20px', width:'auto', filter:'brightness(0) invert(1)', opacity:0.8}}/>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div style={{height:'1px',background:'rgba(255,255,255,0.15)',marginTop:'80px'}}/>
+                  <p style={{fontFamily:"'Satoshi', sans-serif", fontWeight:500, fontSize:'30px', color:'#F5F7F7', marginTop:'120px', textAlign:'left', width:'80%'}}>
+                    ¿Qué cambia con Beacon?
+                  </p>
+                  <div style={{width:'70%', height:'1px', background:'linear-gradient(to right, rgba(176,255,146,0.3), transparent)', marginTop:'16px', marginLeft:'-40px'}}/>
                 </div>
               </div>
             </>
@@ -1154,6 +1366,25 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
           )}
         </div>
       </div>
+      {dotPressed && (
+        <div style={{position:'fixed', top:'5%', left:'2%', width:'58vw', height:'90vh', zIndex:999999, display:'flex', alignItems:'center', justifyContent:'center', pointerEvents:'none'}}>
+          {[pipelineImg, notificacionesImg, pulsecheckImg].map((src, i) => (
+            <div key={i} style={{
+              position:'absolute',
+              width:'90%',
+              height:'90%',
+              borderRadius:'24px',
+              overflow:'hidden',
+              opacity: slideIndex === i ? 1 : 0,
+              transform: slideIndex === i ? 'translateX(0) scale(1)' : 'translateX(60px) scale(0.95)',
+              filter: slideIndex === i ? 'blur(0px)' : 'blur(4px)',
+              transition:'opacity 0.5s ease, transform 0.5s ease, filter 0.5s ease'
+            }}>
+              <img src={src} style={{width:'100%', height:'100%', objectFit:'contain'}}/>
+            </div>
+          ))}
+        </div>
+      )}
       <div style={{
         position: 'fixed',
         top: 0,
@@ -1174,7 +1405,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
           flexDirection: 'column',
           gap: '0'
         }}>
-          {['Discovery', 'Strategy', 'Design', 'Build', 'Impact'].map((item, i) => (
+          {['Contexto', 'Investigación', 'Insights', 'Mercado', 'Estrategia', 'MVP', 'Desarrollo con IA', 'Impacto', 'Aprendizajes'].map((item, i) => (
             <div key={i} style={{display:'flex', alignItems:'center', gap:'8px', padding:'6px 0'}}>
               <div style={{width: activeSection === i ? '2px' : '1px', height:'20px', background: activeSection === i ? '#1A1A1A' : 'rgba(26,26,26,0.3)'}}/>
               <div style={{overflow:'hidden'}}>

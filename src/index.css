@@ -42,6 +42,11 @@ body {
   to { transform: translateY(-50%) translateX(0); opacity: 1; }
 }
 
+@keyframes dotPulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(255,255,255,0.7); transform: translateY(-50%) scale(1); }
+  50% { box-shadow: 0 0 14px rgba(255,255,255,0.4), 0 0 28px rgba(255,255,255,0.15); transform: translateY(-50%) scale(1.1); }
+}
+
 .nav-link {
   text-decoration: none;
   position: relative;
