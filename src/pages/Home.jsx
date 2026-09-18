@@ -35,6 +35,7 @@ import logoClaude from '../assets/claude.png'
 import logoLovable from '../assets/lovable.png'
 import logoGranola from '../assets/granola.png'
 import logoVercel from '../assets/vercel.png'
+import handPinch from '../assets/hand-pinch.png'
 
 function TypingText({ text, speed = 50 }) {
   const [displayed, setDisplayed] = React.useState('')
@@ -135,7 +136,7 @@ function SentidoAnimation() {
       fontFamily: 'inherit',
       fontSize: 'inherit',
       fontWeight: 'inherit',
-      color: frames[frame]?.color || 'inherit',
+      color: getText() === 'sentido' ? '#FF6B35' : (frames[frame]?.color || 'inherit'),
       textAlign: 'left'
     }}>
       {getText()}.
@@ -299,7 +300,7 @@ const SequentialTyping = React.forwardRef(({ onComplete, keepCursorVisible, hide
     '├── systems/',
     '└── notes/',
     '',
-    '// Research notes:',
+    '// field notes:',
     '> Fricción en las entrevistas: Primera pregunta demasiado\nabierta / Falta de historias concretas / La pregunta de\nautomatización no tuvo respuesta.'
   ]
 
@@ -1182,7 +1183,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                     />
                     {dotHovered && (
                       <div style={{position:'absolute', right:'0px', top:'120%', transform:'translateY(-50%)', display:'flex', alignItems:'center', animation:'slideHandIn 0.6s cubic-bezier(0.4,0,0.2,1) forwards', pointerEvents:'none', zIndex:4}}>
-                        <img src="/src/assets/hand-pinch.png" style={{width:'60px', filter:'invert(1)', display:'block'}}/>
+                        <img src={handPinch} style={{width:'60px', filter:'invert(1)', display:'block'}}/>
                         <div style={{width:'24px', height:'20px', background:'rgba(255,255,255,0.9)', borderRadius:'0 6px 8px 0', marginLeft:'-6px', marginTop:'40px', transform:'rotate(15deg)'}}/>
                       </div>
                     )}
@@ -1938,7 +1939,7 @@ export default function Home() {
 
       {/* HERO */}
       <section id="intro" style={{
-        padding:'120px 0 120px 0',
+        padding:'120px 0 120px 80px',
         display:'flex',
         flexDirection:'row',
         alignItems:'flex-start',
@@ -2000,7 +2001,7 @@ export default function Home() {
             }}>
               Porque cada detalle influye en la forma en que las personas entienden, perciben y confían en un producto.
             </h3>
-            <TypingText text={`// Research notes:\n> buscando sentido antes de diseñar soluciones.`} speed={40} />
+            <TypingText text={`// working notes:\n> buscando sentido antes de diseñar soluciones.`} speed={40} />
           </div>
         </div>
         <div style={{flex:1, paddingTop:'0', marginTop:'-180px', position:'relative', opacity: phase === 'zooming' ? Math.max(0, 1 - zoomProgress * 1.5) : phase === 'projects' ? 0 : 1}}>
@@ -2269,7 +2270,7 @@ export default function Home() {
                     lineHeight:1.6,
                     marginTop:'8px'
                   }}>
-                    Theaveling es una app móvil que diseñé para ayudar a viajeros amantes del arte a descubrir experiencias culturales con una perspectiva más local y humana, conectando con personas que asistirán al mismo evento y explorando una ciudad más allá de sus rutas turísticas. Encuentra experiencias artísticas relevantes en pocos minutos y descubre una ciudad desde una perspectiva más local.
+                    Theaveling es una app móvil que diseñé para ayudar a viajeros amantes del arte a descubrir experiencias culturales con una perspectiva más local y humana, conectando con personas que asistirán al mismo evento y explorando una ciudad más allá de sus rutas turísticas.
                   </p>
                   <div style={{
                     position:'absolute',
@@ -2394,6 +2395,28 @@ export default function Home() {
           )}
         </div>
       )}
+
+      <div style={{
+        position:'fixed',
+        top:'15%',
+        right:'0',
+        width:'900px',
+        height:'800px',
+        pointerEvents:'none',
+        zIndex:0,
+        maskImage:'radial-gradient(ellipse at 90% 40%, rgba(0,0,0,0.8) 0%, transparent 65%)',
+        WebkitMaskImage:'radial-gradient(ellipse at 90% 40%, rgba(0,0,0,0.8) 0%, transparent 65%)'
+      }}>
+        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="grid2" width="48" height="48" patternUnits="userSpaceOnUse">
+              <path d="M 48 0 L 0 0 0 48" fill="none" stroke="#1A1A1A" strokeWidth="0.4" opacity="0.85"/>
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#grid2)"/>
+        </svg>
+      </div>
+
     </div>
   )
 }
