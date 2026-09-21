@@ -1808,9 +1808,11 @@ export default function Home() {
       if (phase === 'notes') {
         if (!notesCompleteRef.current) return
         e.preventDefault()
-        setPhase('zooming')
-        zoomProgressRef.current = 0
-        setZoomProgress(0)
+        setTimeout(() => {
+          setPhase('zooming')
+          zoomProgressRef.current = 0
+          setZoomProgress(0)
+        }, 1000)
         return
       }
 
@@ -1825,7 +1827,9 @@ export default function Home() {
           setActiveLink('Proyectos')
           if (!projectsTypedRef.current) {
             projectsTypedRef.current = true
-            typeProjectsText()
+            setTimeout(() => {
+              typeProjectsText()
+            }, 1500)
           }
         } else if (next <= 0) {
           setPhase('notes')
@@ -1954,7 +1958,9 @@ export default function Home() {
                     setPhase('projects')
                     if (!projectsTypedRef.current) {
                       projectsTypedRef.current = true
-                      typeProjectsText()
+                      setTimeout(() => {
+                        typeProjectsText()
+                      }, 1500)
                     }
                   }
                 }
