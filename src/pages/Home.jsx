@@ -1982,7 +1982,7 @@ export default function Home() {
         position:'fixed',
         top:'64px',
         left:'8px',
-        width:'50vw',
+        width:'58vw',
         bottom:'8px',
         background:'#1A1A1A',
         borderRadius:'8px',
@@ -2008,7 +2008,7 @@ export default function Home() {
           ? `${cursorPos.x}px ${cursorPos.y}px`
           : 'center center'
       }}>
-        <div style={{flex:1, marginTop:'80px', opacity: phase === 'zooming' ? Math.max(0, 1 - zoomProgress * 2) : phase === 'projects' ? 0 : 1, transition:'opacity 0.6s ease'}}>
+        <div style={{flex:1, marginTop:'80px', paddingLeft:'72px', opacity: phase === 'zooming' ? Math.max(0, 1 - zoomProgress * 2) : phase === 'projects' ? 0 : 1, transition:'opacity 0.6s ease'}}>
           <div style={{position:'relative', display:'inline-block'}}>
             <span style={{
               position:'absolute',
