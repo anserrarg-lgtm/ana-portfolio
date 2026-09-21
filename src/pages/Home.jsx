@@ -1994,12 +1994,14 @@ export default function Home() {
 
       {/* HERO */}
       <section id="intro" style={{
-        padding:'0px 0 120px 80px',
+        padding:'0px 0 120px 40px',
         display:'flex',
         flexDirection:'row',
         alignItems:'stretch',
         justifyContent:'space-between',
-        gap:'80px',
+        gap:'0px',
+        overflow:'hidden',
+        maxWidth:'100vw',
         transform: phase === 'zooming' || phase === 'projects' || phase === 'rewinding'
           ? `scale(${1 + zoomProgress * 6})`
           : 'scale(1)',
@@ -2008,8 +2010,8 @@ export default function Home() {
           ? `${cursorPos.x}px ${cursorPos.y}px`
           : 'center center'
       }}>
-        <div style={{flex:1, marginTop:'80px', paddingLeft:'72px', opacity: phase === 'zooming' ? Math.max(0, 1 - zoomProgress * 2) : phase === 'projects' ? 0 : 1, transition:'opacity 0.6s ease'}}>
-          <div style={{position:'relative', display:'inline-block'}}>
+        <div style={{flex:'0 0 50vw', marginTop:'80px', paddingLeft:'20px'}}>
+          <div style={{position:'relative', display:'block'}}>
             <span style={{
               position:'absolute',
               top:'-24px',
@@ -2030,22 +2032,18 @@ export default function Home() {
               letterSpacing:'-0.01em',
               fontFamily:"'Plus Jakarta Sans', sans-serif",
               marginBottom:'24px',
-              maxWidth:'800px',
-              minHeight:'120px',
               color:'#F5F2EE'
             }}>
-              Hola soy Ana, y nunca doy por terminada una interfaz hasta que incluso el <span style={{
-                outline: 'none',
-                position: 'relative',
-                padding: '2px 8px',
-                display: 'inline-block'
-              }}>
-                <span style={{position:'absolute', top:0, left:0, width:'8px', height:'8px', borderTop:'1px solid #555', borderLeft:'1px solid #555', transition: 'border-radius 0.8s ease', borderRadius: brRounded ? '4px 0 0 0' : '0'}}/>
-                <span style={{position:'absolute', top:0, right:0, width:'8px', height:'8px', borderTop:'1px solid #555', borderRight:'1px solid #555', transition: 'border-radius 0.8s ease', borderRadius: brRounded ? '0 4px 0 0' : '0'}}/>
-                <span style={{position:'absolute', bottom:0, left:0, width:'8px', height:'8px', borderBottom:'1px solid #555', borderLeft:'1px solid #555', transition: 'border-radius 0.8s ease', borderRadius: brRounded ? '0 0 0 4px' : '0'}}/>
-                <span style={{position:'absolute', bottom:0, right:0, width:'8px', height:'8px', borderBottom:'1px solid #555', borderRight:'1px solid #555', transition: 'border-radius 0.8s ease', borderRadius: brRounded ? '0 0 4px 0' : '0'}}/>
+              {'Hola soy Ana, y nunca doy por terminada una interfaz hasta que incluso el '}
+              <span style={{outline:'none',position:'relative',padding:'2px 8px',display:'inline-block'}}>
+                <span style={{position:'absolute',top:0,left:0,width:'8px',height:'8px',borderTop:'1px solid #555',borderLeft:'1px solid #555',transition:'border-radius 0.8s ease',borderRadius:brRounded?'4px 0 0 0':'0'}}/>
+                <span style={{position:'absolute',top:0,right:0,width:'8px',height:'8px',borderTop:'1px solid #555',borderRight:'1px solid #555',transition:'border-radius 0.8s ease',borderRadius:brRounded?'0 4px 0 0':'0'}}/>
+                <span style={{position:'absolute',bottom:0,left:0,width:'8px',height:'8px',borderBottom:'1px solid #555',borderLeft:'1px solid #555',transition:'border-radius 0.8s ease',borderRadius:brRounded?'0 0 0 4px':'0'}}/>
+                <span style={{position:'absolute',bottom:0,right:0,width:'8px',height:'8px',borderBottom:'1px solid #555',borderRight:'1px solid #555',transition:'border-radius 0.8s ease',borderRadius:brRounded?'0 0 4px 0':'0'}}/>
                 border radius
-              </span> tenga{' '}<span style={{display:'inline-block', minWidth:'7ch', fontFamily:'inherit', fontSize:'inherit', fontWeight:'inherit'}}><SentidoAnimation /></span>
+              </span>
+              {' tenga '}
+              <SentidoAnimation/>
             </h1>
             <h3 style={{
               fontFamily:"'Plus Jakarta Sans', sans-serif",
