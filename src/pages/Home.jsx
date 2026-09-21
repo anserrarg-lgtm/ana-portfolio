@@ -1783,12 +1783,12 @@ export default function Home() {
           typingIntervalRef.current = null
           setTimeout(() => setShowSubtitle(true), 300)
           setTimeout(() => setShowCards(true), 500)
-          setTimeout(() => setShowBeaconCard(true), 4000)
-          setTimeout(() => setShowTheaCard(true), 4300)
-          setTimeout(() => setShowBeaconName(true), 4900)
-          setTimeout(() => setShowTheaName(true), 5200)
-          setTimeout(() => setShowBeaconT(true), 5600)
-          setTimeout(() => setShowTheaT(true), 5900)
+          setTimeout(() => setShowBeaconCard(true), 1500)
+          setTimeout(() => setShowTheaCard(true), 1800)
+          setTimeout(() => setShowBeaconName(true), 2400)
+          setTimeout(() => setShowTheaName(true), 2700)
+          setTimeout(() => setShowBeaconT(true), 3100)
+          setTimeout(() => setShowTheaT(true), 3400)
           setTimeout(() => setShowBeaconInfo(true), 1100)
           setTimeout(() => setShowTheaInfo(true), 1400)
         }
