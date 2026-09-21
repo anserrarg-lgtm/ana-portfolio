@@ -1982,7 +1982,7 @@ export default function Home() {
         position:'fixed',
         top:'64px',
         left:'8px',
-        width:'58vw',
+        width:'64vw',
         bottom:'8px',
         background:'#1A1A1A',
         borderRadius:'8px',
@@ -2010,12 +2010,12 @@ export default function Home() {
           ? `${cursorPos.x}px ${cursorPos.y}px`
           : 'center center'
       }}>
-        <div style={{flex:'0 0 50vw', marginTop:'80px', paddingLeft:'20px'}}>
+        <div style={{flex:'0 0 62vw', marginTop:'100px', paddingLeft:'20px'}}>
           <div style={{position:'relative', display:'block'}}>
             <span style={{
               position:'absolute',
               top:'-24px',
-              right:'0',
+              right:'60px',
               fontSize:'13px',
               letterSpacing:'0.05em',
               textTransform:'uppercase',
@@ -2058,7 +2058,7 @@ export default function Home() {
             <TypingText text={`// working notes:\n> buscando sentido antes de diseñar soluciones.`} speed={40} />
           </div>
         </div>
-        <div style={{flex:1, paddingTop:'0', marginTop:'-60px', paddingLeft:'200px', position:'relative', opacity: phase === 'zooming' ? Math.max(0, 1 - zoomProgress * 1.5) : phase === 'projects' ? 0 : 1}}>
+        <div style={{flex:1, paddingTop:'0', marginTop:'-60px', paddingLeft:'40px', position:'relative', opacity: phase === 'zooming' ? Math.max(0, 1 - zoomProgress * 1.5) : phase === 'projects' ? 0 : 1}}>
           <div id="notes-container" ref={notesRef} style={{}}>
             <SequentialTyping ref={endCursorRef} keepCursorVisible={phase === 'zooming' || phase === 'rewinding'} hideCursor={phase === 'zooming' || phase === 'rewinding' || phase === 'projects'} onComplete={() => {
               notesCompleteRef.current = true
@@ -2340,47 +2340,6 @@ export default function Home() {
           </div>
         </div>
       )}
-
-      {/* PROYECTOS */}
-      <section id="proyectos" style={{padding:'80px 80px 0 80px', borderTop:'1px solid rgba(0,0,0,0.08)', display: phase === 'notes' ? 'block' : 'none'}}>
-        <div ref={proyectosRef} style={{position:'relative', height:'70px', marginBottom:'0'}}>
-          <div style={{
-            position:'absolute',
-            left: proyectosVisible ? '110px' : '-300px',
-            transition:'left 0.5s cubic-bezier(0.16,1,0.3,1)',
-            border:'1px solid #1A1A1A',
-            padding:'8px 20px',
-            fontFamily:"'Plus Jakarta Sans', sans-serif",
-            fontSize:'42px',
-            fontWeight:700,
-            color:'#1A1A1A',
-            background:'#F5F2EE',
-            zIndex:1
-          }}>
-            proyectos
-          </div>
-          <div style={{
-            position:'absolute',
-            left: misVisible ? '0' : '-300px',
-            transition:'left 0.6s cubic-bezier(0.16,1,0.3,1), border-radius 0.4s ease',
-            border:'1px solid #1A1A1A',
-            borderRadius: misRounded ? '20px' : '0px',
-            padding:'8px 20px',
-            fontFamily:"'Plus Jakarta Sans', sans-serif",
-            fontSize:'42px',
-            fontWeight:700,
-            color:'#1A1A1A',
-            background:'#F5F2EE',
-            zIndex:2
-          }}>
-            Mis
-          </div>
-        </div>
-
-        <h3 style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:200, fontSize:'30px', color:'#1A1A1A', marginTop:'0', marginBottom:'0'}}>
-          Donde las notas terminan convirtiéndose en producto.
-        </h3>
-      </section>
 
       {projectTransition && (
         <ProjectTransition
