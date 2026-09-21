@@ -1808,33 +1808,27 @@ export default function Home() {
       if (phase === 'notes') {
         if (!notesCompleteRef.current) return
         e.preventDefault()
-        setTimeout(() => {
-          setPhase('zooming')
-          zoomProgressRef.current = 0
-          setZoomProgress(0)
-        }, 1000)
-        return
-      }
-
-      if (phase === 'zooming') {
-        e.preventDefault()
-        const delta = e.deltaY > 0 ? 0.05 : -0.05
-        const next = Math.max(0, Math.min(1, zoomProgressRef.current + delta))
-        zoomProgressRef.current = next
-        setZoomProgress(next)
-        if (next >= 1) {
-          setPhase('projects')
-          setActiveLink('Proyectos')
-          if (!projectsTypedRef.current) {
-            projectsTypedRef.current = true
-            setTimeout(() => {
-              typeProjectsText()
-            }, 1500)
+        if (wheelLockRef.current) return
+        wheelLockRef.current = true
+        setPhase('zooming')
+        zoomProgressRef.current = 0
+        setZoomProgress(0)
+        const animate = () => {
+          zoomProgressRef.current = Math.min(1, zoomProgressRef.current + 0.03)
+          setZoomProgress(zoomProgressRef.current)
+          if (zoomProgressRef.current < 1) {
+            requestAnimationFrame(animate)
+          } else {
+            setPhase('projects')
+            setActiveLink('Proyectos')
+            wheelLockRef.current = false
+            if (!projectsTypedRef.current) {
+              projectsTypedRef.current = true
+              setTimeout(() => typeProjectsText(), 1500)
+            }
           }
-        } else if (next <= 0) {
-          setPhase('notes')
-          setActiveLink('Intro')
         }
+        requestAnimationFrame(animate)
         return
       }
 
