@@ -64,7 +64,7 @@ function TypingText({ text, speed = 50 }) {
           fontFamily:"'IBM Plex Mono', monospace",
           fontWeight: 300,
           fontSize: '14px',
-          color: '#1A1A1A',
+          color: 'rgba(245,242,238,0.6)',
           margin: '2px 0',
           display: 'flex',
           alignItems: 'center'
@@ -1758,6 +1758,14 @@ export default function Home() {
     }
   }, [])
 
+  React.useEffect(() => {
+    if (phase === 'projects') {
+      setActiveLink('Proyectos')
+    } else if (phase === 'notes' || phase === 'zooming') {
+      setActiveLink('Intro')
+    }
+  }, [phase])
+
   const typeProjectsText = () => {
     if (typingIntervalRef.current) {
       clearTimeout(typingIntervalRef.current)
@@ -1814,12 +1822,14 @@ export default function Home() {
         setZoomProgress(next)
         if (next >= 1) {
           setPhase('projects')
+          setActiveLink('Proyectos')
           if (!projectsTypedRef.current) {
             projectsTypedRef.current = true
             typeProjectsText()
           }
         } else if (next <= 0) {
           setPhase('notes')
+          setActiveLink('Intro')
         }
         return
       }
@@ -1869,6 +1879,7 @@ export default function Home() {
               requestAnimationFrame(rewind)
             } else {
               setPhase('notes')
+              setActiveLink('Intro')
               wheelLockRef.current = false
             }
           }
@@ -1887,24 +1898,26 @@ export default function Home() {
 
       {/* NAVBAR */}
       <div style={{
-        position: 'fixed',
-        top: '40px',
-        left: '80px',
-        right: '80px',
+        position: phase === 'projects' ? 'fixed' : 'fixed',
+        top: phase === 'projects' ? '12px' : '40px',
+        right: phase === 'projects' ? '24px' : '80px',
+        left: phase === 'projects' ? 'auto' : '80px',
         transform: 'none',
-        width: 'calc(100% - 160px)',
+        width: phase === 'projects' ? 'auto' : 'calc(100% - 160px)',
         display: 'flex',
         gap: '0',
-        zIndex: 100,
+        zIndex: phase === 'projects' ? 600 : 100,
         justifyContent: scrolled ? 'flex-end' : 'space-between',
-        border: scrolled ? 'none' : '1px solid #1A1A1A',
-        boxShadow: scrolled ? 'none' : '2px 2px 0px #1A1A1A',
-        transition: 'all 0.3s ease'
+        background: phase === 'projects' ? 'rgba(245,242,238,0.85)' : '#F5F2EE',
+        backdropFilter: phase === 'projects' ? 'blur(8px)' : 'none',
+        border: phase === 'projects' ? '1px solid rgba(26,26,26,0.2)' : (scrolled ? 'none' : '1px solid #1A1A1A'),
+        boxShadow: phase === 'projects' ? 'none' : (scrolled ? 'none' : '2px 2px 0px #1A1A1A'),
+        transition: 'all 0.5s ease'
       }}>
         <div style={{
           borderRight: '1px solid #1A1A1A',
           padding: '8px 16px',
-          display: scrolled ? 'none' : 'flex',
+          display: scrolled || phase === 'projects' ? 'none' : 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
           background: '#F5F2EE'
@@ -1918,8 +1931,36 @@ export default function Home() {
           alignItems: 'stretch',
           background: '#F5F2EE'
         }}>
-          {['Intro', 'Proyectos', 'Sobre mí'].map((link, i) => (
-            <a key={link} href={`#${link}`} className="nav-link" onClick={() => setActiveLink(link)} style={{
+          {['Intro', 'Proyectos', 'Sobre mí', 'Conectemos'].map((link, i) => (
+            <a key={link} href={`#${link}`} className="nav-link" onClick={() => {
+              setActiveLink(link)
+              if (link === 'Intro') {
+                setPhase('notes')
+                setZoomProgress(0)
+                setProjectTransition(null)
+              }
+              if (link === 'Proyectos') {
+                setActiveLink('Proyectos')
+                if (phase === 'projects') return
+                setPhase('zooming')
+                zoomProgressRef.current = 0
+                setZoomProgress(0)
+                const zoom = () => {
+                  zoomProgressRef.current = Math.min(1, zoomProgressRef.current + 0.05)
+                  setZoomProgress(zoomProgressRef.current)
+                  if (zoomProgressRef.current < 1) {
+                    requestAnimationFrame(zoom)
+                  } else {
+                    setPhase('projects')
+                    if (!projectsTypedRef.current) {
+                      projectsTypedRef.current = true
+                      typeProjectsText()
+                    }
+                  }
+                }
+                requestAnimationFrame(zoom)
+              }
+            }} style={{
               padding: '8px 16px',
               borderLeft: i === 0 ? 'none' : '1px solid #1A1A1A',
               display: 'flex',
@@ -1937,12 +1978,26 @@ export default function Home() {
         </div>
       </div>
 
+      <div style={{
+        position:'fixed',
+        top:'64px',
+        left:'8px',
+        width:'50vw',
+        bottom:'8px',
+        background:'#1A1A1A',
+        borderRadius:'8px',
+        zIndex:0,
+        pointerEvents:'none',
+        opacity: phase === 'zooming' ? Math.max(0, 1 - zoomProgress * 2) : phase === 'projects' ? 0 : 1,
+        transition:'opacity 0.6s ease'
+      }}/>
+
       {/* HERO */}
       <section id="intro" style={{
-        padding:'120px 0 120px 80px',
+        padding:'0px 0 120px 80px',
         display:'flex',
         flexDirection:'row',
-        alignItems:'flex-start',
+        alignItems:'stretch',
         justifyContent:'space-between',
         gap:'80px',
         transform: phase === 'zooming' || phase === 'projects' || phase === 'rewinding'
@@ -1953,7 +2008,7 @@ export default function Home() {
           ? `${cursorPos.x}px ${cursorPos.y}px`
           : 'center center'
       }}>
-        <div style={{flex:1, marginTop:'20px', opacity: phase === 'zooming' ? Math.max(0, 1 - zoomProgress * 2) : phase === 'projects' ? 0 : 1}}>
+        <div style={{flex:1, marginTop:'80px', opacity: phase === 'zooming' ? Math.max(0, 1 - zoomProgress * 2) : phase === 'projects' ? 0 : 1, transition:'opacity 0.6s ease'}}>
           <div style={{position:'relative', display:'inline-block'}}>
             <span style={{
               position:'absolute',
@@ -1962,7 +2017,7 @@ export default function Home() {
               fontSize:'13px',
               letterSpacing:'0.05em',
               textTransform:'uppercase',
-              color:'#1A1A1A',
+              color:'#F5F2EE',
               fontFamily:"'Plus Jakarta Sans', sans-serif",
               fontWeight:400
             }}>
@@ -1976,7 +2031,8 @@ export default function Home() {
               fontFamily:"'Plus Jakarta Sans', sans-serif",
               marginBottom:'24px',
               maxWidth:'800px',
-              minHeight:'120px'
+              minHeight:'120px',
+              color:'#F5F2EE'
             }}>
               Hola soy Ana, y nunca doy por terminada una interfaz hasta que incluso el <span style={{
                 outline: 'none',
@@ -1995,7 +2051,7 @@ export default function Home() {
               fontFamily:"'Plus Jakarta Sans', sans-serif",
               fontWeight:200,
               fontSize:'30px',
-              color:'#1A1A1A',
+              color:'#F5F2EE',
               marginTop:'16px',
               marginBottom:'24px'
             }}>
@@ -2004,7 +2060,7 @@ export default function Home() {
             <TypingText text={`// working notes:\n> buscando sentido antes de diseñar soluciones.`} speed={40} />
           </div>
         </div>
-        <div style={{flex:1, paddingTop:'0', marginTop:'-180px', position:'relative', opacity: phase === 'zooming' ? Math.max(0, 1 - zoomProgress * 1.5) : phase === 'projects' ? 0 : 1}}>
+        <div style={{flex:1, paddingTop:'0', marginTop:'-60px', paddingLeft:'200px', position:'relative', opacity: phase === 'zooming' ? Math.max(0, 1 - zoomProgress * 1.5) : phase === 'projects' ? 0 : 1}}>
           <div id="notes-container" ref={notesRef} style={{}}>
             <SequentialTyping ref={endCursorRef} keepCursorVisible={phase === 'zooming' || phase === 'rewinding'} hideCursor={phase === 'zooming' || phase === 'rewinding' || phase === 'projects'} onComplete={() => {
               notesCompleteRef.current = true
@@ -2336,6 +2392,7 @@ export default function Home() {
           projectColor={projectTransition === 'beacon' ? '#121716' : '#112C2C'}
           onClose={() => {
             setPhase('projects')
+            setActiveLink('Proyectos')
             setProjectTransition(null)
             setProjectsText('> Projects/')
             setShowSubtitle(true)
