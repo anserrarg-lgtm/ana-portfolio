@@ -2129,7 +2129,7 @@ export default function Home() {
             </h3>
           </div>
 
-          <div style={{display:'flex', gap:'40px', position:'relative', minHeight:'80vh', top:'12px', left:'80px', right:'80px'}}>
+          <div style={{display:'flex', gap:'40px', position:'absolute', top:'12px', left:'80px', right:'80px'}}>
             <div style={{flex:1, opacity: showBeaconCard ? 1 : 0, transform: showBeaconCard ? 'translateY(0)' : 'translateY(100vh)', transition:'opacity 0.8s ease, transform 0.8s ease', position:'relative', alignSelf:'stretch', height:'70vh'}} onMouseEnter={() => {
               setBeaconHovered(true)
               setBeaconTyping('')
