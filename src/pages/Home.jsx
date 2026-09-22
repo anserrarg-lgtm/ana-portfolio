@@ -2339,6 +2339,7 @@ export default function Home() {
               )}
             </div>
           </div>
+          <div style={{height:'120vh', pointerEvents:'none'}}/>
         </div>
       )}
 
