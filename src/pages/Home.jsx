@@ -2110,6 +2110,7 @@ export default function Home() {
           justifyContent:'flex-start',
           alignItems:'stretch',
           padding:'0 80px',
+          paddingBottom:'300px',
           overflowY:'auto',
           touchAction:'pan-y'
         }}>
