@@ -2093,7 +2093,7 @@ export default function Home() {
       {(phase === 'projects' || (phase === 'zooming' && zoomProgress > 0.8)) && (
         <div className="projects-overlay" onScroll={(e) => {
           const el = e.currentTarget
-          if (el.scrollTop + el.clientHeight >= el.scrollHeight - 10) {
+          if (el.scrollTop + el.clientHeight >= el.scrollHeight - 1) {
             setAboutPhase('black')
             setTimeout(() => setAboutPhase('white'), 1800)
           }
