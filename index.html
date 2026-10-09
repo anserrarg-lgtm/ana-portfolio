@@ -5,9 +5,19 @@
     <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ana-portfolio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@300;400;500&family=Sansita:wght@700&family=Outfit:wght@100;200;300;400&family=Playfair+Display:wght@700&family=Didact+Gothic&display=swap" rel="stylesheet">
-    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@100,300,400,700&f[]=chillax@300,500&f[]=ranade@100,200,300&display=swap" rel="stylesheet">
-    <link href="https://api.fontshare.com/v2/css?f[]=excon@100,200,300,400&display=swap" rel="stylesheet">
+    <!-- 2026-10-08, a pedido de Ana: agrega Inter (pesos 500/600/700) para
+         la hora del status bar del mockup de iPhone (Home.jsx) — mandó una
+         captura real de iOS pidiendo "algo más de iPhone". La fuente real
+         del sistema (San Francisco) no es descargable vía Google Fonts (es
+         de Apple, no de uso libre fuera de sus plataformas); en Mac/iOS el
+         stack -apple-system ya mostraba San Francisco real, pero en
+         Windows (donde Ana estaba probando) no existe esa fuente y caía a
+         Arial/Segoe UI genérica, muy distinta a la referencia. Inter es de
+         código abierto (OFL), se diseñó con métricas y proporciones muy
+         cercanas a SF Pro, y es la alternativa estándar de la industria
+         para mockups de iOS en cualquier sistema operativo. -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@300;400;500&family=Sansita:wght@700&family=Didact+Gothic&family=Inter:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@100,300,400,700&display=swap" rel="stylesheet">
   </head>
   <body>
     <div id="root"></div>

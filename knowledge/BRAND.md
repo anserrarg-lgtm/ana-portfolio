@@ -25,3 +25,6 @@ Juntos comunican: sabe el proceso Y sabe construir. No elige entre uno y otro.
 
 ## Lo que diferencia a Ana de otros portfolios
 No muestra pantallas bonitas. Muestra el proceso de pensar. La narrativa del portfolio es el proceso mismo.
+
+## Estilo visual (registrado 2026-09-22, Ana)
+Dirección de estilo a mantener en todo el portfolio: **brutalismo + un toque de color + modernidad**. En la práctica esto se ve en cosas como: tipografía grande y de mucho peso usada como elemento gráfico (no solo para leer), bordes duros y estructurales en vez de decorativos, alto contraste (negro `#1A1A1A` sobre crema `#F5F2EE`), y transiciones/animaciones marcadas y directas en vez de sutiles. El color entra puntual, no como fondo general — sirve de acento, no de base. Cualquier elemento nuevo (secciones, animaciones, componentes) debe sentirse dentro de esta misma línea, no como un estilo aparte.
