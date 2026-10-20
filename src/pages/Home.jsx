@@ -5919,7 +5919,8 @@ export default function Home() {
             flexDirection:'column',
             alignItems:'center',
             justifyContent:'center',
-            textAlign:'center'
+            textAlign:'center',
+            transform:'translateY(-30px)'
           }}>
             <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:600, fontSize:'20px', color:'#1A1A1A', lineHeight:1.4, margin:0}}>
               Hecho para pantallas grandes.
@@ -5927,7 +5928,7 @@ export default function Home() {
             <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:400, fontSize:'15px', color:'#1A1A1A', lineHeight:1.5, margin:'16px 0 0'}}>
               Vale la pena abrir este link desde tu compu.
             </p>
-            <div style={{display:'flex', alignItems:'center', justifyContent:'center', gap:'8px', marginTop:'40px'}}>
+            <div style={{display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:'8px', marginTop:'46px'}}>
               <button
                 onClick={copyGateLink}
                 aria-label={gateLinkCopied ? 'Link copiado' : 'Copiar link'}
