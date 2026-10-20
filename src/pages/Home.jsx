@@ -1,4 +1,6 @@
 import React from 'react'
+import { createPortal } from 'react-dom'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import { ArrowDown, Building2, Phone, Handshake, User, Settings2, Inbox, Filter, Compass, Ticket, Sparkle } from 'lucide-react'
 import anaPhoto from '../assets/ana.png'
 import camilaPhoto from '../assets/camila.png'
@@ -7,7 +9,23 @@ import valentinPhoto from '../assets/valentin.png'
 import federicoPhoto from '../assets/federico.png'
 import marcelaPhoto from '../assets/marcela.png'
 import danielaPhoto from '../assets/daniela.png'
+import juanSebastianPhoto from '../assets/juansebastian.png'
+import mariaJosePhoto from '../assets/mariajose.png'
+import mariaSofiaPhoto from '../assets/mariasofia.png'
+import tapHand from '../assets/tap-hand.png'
+import usabilityTestVideo from '../assets/usability-test.mp4'
 import notionIcon from '../assets/notion-icon.png'
+import arenaIcon from '../assets/arena-icon.png'
+// 2026-10-19, a pedido de Ana: en la cuadrícula de herramientas de Theaveling,
+// el ícono de Are.na (arenaIcon) se veía como un cuadro blanco en blanco en
+// vez de las estrellitas -- arenaIcon tiene fondo opaco (no transparente, con
+// un degradado suave de blanco a gris), y el filter:'brightness(0) invert(1)'
+// que usa esa sección vuelve blanco TODO lo opaco, fondo incluido, tapando el
+// ícono. icon-arena.png es el mismo ícono con el fondo recortado a
+// transparente (igual que se hizo con tally/granola/notebooklm para Beacon).
+// arenaIcon (el original) se deja intacto para el botón "Moodbar" de más
+// abajo, que sí lo usa sin invertir -- como un chip de ícono normal.
+import iconArena from '../assets/icon-arena.png'
 import theavelingPhoto from '../assets/theaveling.png'
 import pipelinePhoto from '../assets/pipeline.png'
 import logoPhoto from '../assets/logo.png'
@@ -20,7 +38,9 @@ import telonIzquierdo from '../assets/telonizquierdo.png'
 import beaconMockup from '../assets/mockup-beacon.webp'
 import capturePipeline from '../assets/capture-pipeline.png'
 import cardBeacon from '../assets/card-beacon.webp'
+import cardBeaconMini from '../assets/card-beacon-mini.webp'
 import cardTheaveling from '../assets/card-theaveling.webp'
+import cardTheavelingMini from '../assets/card-theaveling-mini.webp'
 import procesoBea1 from '../assets/proceso-beacon-1.webp'
 import mockupBeacon from '../assets/mockup-beacon.webp'
 import partnerstack from '../assets/partnerstack.webp'
@@ -40,9 +60,64 @@ import logoChatgpt from '../assets/chatgpt.png'
 import logoNotebooklm from '../assets/notebooklm.png'
 import logoClaude from '../assets/claude.png'
 import logoLovable from '../assets/lovable.png'
+// 2026-10-19, a pedido de Ana: para la sección "Flujo de trabajo con IA" del
+// case de Beacon, los logos de arriba (los wordmarks completos) quedaban con
+// tamaños visuales muy inconsistentes al forzarles una sola altura fija --
+// cada uno tiene un ícono de proporción distinta dentro del wordmark. Ana
+// mandó versiones nuevas, ya recortadas solo-ícono, de cada herramienta
+// (más una que no tenía: Claude Code, que es con la que armó Beacon). Estos
+// imports son exclusivos de esa sección de Beacon -- el case de Thea sigue
+// usando los logos de arriba (logoGithub, logoChatgpt, logoClaude, etc.) tal
+// cual, porque ese fix queda para después.
+import iconTally from '../assets/icon-tally.png'
+import iconGranola from '../assets/icon-granola.png'
+import iconNotebooklm from '../assets/icon-notebooklm.png'
+import iconClaude from '../assets/icon-claude.png'
+import iconLovable from '../assets/icon-lovable.png'
+import iconGithub from '../assets/icon-github.png'
+import iconVercel from '../assets/icon-vercel.png'
+import iconChatgpt from '../assets/icon-chatgpt.png'
+import iconClaudeCode from '../assets/icon-claudecode.png'
+// 2026-10-13, a pedido de Ana, sección Spacing & Grid del case de Thea:
+// "una captura de una pantalla real con la cuadrícula o las medidas
+// superpuestas, acompañada de una vista limpia de la misma composición"
+// (sugerencia que le hicieron a ella). La captura es la pantalla real que
+// Ana mandó (Descubrir, tab "Todo", después del commit/push verificado de
+// hoy a Vercel); la grilla que se superpuso NO es a ojo -- cada valor
+// (px-5=20px, gap-2=8px, gap-4=16px, cards a 0px/a sangre) se verificó
+// contra el código real de `Descubrir.tsx` antes de dibujar la anotación.
+import theaSpacingAnnotated from '../assets/thea-spacing-annotated.webp'
+// 2026-10-13, composición "Sistema de componentes" a pedido de Ana (4
+// grupos: Componentes de interacción / Navegación / Category Tabs /
+// Estados y variantes) -- capturas reales sacadas directo del archivo
+// de Figma del design system (no son mockups inventados), recortadas
+// para mostrar solo el componente real, sin el canvas vacío de Figma
+// alrededor ni las etiquetas internas tipo "3. Mobile Bottom
+// Navigation...". Grupo 4 muestra contrastes de estado con un
+// propósito claro (no la fila completa de 20 variantes de botón, que
+// se ve diminuta y sin jerarquía).
+import theaCompG1Button from '../assets/thea-comp-g1-button.webp'
+import theaCompG1Input from '../assets/thea-comp-g1-input.webp'
+import theaCompNavbar from '../assets/thea-comp-navbar.webp'
+import theaCompTopbar from '../assets/thea-comp-topbar.webp'
+import theaCompBottomnav from '../assets/thea-comp-bottomnav.webp'
+import theaCompCitypicker from '../assets/thea-comp-citypicker.webp'
+import theaCompCategoryTabs from '../assets/thea-comp-categorytabs.webp'
+import theaCompG4ButtonStates from '../assets/thea-comp-g4-button-states.webp'
+import theaCompG4InputStates from '../assets/thea-comp-g4-input-states.webp'
+import theaCompFeedback from '../assets/thea-comp-feedback.webp'
+import theaCompSwitch from '../assets/thea-comp-switch.webp'
 import logoGranola from '../assets/granola.png'
 import logoVercel from '../assets/vercel.png'
+import logoFigma from '../assets/figma.png'
+import logoUxtweak from '../assets/uxtweak.png'
+// 2026-10-19, a pedido de Ana: ícono solo de UXtweak (el hexágono + la
+// flechita, sin el texto "UXtweak" al lado) -- reemplaza la insignia
+// completa (logoUxtweak) en la cuadrícula de herramientas de Theaveling,
+// mismo tratamiento que el resto de los íconos de esa sección.
+import iconUxtweak from '../assets/icon-uxtweak.png'
 import handPinch from '../assets/hand-pinch.png'
+import beaconHand from '../assets/beacon-hand.png'
 import collage01 from '../assets/collage/collage-01.jpg'
 import collage02 from '../assets/collage/collage-02.jpg'
 import collage03 from '../assets/collage/collage-03.jpg'
@@ -58,10 +133,6 @@ import collage12 from '../assets/collage/collage-12.jpg'
 import cardCuradoTheaveling from '../assets/curar-cards/card-01-consagracion-otono.png'
 import cardMasReservados from '../assets/curar-cards/card-03-mas-reservados-casa-silencios.png'
 import cardMasDescubrimientos from '../assets/curar-cards/card-02-descubrimiento-chorus-line.png'
-// 2026-10-08 (sexagésima novena vuelta), a pedido de Ana: primera pieza
-// suelta del moodboard (cortina roja), va a la izquierda debajo de todo
-// el bloque de "Diseño", sin margen.
-import theaCortinaIzq from '../assets/thea-cortina-izq.webp'
 // 2026-10-08, a pedido de Ana: mockup interactivo de scroll libre para el
 // case de Thea, debajo de "La card despierta el interés. La experiencia
 // necesita contexto para sostenerlo". Es una captura REAL, no una pieza
@@ -86,6 +157,21 @@ import theaChorusLineScroll from '../assets/thea-chorusline-scroll.jpg'
 // mandó Ana), procesado para dejar la pantalla transparente — ver la nota
 // grande junto a `thea-chorusline-scroll.jpg` más abajo en este archivo.
 import theaIphoneBezel from '../assets/thea-iphone-bezel.png'
+
+// 2026-10-09, a pedido de Ana: mood bar del cierre del case de Thea --
+// galería horizontal animada con scroll (framer-motion), basada en el
+// ejemplo "Tokyo Nights" de motion.dev que mandó (código Vue, portado acá
+// a React/framer-motion). Las 5 fotos las fue mandando una por una.
+import moodbar01 from '../assets/moodbar/moodbar-01.webp'
+import moodbar02 from '../assets/moodbar/moodbar-02.webp'
+import moodbar03 from '../assets/moodbar/moodbar-03.webp'
+import moodbar04 from '../assets/moodbar/moodbar-04.webp'
+import moodbar05 from '../assets/moodbar/moodbar-05.webp'
+import moodbar06 from '../assets/moodbar/moodbar-06.webp'
+// Isotipo+wordmark recortado de logothea.png (el splash de Theaveling que
+// Ana ya había mandado), fondo verde-oscuro del splash quitado (chroma
+// key) para que quede limpio sobre el fondo del mood bar.
+import theavelingWordmark from '../assets/theaveling-wordmark.png'
 
 // Orden de "tiro" del collage (no es el orden de los archivos): primero la
 // foto mas ancha del grupo 1 (collage-04, panoramica), cae al centro. Luego
@@ -127,7 +213,7 @@ const CURAR_SCALE = 260 / 442 // Curado (la imagen más grande) queda en 260px d
 const curarCards = [
   { label: 'Curado por Theaveling', src: cardCuradoTheaveling, w: 442, h: 592 },
   { label: 'Más reservados', src: cardMasReservados, w: 336, h: 461 },
-  { label: 'Más descubrimientos', src: cardMasDescubrimientos, w: 375, h: 387 }
+  { label: 'Descubrimientos', src: cardMasDescubrimientos, w: 375, h: 387 }
 ].map(c => ({ ...c, renderW: Math.round(c.w * CURAR_SCALE), renderH: Math.round(c.h * CURAR_SCALE) }))
 
 // El track está alineado por ARRIBA (alignItems:'flex-start'), no por abajo
@@ -564,18 +650,915 @@ function CarouselDots({ count, activeIndex, onChange, duration = 14000, color = 
   )
 }
 
-function VerProductoBtn({ texto = 'Ver producto', icon, href, width = '130px', hoverWidth = '145px' }) {
+// 2026-10-09, a pedido de Ana: mood bar del cierre del case de Thea.
+// Puerto directo (React + framer-motion) del ejemplo "Tokyo Nights" de
+// motion.dev que mandó en código Vue -- mismo mecanismo: useScroll +
+// useTransform leen el progreso de scroll de `galleryRef` (un contenedor
+// alto, 300vh) y lo convierten en un translateX que desliza la tira de
+// fotos hacia la izquierda, mientras el título queda fijo (sticky) arriba.
+//
+// Diferencia clave respecto al original: ahí el scroll es el de la
+// ventana. Acá el scroll real es el de `contentRef` (el panel
+// izquierdo, overflowY:auto, ver `left-panel` más abajo), así que
+// useScroll recibe `container: scrollContainerRef` (ese contentRef) en
+// vez de trackear window -- esto sí lo soporta framer-motion nativamente,
+// no hace falta código de scroll a mano.
+// 2026-10-09 (octogésima octava vuelta), a pedido de Ana ("no me gusto
+// quitala, despues veo eso"): la 6ta foto (moodbar06) se saca del
+// carrusel -- no le convenció. El import y el archivo
+// (moodbar-06.webp) se dejan en assets por si la retoma más adelante.
+const MOODBAR_ITEMS = [
+  { id: 1, image: moodbar01, color: '#F31006' },
+  { id: 2, image: moodbar02, color: '#2ECCA6' },
+  { id: 3, image: moodbar03, color: '#F31006' },
+  { id: 4, image: moodbar04, color: '#2ECCA6' },
+  { id: 5, image: moodbar05, color: '#F31006' }
+]
+const MOODBAR_ITEM_WIDTH = 340
+const MOODBAR_GAP = 24
+
+function TheaMoodbarGallery({ scrollContainerRef, sec05Ref }) {
+  const galleryRef = React.useRef(null)
+  const { scrollYProgress } = useScroll({
+    container: scrollContainerRef,
+    target: galleryRef,
+    offset: ['start start', 'end end']
+  })
+  const totalDistance = (MOODBAR_ITEMS.length - 1) * (MOODBAR_ITEM_WIDTH + MOODBAR_GAP)
+  // 2026-10-09 (octogésima primera vuelta), a pedido de Ana: no quería que
+  // el "colchón" antes del scroll horizontal fuera scroll normal de
+  // página -- quería que fuera el bloque MISMO el que sube, ya fijo (el
+  // mismo pin que usa el scroll horizontal), en dos fases dentro del
+  // mismo tramo de 300vh: primero sube (translateY) y recién ahí arranca
+  // el translateX. RISE_PHASE_END marca ese quiebre; useTransform
+  // clampea por default, así que x se queda en 0 mientras progress <
+  // RISE_PHASE_END, y se queda asentado en y:0 después -- no se solapan.
+  // 2026-10-09 (octogésima segunda vuelta), a pedido de Ana ("no se está
+  // notando tanto, debería notarse"): la subida pasa de 70px a 220px, y
+  // la fase pasa de 15% a 28% del tramo -- más recorrido Y más scroll
+  // dedicado a esa fase, para que se sienta como un movimiento real y no
+  // como un parpadeo.
+  // 2026-10-09 (octogésima tercera vuelta), a pedido de Ana ("hagámoslo
+  // más notorio todavía" + "está muy separado del texto, que suba un
+  // poco"): más recorrido todavía (220 -> 340px) para que se note más,
+  // PERO sin alejarlo más del texto de arriba -- eso se resuelve abajo
+  // (alignItems + paddingTop en vez de centrar en los 100vh), no acá.
+  // 2026-10-09 (octogésima cuarta vuelta), a pedido de Ana ("esta ahi, y
+  // en ningun momento sube a acercarse"): 32% de los 300vh (~96vh de
+  // scroll) para subir 340px era tan gradual que no se percibía como
+  // "subida" -- 8% (~24vh) para el mismo recorrido, mucho más rápido y
+  // decisivo.
+  // 2026-10-09 (octogésima séptima vuelta), a pedido de Ana ("ahorita esta
+  // subiendo super rapido, hacerlo un poco mas sutil"): 8% quedó
+  // demasiado brusco en el sentido contrario -- sube a 16%, un punto
+  // medio entre el "parpadeo" del 32% y el golpe seco del 8%.
+  const RISE_PHASE_END = 0.16
+  const y = useTransform(scrollYProgress, [0, RISE_PHASE_END], [340, 0])
+  const x = useTransform(scrollYProgress, [RISE_PHASE_END, 1], [0, -totalDistance])
+
+  return (
+    <div ref={sec05Ref} style={{width:'calc(100% + 8px)', marginLeft:'-8px', marginTop:'24px'}}>
+      {/* 2026-10-09 (nonagésima novena vuelta), a pedido de Ana ("la barra
+       * de contenido está como estancada"): `ref={sec05Ref}` vivía en el
+       * <p> de "La interfaz tenía que sentirse..." (ver más abajo), que
+       * está adentro de DOS ancestros posicionados (el div 300vh con
+       * position:relative, y el div sticky). offsetTop se mide respecto
+       * al offsetParent más cercano -- y el offsetParent de ese <p> es el
+       * div sticky, NO el panel de scroll (contentRef). Por eso
+       * sec05Ref.current.offsetTop daba un número chiquito y casi fijo
+       * (~24px, el paddingTop del sticky) en vez de la posición real
+       * dentro del panel -- "Diseño" se activaba casi apenas arrancaba el
+       * scroll, muchísimo antes de llegar a ese texto, y con el cap en 4
+       * (ver sectionHighlightCap) se quedaba ahí pegado el resto del
+       * scroll -- de ahí el "estancada". El ref se mueve a ESTE wrapper
+       * de más afuera, que no tiene position seteado (position:static),
+       * así que su offsetTop se resuelve contra el mismo offsetParent que
+       * sec04Ref y el resto -- la posición real donde arranca "Diseño". */}
+      {/* 2026-10-09 (septuagésima octava vuelta), a pedido de Ana ("la
+       * quiero justo arriba del borde de la foto" -- no encima/superpuesta,
+       * sino afuera, flotando justo sobre el borde superior de la
+       * primera foto -- "y un poquito más grande"): el item 0 ya no es
+       * un solo div con overflow:hidden (eso clipeaba cualquier cosa
+       * puesta por fuera). Ahora es un wrapper exterior sin overflow,
+       * mismo ancho, con la foto adentro (overflow:hidden, como antes) y
+       * el wordmark como hermano, posicionado con bottom:'100%' para que
+       * quede pegado justo arriba del borde de la card. 220px -> 280px. */}
+      {/* 2026-10-09 (octogésima tercera vuelta), a pedido de Ana: el
+       * marginTop de arriba baja de 72px a 24px. */}
+      {/* 2026-10-09 (octogésima sexta vuelta), a pedido de Ana ("ahora
+       * mismo esta subiendo y desapareciendo el texto" -- quiere que
+       * "Una identidad..." se quede QUIETO, pegado arriba, y que sea
+       * solo el carrusel el que sube debajo de él): el párrafo "Una
+       * identidad que no compitiera con las experiencias." se mueve
+       * ACÁ ADENTRO (antes vivía afuera, en el JSX de ProjectTransition,
+       * como cualquier párrafo más -- por eso se iba con el scroll
+       * normal de la página). Ahora texto + carrusel comparten el MISMO
+       * div sticky (pegado en top:0): el texto no tiene ninguna
+       * transformación aplicada, así que una vez pegado se queda quieto
+       * -- es únicamente el motion.div de las cards el que tiene
+       * x/y. Eso reemplaza el sticky separado (top:'70px') que tenía
+       * antes solo la galería. */}
+      {/* 2026-10-09 (octogésima séptima vuelta), a pedido de Ana: ahora
+       * TODO el bloque de texto de cierre de "Diseño" se queda quieto
+       * junto con el carrusel -- antes solo "Una identidad..." estaba
+       * acá, "La interfaz tenía que sentirse..." (con ref={sec05Ref},
+       * marca el inicio de la sección "Diseño" en la barra lateral) y
+       * "El lenguaje visual de Theaveling..." vivían afuera, en el JSX
+       * de ProjectTransition, y se iban con el scroll normal. Los tres
+       * se movieron acá, en el mismo orden. sec05Ref ahora es prop. */}
+      {/* 2026-10-13, a pedido de Ana: estos 2 párrafos SALEN del div sticky
+       * de más abajo. Antes vivían ahí adentro como los dos primeros
+       * hijos, y por eso eran ELLOS (no "Una identidad...") los que
+       * quedaban pegados arriba del viewport al stickear -- un div
+       * position:sticky pega TODO su contenido como bloque una vez que su
+       * primer hijo toca el top, así que lo que sea que esté primero ahí
+       * adentro es lo que se ve fijo arriba. Ana pidió explícitamente que
+       * sea "Una identidad que deja espacio para descubrir." el texto que
+       * se queda pegado arriba, y que sea justo ahí (cuando ese texto
+       * llega al tope) cuando sube el bloque de Theaveling y arranca el
+       * scroll horizontal. Para lograrlo, estos 2 párrafos pasan a vivir
+       * en flujo normal, ANTES del contenedor sticky -- se van con el
+       * scroll normal de la página en vez de quedar fijos, y "Una
+       * identidad..." queda como primer hijo del sticky. */}
+      <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.7, margin:0, width:'80%', paddingLeft:'8px'}}>
+        <span style={{display:'inline-block', width:'4px', height:'22px', background:'#2ECCA6', borderRadius:'2px', marginRight:'10px', verticalAlign:'middle', position:'relative', top:'-6px'}}/><span style={{fontFamily:"'Satoshi', sans-serif", fontWeight:500, fontSize:'30px', color:'#F5F7F7'}}>La interfaz tenía que sentirse como la escena que estaba intentando descubrir.</span>
+      </p>
+      <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.7, marginTop:'24px', width:'80%', paddingLeft:'8px'}}>
+        El lenguaje visual de Theaveling debía alejarse de la lógica de un catálogo turístico y transmitir una escena cultural <span style={{color:'#2ECCA6'}}>independiente, contemporánea y cuidadosamente curada.</span>
+      </p>
+      <div ref={galleryRef} style={{height:'300vh', position:'relative', marginTop:'24px'}}>
+        <div style={{position:'sticky', top:0, paddingTop:'24px'}}>
+          <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'#2ECCA6', lineHeight:1.7, margin:0, width:'80%', paddingLeft:'8px'}}>
+            Una identidad que deja espacio para descubrir.
+          </p>
+          <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.7, marginTop:'24px', width:'80%', paddingLeft:'8px'}}>
+            Theaveling necesitaba una identidad capaz de transmitir su sensibilidad artística sin convertir la interfaz en una publicación editorial ni en un catálogo turístico convencional.
+          </p>
+          <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.7, marginTop:'24px', width:'80%', paddingLeft:'8px'}}>
+            La propuesta combina una personalidad visual reconocible con una interfaz clara y funcional. <span style={{color:'#2ECCA6'}}>El objetivo era dar protagonismo a las experiencias, facilitar la lectura de la información y mantener una identidad coherente a lo largo de todo el recorrido.</span>
+          </p>
+          {/* 2026-10-09 (nonagésima segunda vuelta), a pedido de Ana ("el
+           * bloque de fotos subió y quedó demasiado pegado al texto, el
+           * tope debería ser un poco más abajo"): este margin es la
+           * distancia entre "Una identidad..." y el inicio del bloque de
+           * fotos (wordmark+carrusel) -- el wordmark se queda pegado a la
+           * foto (4px, no se toca), pero todo el conjunto baja un poco
+           * respecto al texto. 64px -> 90px. */}
+          {/* 2026-10-09 (nonagésima tercera vuelta), a pedido de Ana ("ahí
+           * sí la diste, un poquito más abajo"): 90px -> 110px. */}
+          {/* 2026-10-13, a pedido de Ana ("el texto de arriba cambió...
+           * las fotos se ven raras, se cortan"): en su momento esto bajó
+           * de 110px a 50px porque "Theaveling necesitaba..." y "La
+           * propuesta combina..." se habían agregado DENTRO de este mismo
+           * sticky, sumándose a los 3 párrafos que ya vivían ahí y
+           * dejando muy poco alto disponible para la foto. Con la
+           * restructuración de más arriba ("La interfaz..." y "El
+           * lenguaje visual..." salen del sticky, quedan en flujo
+           * normal), el sticky vuelve a tener 3 párrafos (igual que
+           * antes de esos 2 agregados) -- sobra espacio otra vez, así
+           * que vuelve a 110px. */}
+          {/* 2026-10-13, a pedido de Ana ("el wordmark no se monte en el
+           * texto"): el wordmark (theaveling-wordmark.png, 700x141) se
+           * posiciona con bottom:'calc(100% + 4px)' sobre el wrapper de
+           * la foto -- o sea, cuelga hacia ARRIBA desde el borde superior
+           * de este wrapper, independientemente del marginTop de acá. A
+           * 280px de ancho mide ~56px de alto (700:141 escalado), + 4px
+           * de gap = ~60px que necesita de aire libre arriba para no
+           * pisar el texto. Con margin:24px (el valor que se usó para el
+           * fix del recorte por viewport) sobraba, así que se montaba. 80px
+           * = ~60px de aire real para el wordmark + colchón chico, sin
+           * volver a los 110px que recortaban por abajo. */}
+          <div style={{width:`${MOODBAR_ITEM_WIDTH}px`, margin:'80px auto 0 auto', position:'relative', overflow:'visible'}}>
+          <motion.div style={{display:'flex', gap:`${MOODBAR_GAP}px`, willChange:'transform', x, y}}>
+            {MOODBAR_ITEMS.map((item, i) => (
+              <div key={item.id} style={{flexShrink:0, width:`${MOODBAR_ITEM_WIDTH}px`, position:'relative'}}>
+                {/* 2026-10-09 (octogésima vuelta), a pedido de Ana ("pega
+                 * más la imagen a la primera foto"): vuelve a bajar, ahora
+                 * más cerca del borde que nunca (36px -> 10px). */}
+                {/* 2026-10-09 (octogésima octava vuelta), a pedido de Ana
+                 * ("muy pegadito ya demasiado a la letra... dale un
+                 * pequeño margen, tampoco tan pegado"): 10px -> 20px. */}
+                {/* 2026-10-09 (octogésima novena vuelta), a pedido de Ana
+                 * ("lo que hiciste fue subirlo más, dale margen hacia
+                 * abajo, un poquito, no lo mandes tan lejos"): este valor
+                 * es la distancia AL BORDE DE LA FOTO (no al texto) --
+                 * subirlo (20px) lo alejó de la foto y lo acercó al
+                 * texto, justo al revés de lo que pedía. Baja a 8px
+                 * (entre el 10px original y el 20px de la vuelta
+                 * pasada), un margen chico hacia la foto. */}
+                {/* 2026-10-09 (nonagésima vuelta), a pedido de Ana ("un
+                 * poquito más de margen hacia abajo"): 8px -> 16px. */}
+                {/* 2026-10-09 (nonagésima primera vuelta), a pedido de Ana
+                 * ("abajo no es arriba -- lo que haces es separarla de la
+                 * foto, dejala mas pegadita"): "abajo" = hacia la foto, no
+                 * alejarla. Se había ido en la dirección contraria otra
+                 * vez. Baja de 16px a 4px, bien pegado a la foto. */}
+                {i === 0 && (
+                  <img src={theavelingWordmark} alt="Theaveling" style={{position:'absolute', bottom:'calc(100% + 4px)', left:0, width:'280px', height:'auto'}}/>
+                )}
+                <div style={{
+                  width:'100%',
+                  // 2026-10-13, a pedido de Ana ("no se ven bien las fotos
+                  // durante el scroll, no se ve la parte de abajo"): este
+                  // bloque va DENTRO de un div position:'sticky' (arriba),
+                  // pegado a top:0 de un panel que mide exactamente 100vh
+                  // (contentRef, position:'fixed'). Un alto fijo de 460px
+                  // para la foto, sumado al texto + 110px de margen que van
+                  // ARRIBA de ella en ese mismo sticky, puede superar el
+                  // alto real de la ventana en pantallas/ventanas más
+                  // bajas -- como está pegado (sticky), lo que no entra en
+                  // el viewport queda cortado para siempre mientras dura el
+                  // scroll de esa sección, nunca se ve. `min(460px, 46vh)`
+                  // deja el mismo alto de siempre en ventanas normales/altas,
+                  // pero se achica solo en ventanas bajas para que la foto
+                  // completa quepa debajo del texto.
+                  // 2026-10-13, a pedido de Ana ("sí las achicaste, una de
+                  // las fotos tiene una palabra que está cortada ahora...
+                  // dejale el tamaño real, el que tenían antes, solo el
+                  // tamaño"): cualquier tope en vh (46vh, 50vh, lo que
+                  // sea) cambia el alto REAL de la caja según la ventana,
+                  // y como la foto usa backgroundSize:'cover', un alto
+                  // distinto cambia cuánto recorta del ancho/alto de la
+                  // imagen para llenar la caja -- eso es lo que estaba
+                  // recortando la palabra. Vuelve al alto fijo real de
+                  // 460px, SIN tope de vh (el "alto fijo de 460px" que
+                  // menciona el comentario de abajo, antes de que
+                  // existiera este min()). Ana dijo explícitamente que la
+                  // animación/posición ya está bien, que esto es solo de
+                  // tamaño -- si el recorte por viewport bajo vuelve a
+                  // aparecer, se resuelve aparte, sin tocar esto.
+                  height:'460px',
+                  borderRadius:'12px',
+                  position:'relative',
+                  overflow:'hidden',
+                  backgroundImage:`url(${item.image})`,
+                  backgroundSize:'cover',
+                  backgroundPosition:'top'
+                }}>
+                  <div style={{position:'absolute', inset:0, background:`linear-gradient(to bottom, transparent 60%, ${item.color})`, mixBlendMode:'multiply'}}/>
+                  <span style={{position:'absolute', bottom:'24px', left:'24px', zIndex:1, fontFamily:"'IBM Plex Mono', monospace", fontSize:'13px', color:item.color}}>0{i + 1}</span>
+                </div>
+              </div>
+            ))}
+          </motion.div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// 2026-10-09 (nonagésima cuarta vuelta), a pedido de Ana: sección de
+// colores de Theaveling, debajo del mood bar. Referencia: ejemplo "Lenis
+// smooth scroll" de motion.dev que Ana mandó (código Vue con ReactLenis +
+// secciones con foto + número en paralaje). Se porta SOLO la parte de
+// framer-motion -- Ana preguntó si valía la pena meter Lenis también, y
+// se decidió que no: Lenis controla el scroll de la ventana/documento
+// completo, y este panel ya tiene su propio contenedor de scroll
+// (contentRef, overflow-y:auto) con su propio patrón useScroll({container,
+// target}) para el mood bar -- meter Lenis encima chocaría con esa
+// arquitectura. El efecto de paralaje (el texto moviéndose distinto a la
+// imagen) se porta igual con useScroll+useTransform, sin librerías nuevas.
+// Cada color es su propia sección en el flujo normal de scroll (no
+// pegada/sticky como el mood bar) -- igual que el ejemplo original, donde
+// cada <Section> tenía su propio target y su propio progress. Donde el
+// original pone la foto + "#001", acá va el swatch de color + nombre y
+// hex (a pedido de Ana, posicionados al lado derecho del swatch, igual
+// que el título en el ejemplo original). Orden a pedido de Ana: Thea Deep
+// primero (por ser el color principal), Rojo (el del wordmark/watermark),
+// Thea Green, Mint y Blanco al final.
+//
+// 2026-10-13, a pedido de Ana ("¿cuál es el blanco que usa Theaveling de
+// verdad, del código real?"): "Blanco" tenía #F5F2EE, que no es ningún
+// blanco real del proyecto -- se verificó contra el código real
+// (theaveling/src/index.css): `--color-off-white: #fbfbfb` y
+// `--color-white-100: #fbfbfb` (el blanco base de TODA la interfaz, del
+// que salen además white-80/60/40/20/12/8/6/4 por opacidad). Esto además
+// coincide exacto con lo que ya documenta Figma en "01.1 — Colors"
+// (swatch "Off-White", #FBFBFB) -- no hubo que corregir nada ahí, Figma
+// ya estaba bien; el que estaba mal era este swatch del case. Se corrige
+// a #FBFBFB. De paso, el nombre pasa de "Blanco" (etiqueta en español
+// que se le puso acá al armar el swatch, no el nombre real) a "Off-White"
+// -- el nombre real que usan tanto Figma como el código.
+//
+// 2026-10-13, a pedido de Ana ("corrige cómo se llaman ahí en el case en
+// cuanto a lo que dice el design system"): se verificaron los otros 2
+// nombres en español contra Figma ("01.1 — Colors") Y contra el código
+// real (theaveling/src/index.css) --
+//  - "Rojo" -> el swatch real se llama "Thea Red" en Figma, y el código
+//    tiene `--color-thea-red` -- coinciden, se corrige el nombre acá.
+//  - "Mint" -> el swatch real se llama "Thea Mint" en Figma, y el código
+//    tiene `--color-thea-mint` -- coinciden, se corrige el nombre acá.
+// "Thea Green" y "Off-White" ya coincidían, no se tocan.
+// "Thea Deep" queda pendiente de confirmar con Ana -- ver nota abajo
+// (Figma lo llama "Thea Green Deep", pero el código real usa
+// `--color-thea-deep`, no "thea-green-deep"; son 2 fuentes reales que no
+// coinciden entre sí para este swatch en particular).
+// 2026-10-13, a pedido de Ana ("el mint ponlo debajo... porque se está
+// como saliendo el blanco"): Off-White, al ser el último, era el que
+// más se acercaba al borde del panel -- con texto saliendo hacia la
+// derecha del cuadro, era el que menos margen de sobra tenía. Se pasa
+// Thea Mint al final (después de Off-White) -- doble beneficio: Off-
+// White ya no es el último (deja de estar al borde), y cerrar la
+// secuencia con el acento (Thea Mint) refuerza visualmente que es el
+// color de acento del sistema, tal como ya lo documenta Figma ("Acento
+// -- color de interacción restringido").
+const THEA_COLORS = [
+  { name: 'Thea Green Deep', hex: '#011414' },
+  { name: 'Thea Red', hex: '#F31006' },
+  { name: 'Thea Green', hex: '#112C2C' },
+  { name: 'Off-White', hex: '#FBFBFB' },
+  { name: 'Thea Mint', hex: '#2ECCA6' }
+]
+
+// 2026-10-10 (centésima vigésima vuelta), a pedido de Ana ("no me llega a
+// gustar, me estanqué con cómo mostrar la paleta"): después de varias
+// vueltas persiguiendo una animación/interacción (scroll-bleed, hover,
+// carrusel pineado, superpuesto en foto) sin que ninguna termine de
+// convencer, se prueba la opción opuesta: estática y directa, sin pedirle
+// nada al usuario -- una grilla simple de los 5 swatches con nombre+hex
+// debajo de cada uno, como una página de guía de marca. Se descarta
+// también el fondo de foto (moodbar04 ya no se usa acá, sigue en uso en
+// TheaMoodbarGallery) -- el label ya no vive SOBRE el swatch, vive abajo
+// sobre el fondo del panel, así que ya no hace falta la lógica de
+// "needsDarkBorder cambia el color del label" (eso era solo para que el
+// texto se leyera encima del propio color) -- el label siempre es el
+// mismo blanco/gris, solo el stroke del swatch varía para que Thea Deep
+// (casi del mismo color que el fondo del panel) se distinga.
+function TheaColorGrid() {
+  return (
+    <div style={{width:'100%', marginTop:'140px'}}>
+      {/* 2026-10-13, a pedido de Ana ("tiralo para abajo sin dañar el
+        * margen de arriba de la paleta de colores"): este marginTop
+        * (60px -> 140px) mueve TODO el grupo (botón Moodbar + este
+        * texto) más abajo respecto a lo que viene antes (el moodbar
+        * gallery) -- el gap entre este texto y la fila de swatches sigue
+        * siendo el marginTop:'110px' de más abajo, que Ana ya había
+        * confirmado como correcto y no se toca.
+        * 2026-10-15, a pedido de Ana ("yo te dije que subieras el botón
+        * de Moodbar, no el texto de 'concepto al sistema visual'... no
+        * perturbes el margen que te pedí para la paleta"): se revierte
+        * el 140px (el intento anterior de 60px movía TODO el grupo, texto
+        * y paleta incluidos, y eso no se pidió) -- el acercamiento a las
+        * fotos ahora se aplica SOLO al botón, con position:relative más
+        * abajo, sin tocar este margen ni el del texto/paleta que viene
+        * después. */}
+      <div style={{width:'80%', paddingLeft:'8px'}}>
+        {/* 2026-10-13, a pedido de Ana: botón hacia el moodbar de
+          * referencia en Are.na (https://www.are.na/share/gNDXevY),
+          * mismo componente VerProductoBtn que ya se usa para los demás
+          * links de contexto (Notion, etc.) en el resto del case --
+          * icono propio (arena-icon.png, antes era cosmos-icon.png
+          * cuando la referencia vivía en Cosmos). */}
+        {/* 2026-10-15, a pedido de Ana: SOLO el botón sube más cerca de
+          * las fotos del moodbar gallery -- position:relative + top
+          * negativo, para que se mueva visualmente sin empujar el texto
+          * "Del concepto al sistema visual" ni la paleta de abajo (su
+          * espacio reservado en el flujo no cambia). */}
+        <div style={{marginBottom:'24px', position:'relative', top:'-80px'}}>
+          {/* 2026-10-13, a pedido de Ana ("fíjate en los otros botones,
+            * los que han sido con el icono de Notion... cómo quedan bien
+            * centrados"): se descartan los ajustes custom (ícono 24px,
+            * ancho angosto) -- este botón ahora usa exactamente los
+            * mismos valores por default que ya usan "Benchmark"/
+            * "Userflow" (palabra corta como "Moodbar"): ícono 16px de
+            * siempre, padding/centrado por default, mismo width/
+            * hoverWidth que esos dos. */}
+          <VerProductoBtn texto="Moodbar" icon={arenaIcon} href="https://www.are.na/share/gNDXevY" width="140px" hoverWidth="160px" />
+        </div>
+        {/* 2026-10-15, a pedido de Ana ("el botón ya está bien ahí, ahora
+          * baja ese bloque de texto"): marginTop propio para bajar SOLO
+          * este texto (y, con él, la paleta que viene después, que se
+          * mueve junto sin que cambie el gap de 110px entre ambos --
+          * ese margen sigue intacto, no se toca). */}
+        <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'#2ECCA6', lineHeight:1.7, margin:0, marginTop:'40px'}}>
+          Del concepto al sistema visual.
+        </p>
+        <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.7, marginTop:'16px'}}>
+          El sistema visual se construyó para mantener una identidad reconocible sin quitar protagonismo al contenido cultural.
+        </p>
+        <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.7, marginTop:'16px'}}>
+          Un sistema de luces y sombras, como en un escenario. <span style={{color:'#2ECCA6'}}>La oscuridad sostiene; la luz aparece solo donde hace falta.</span> Thea mint no decora: señala. Aparece en estados y elementos concretos que necesitan destacar.
+        </p>
+      </div>
+      {/* 2026-10-13: BUG REAL encontrado -- `display:'grid'` con
+        * `gridTemplateColumns:'repeat(5, max-content)'` y 5 items de
+        * `width:'220px'` fijo necesita 1100px de ancho. Como esos tracks
+        * son de tamaño fijo (no 'fr'/'auto'), CSS Grid NO los achica para
+        * entrar en el `width:'80%'` del contenedor -- la fila se renderiza
+        * a su ancho real (1100px) sin importar el 80% declarado. Esa fila
+        * de 1100px, al no tener ningún overflow que la contenga, terminaba
+        * agrandando el contenedor de todo el case (que se mide por su hijo
+        * más ancho), y ESO corría/recortaba absolutamente todo el texto
+        * del panel contra la barra lateral -- no era solo esta sección.
+        * FIX: `display:'flex'` + `flexWrap:'wrap'` en vez de grid. Un
+        * contenedor flex con ancho explícito NUNCA crece más allá de ese
+        * ancho -- si los items no entran en una sola fila, flex los baja a
+        * una fila nueva en vez de forzar el contenedor a ensancharse. Cada
+        * swatch sigue teniendo su `width:'220px'` fijo (eso es lo que evita
+        * que el texto se choque con el cuadro siguiente), así que con el
+        * ancho real del panel entran ~4 por fila y el 5to (Thea Mint, el
+        * último) cae a una segunda fila -- coincide además con lo que Ana
+        * ya había pedido ("el mint ponlo debajo"). */}
+      <div style={{width:'80%', paddingLeft:'8px', marginTop:'110px', display:'flex', flexWrap:'wrap', rowGap:'40px', columnGap:'0px'}}>
+        {THEA_COLORS.map((color) => {
+          const isDeep = color.hex === '#011414'
+          const needsDarkStroke = color.hex === '#FBFBFB'
+          // 2026-10-13, a pedido de Ana: el texto arranca ADENTRO del
+          // cuadro, a la mitad (vertical y horizontal), y sale hacia la
+          // derecha por fuera de él -- la mayor parte del texto termina
+          // sobre el FONDO del case (oscuro), no sobre el swatch. Primer
+          // intento: texto oscuro (Thea Green) en Off-White y Thea Mint
+          // por ser swatches claros -- Ana corrigió: Thea Mint vuelve a
+          // blanco (igual que los demás, se lee bien ahí). Solo Off-White
+          // sigue siendo un problema real: el fondo oscuro del case es
+          // prácticamente el mismo color que Thea Green (#112C2C), así que
+          // ese texto oscuro se perdía apenas salía del cuadro hacia el
+          // fondo. Se usa gris en vez de blanco o verde para ese único
+          // caso -- un tono intermedio que se ve tanto sobre Off-White
+          // (claro) como sobre el fondo oscuro del case.
+          const isOffWhite = color.hex === '#FBFBFB'
+          return (
+            // el wrapper necesita un ancho EXPLÍCITO (220px: 150px del
+            // cuadro + ~70px de texto que sale por fuera) -- como el
+            // texto es position:absolute, queda fuera del flujo y la
+            // grilla NO lo contaba para medir el ancho de cada columna
+            // (eso era el bug real: los cuadros quedaban pegados entre
+            // sí, el texto se montaba encima del cuadro siguiente, y el
+            // espacio libre se amontonaba entero después del último
+            // cuadro en vez de repartirse entre los 5).
+            <div key={color.hex} style={{position:'relative', width:'220px'}}>
+              <div style={{
+                width:'150px',
+                aspectRatio:'1',
+                borderRadius:'12px',
+                background: color.hex,
+                boxShadow: needsDarkStroke
+                  ? 'inset 0 0 0 1px rgba(0,0,0,0.1)'
+                  : isDeep
+                    ? 'inset 0 0 0 2px rgba(255,255,255,0.18)'
+                    : 'inset 0 0 0 1px rgba(255,255,255,0.08)'
+              }}/>
+              {isDeep ? (
+                // 2026-10-13, a pedido de Ana ("no que lo pongas adentro
+                // del cuadro... centrado a nivel vertical"): este swatch
+                // sigue el MISMO patrón que todos los demás -- arranca en
+                // left:75px (la mitad horizontal) y el texto se desborda
+                // hacia la derecha, por fuera del cuadro, igual que los
+                // otros 4. La única diferencia real es que, al tener 2
+                // líneas de nombre en vez de 1, el bloque es más alto --
+                // en vez de arrancar su borde superior en la mitad (eso lo
+                // empujaba hacia abajo, pegado al borde inferior del
+                // cuadro), se centra verticalmente ALREDEDOR de esa misma
+                // línea media (top:75px + transform:translateY(-50%)),
+                // igual de "a la mitad del cuadro" que los demás, pero sin
+                // quedar descompensado por tener más altura.
+                <div style={{position:'absolute', top:'75px', left:'75px', transform:'translateY(-50%)'}}>
+                  <div style={{fontFamily:"'IBM Plex Mono', monospace", fontSize:'20px', fontWeight:700, color:'#F5F7F7', whiteSpace:'nowrap', lineHeight:1.25}}>
+                    <div>Thea</div>
+                    <div>Green Deep</div>
+                  </div>
+                  <div style={{fontFamily:"'IBM Plex Mono', monospace", fontSize:'16px', color:'rgba(255,255,255,0.5)', marginTop:'6px', whiteSpace:'nowrap'}}>{color.hex}</div>
+                </div>
+              ) : (
+                <div style={{position:'absolute', top:'75px', left:'75px'}}>
+                  <div style={{fontFamily:"'IBM Plex Mono', monospace", fontSize:'20px', fontWeight:700, color: isOffWhite ? '#9FA8A6' : '#F5F7F7', whiteSpace:'nowrap'}}>{color.name}</div>
+                  <div style={{fontFamily:"'IBM Plex Mono', monospace", fontSize:'16px', color: isOffWhite ? 'rgba(159,168,166,0.7)' : 'rgba(255,255,255,0.5)', marginTop:'6px', whiteSpace:'nowrap'}}>{color.hex}</div>
+                </div>
+              )}
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+// 2026-10-12, a pedido de Ana: sección de tipografía del case de Thea,
+// primer intento ("probemos primero esa"). Mismo criterio estático que
+// TheaColorGrid de arriba (ver esa nota: "me estanqué con cómo mostrar la
+// paleta" -> grilla simple sin animación) -- acá tampoco hay scroll
+// pineado ni fade, directo como una página de guía de marca. Referencia
+// visual que mandó Ana: specimen de un glifo grande al lado de una lista
+// de variaciones (estilo type foundry).
+//
+// La lista de cada columna NO es genérica -- refleja cómo cada
+// tipografía se usa de verdad en el Design System de Theaveling (ver
+// node "01.2 — Typography" en Figma, type scale real):
+//  - Archivo SIEMPRE es peso Thin en la app real ("Archivo Thin · 72/80",
+//    "52/60", "40/48"...) -- lo que varía es el TAMAÑO, nunca el peso.
+//    La columna muestra esa escala de tamaños.
+//  - Instrument Sans es al revés: el tamaño de cuerpo se mantiene
+//    bastante estable, pero SÍ varía en peso (Regular/Medium/SemiBold)
+//    para dar jerarquía dentro del contenido funcional. La columna
+//    muestra esos pesos.
+// Esto hace que la columna misma demuestre la frase de roles ya escrita
+// en Figma ("Archivo expresa e introduce" / "Instrument Sans informa y
+// habilita la acción") con datos reales del producto, no con una lista
+// inventada -- Archivo expresa a través de ESCALA, Instrument Sans
+// organiza a través de PESO.
+//
+// 2026-10-13, a pedido de Ana ("esas frases las usaste de la realidad?"):
+// se revisó cada sample contra la fuente real y se corrigieron 3 que NO
+// estaban verificados (se habían puesto a ojo, por similitud, no
+// copiados de ningún lado):
+//  - Archivo Display S: "Nuevos descubrimientos" (inventado) -> "¡Reserva
+//    confirmada!" (texto real del ejemplo "Display Thin 30/36" en Figma,
+//    nodo 2437:1152).
+//  - Instrument Sans Regular: "Teatro · Bogotá" (inventado, aunque
+//    parecido al patrón real) -> "Teatro Pradillo · Bogotá — 18 Oct – 20
+//    Oct" (texto real del ejemplo "UI/Metadata" en Figma, nodo 1425:144).
+//  - Instrument Sans SemiBold: "Antígona" (inventado -- el título real es
+//    "Antígona, Ahora: Tragedia Urbana", no solo "Antígona") -> se cambia
+//    a "Materia en Suspensión", título real de `experiences.ts` en el
+//    repo de Theaveling, más corto y más representativo del tamaño real
+//    de un título de Reservation Card.
+// Las otras 4 (Display XL/L/M de Archivo, "Ver ticket" de Instrument
+// Sans) ya estaban verificadas desde el principio -- "Descubre lo
+// inesperado"/"La escena alternativa"/"Teatro, danza y performance" son
+// los ejemplos reales de Figma (01.2 — Typography), y "Ver ticket" es el
+// texto real del botón en ReservationCard.tsx.
+function TheaTypeSpecimen({ label, glyph, fontFamily, rows }) {
+  return (
+    <div style={{flex:'1 1 0', minWidth:0}}>
+      <div style={{fontFamily, fontWeight:100, fontSize:'180px', lineHeight:1, color:'#F5F7F7'}}>
+        {glyph}
+      </div>
+      <div style={{fontFamily:"'IBM Plex Mono', monospace", fontSize:'13px', color:'#2ECCA6', marginTop:'24px', textTransform:'uppercase', letterSpacing:'0.5px'}}>
+        {label}
+      </div>
+      <div style={{marginTop:'20px', display:'flex', flexDirection:'column', gap:'14px'}}>
+        {/* 2026-10-13, a pedido de Ana ("no caben la una al lado del
+         * otro?"): las dos columnas se estaban cayendo a 2 filas porque
+         * el texto de muestra (ej. "Teatro, danza y performance") estaba
+         * en whiteSpace:'nowrap' -- eso le daba a cada columna un ancho
+         * mínimo grande, y entre las 2 no cabían lado a lado. Se quita el
+         * nowrap del texto de muestra (si hace falta, ahora puede quebrar
+         * en 2 líneas en vez de empujar la columna) y se agrega
+         * minWidth:0 arriba para que flex:1 sí pueda angostar la columna
+         * en vez de respetar el ancho del contenido. La etiqueta (tag)
+         * se deja en una sola línea -- es corta, no genera el problema. */}
+        {rows.map((row) => (
+          <div key={row.tag} style={{display:'flex', alignItems:'baseline', gap:'16px', flexWrap:'wrap'}}>
+            <span style={{fontFamily, fontWeight:row.weight, fontSize:row.sampleSize, color:'#F5F7F7'}}>
+              {row.sample}
+            </span>
+            <span style={{fontFamily:"'IBM Plex Mono', monospace", fontSize:'12px', color:'rgba(255,255,255,0.4)', whiteSpace:'nowrap'}}>
+              {row.tag}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function TheaTypographyShowcase() {
+  return (
+    <div style={{width:'100%', marginTop:'110px', marginBottom:'110px'}}>
+      <div style={{width:'80%', paddingLeft:'8px'}}>
+        <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'#2ECCA6', lineHeight:1.7, margin:0}}>
+          La tipografía debía equilibrar personalidad y legibilidad.
+        </p>
+        <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.7, marginTop:'16px'}}>
+          Archivo aporta carácter a los títulos y a los elementos que introducen la experiencia; Instrument Sans resuelve la lectura de información y las interacciones.
+        </p>
+        <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.7, marginTop:'16px'}}>
+          En lugar de utilizar la misma jerarquía en todas las situaciones, definí escalas tipográficas para títulos, texto, botones, navegación y metadatos.
+        </p>
+        <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'#2ECCA6', lineHeight:1.7, marginTop:'16px'}}>
+          No compiten entre sí.
+        </p>
+      </div>
+      {/* 2026-10-13, a pedido de Ana ("correr el bloque un poquito más
+       * hacia la derecha, como centrarlo"): este bloque en particular
+       * (Archivo + Instrument Sans) pasa de paddingLeft:'8px' (pegado a
+       * la izquierda, igual que el resto del case) a margin:'0 auto'
+       * (centrado en el panel) -- a diferencia del resto de bloques del
+       * case, que se quedan como están. */}
+      <div style={{width:'80%', margin:'110px auto 0 auto', display:'flex', gap:'64px'}}>
+        <TheaTypeSpecimen
+          label="Archivo — varía en escala"
+          glyph="Aa"
+          fontFamily="'Archivo', sans-serif"
+          rows={[
+            { tag: 'Display XL · 72px', sample: 'Descubre lo inesperado', weight: 100, sampleSize: '28px' },
+            { tag: 'Display L · 52px', sample: 'La escena alternativa', weight: 100, sampleSize: '23px' },
+            { tag: 'Display M · 40px', sample: 'Teatro, danza y performance', weight: 100, sampleSize: '19px' },
+            { tag: 'Display S · 30px', sample: '¡Reserva confirmada!', weight: 100, sampleSize: '16px' },
+          ]}
+        />
+        <TheaTypeSpecimen
+          label="Instrument Sans — varía en peso"
+          glyph="Gg"
+          fontFamily="'Instrument Sans', sans-serif"
+          rows={[
+            { tag: 'Regular · metadata', sample: 'Teatro Pradillo · Bogotá — 18 Oct – 20 Oct', weight: 400, sampleSize: '17px' },
+            { tag: 'Medium · texto funcional', sample: 'Ver ticket', weight: 500, sampleSize: '19px' },
+            { tag: 'SemiBold · título (Reservation Card)', sample: 'Materia en Suspensión', weight: 600, sampleSize: '19px' },
+          ]}
+        />
+      </div>
+      {/* 2026-10-13, a pedido de Ana ("no me refería en color, el color
+       * sí estaba bien, me refería al margen"): el color mint de "La
+       * coherencia también está en el espacio." se queda (vuelve a
+       * #2ECCA6, el cambio a gris de la vuelta anterior fue un
+       * malentendido mío). Lo que SÍ estaba mal era el margen -- este
+       * bloque tenía margin:'auto' (centrado, copiado del bloque de las
+       * columnas de arriba), distinto al paddingLeft:'8px' que usa el
+       * párrafo de intro y el resto del case -- por eso no quedaba
+       * alineado a la izquierda con los demás textos. Se corrige a
+       * paddingLeft:'8px', igual que el resto. Puente hacia el
+       * siguiente tema (espaciado/grid). */}
+      <div style={{width:'80%', paddingLeft:'8px', marginTop:'110px'}}>
+        <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'#2ECCA6', lineHeight:1.7, margin:0}}>
+          La coherencia también está en el espacio.
+        </p>
+        <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.7, marginTop:'16px'}}>
+          Definí una escala de espaciado y reglas de composición para mantener relaciones consistentes entre los elementos. <span style={{color:'#2ECCA6'}}>La cuadrícula se adapta a cada formato, mientras que el espaciado establece distintos niveles de proximidad entre la información, los componentes y las secciones.</span>
+        </p>
+      </div>
+    </div>
+  )
+}
+
+// 2026-10-13, a pedido de Ana: cierre de la sección Spacing & Grid del
+// case de Thea. Mismo criterio estático que TheaColorGrid/
+// TheaTypographyShowcase arriba -- un par de imágenes, sin animación.
+// División de trabajo que pidió Ana explícitamente: ella manda la
+// captura real ("ya le tomó el pantallazo"), acá se le superpone la
+// grilla y el resto ("tú le pones la grilla, así pues todo lo demás").
+//
+// La captura (`theaSpacingClean`) es la pantalla real de Descubrir (tab
+// "Todo"), tomada después de confirmar que los fixes de hoy (botones,
+// focus rings, iconos, VerMasCard, tipografía) ya estaban commiteados y
+// pusheados a Vercel -- no es una captura vieja desalineada del código.
+//
+// La anotada (`theaSpacingAnnotated`) NO mide la captura a ojo: cada
+// valor que aparece viene de `Descubrir.tsx` real --
+//  - px-5 = 20px, el margen lateral de toda la pantalla.
+//  - gap-2 = 8px, entre el eyebrow/descripción/título.
+//  - gap-4 = 16px, entre ese bloque de texto y la primera card.
+//  - 0px / "a sangre": las cards de Curado son edge-to-edge por diseño
+//    (sin margen lateral), a propósito -- mismo criterio que ya documenta
+//    un comentario real en Descubrir.tsx citando el nodo de Figma
+//    1753:518. Se deja así en la anotación para que se note el contraste
+//    con los 20px del resto de la pantalla, no como un error.
+// 2026-10-13, a pedido de Ana ("puedes poner una al lado de la otra?"):
+// la primera versión usaba height fija + width:'auto' en cada <img>, dos
+// columnas con flex:'0 1 auto' y flexWrap:'wrap' en el contenedor -- cada
+// imagen reservaba su propio ancho "natural" (según su altura y su
+// proporción), y si la suma de los dos anchos no cabía en el 80% del
+// panel, flexWrap las mandaba a 2 filas en vez de dejarlas lado a lado.
+// Mismo bug, mismo arreglo que ya se usó en TheaTypeSpecimen (ver nota de
+// arriba, "no caben la una al lado del otro"): se quita flexWrap, cada
+// columna pasa a flex:'1 1 0' + minWidth:0 (para que SÍ pueda angostarse)
+// y la imagen pasa a width:'100%' + height:'auto' (el ancho lo define la
+// columna, no la imagen) -- así las 2 SIEMPRE quedan lado a lado sin
+// importar el ancho del panel, a costa de que ya no comparten la misma
+// altura exacta (la anotada es más ancha por su columna de leyenda, así
+// que a igual ancho de columna queda un poco más baja que la limpia --
+// se mantiene alignItems:'flex-start' para que al menos arriba sí queden
+// alineadas).
+//
+// 2026-10-13, a pedido de Ana (dos cosas en el mismo mensaje):
+//  1. "céntralas, centra el bloque de capturas" -- el bloque entero
+//     (título + las 2 imágenes) pasa de paddingLeft:'8px' (pegado a la
+//     izquierda, el default del resto del case) a margin:'0 auto'
+//     (centrado en el panel), mismo criterio que ya se usó para el
+//     bloque de Archivo/Instrument Sans en TheaTypographyShowcase.
+//  2. "hay una letra arriba de la que está del lado derecho que no se
+//     ve... spacing and grid, descubrir pantalla real, valores
+//     verificados en código, esa frase no se ve nada" -- ese título y
+//     subtítulo SE DIBUJABAN antes dentro de la imagen anotada (ver
+//     annotate.py), a un tamaño pensado para un canvas de 1440px. Pero
+//     acá la imagen se muestra a la mitad del ancho del panel, al lado
+//     de la limpia -- el navegador la achica y ese texto se volvía
+//     minúsculo e ilegible. Se sacó de la imagen (ver nota en el script
+//     de generación) y ahora es texto real de HTML, con el mismo
+//     tratamiento tipográfico que el resto de intros del case (Plus
+//     Jakarta Sans) -- así escala con el layout de la página, no con los
+//     píxeles de un PNG.
+//
+// 2026-10-13, a pedido de Ana ("colocaste más chiquita la cuadrícula...
+// -- correcta): la versión de arriba (con columna de leyenda) dejaba la
+// imagen anotada en 1440px totales contra 1080px de la limpia. Como las
+// 2 se mostraban a la MISMA ANCHO DE COLUMNA (flex:'1 1 0' parejo), la
+// pantalla de celular dentro de la anotada se veía ~25% más chica que
+// en la limpia, para hacerle espacio a esa columna extra. PRIMER
+// INTENTO de arreglo: se sacó la columna de leyenda de la imagen (las
+// medidas se escribían directo sobre la captura) para que las 2
+// imágenes midieran exactamente lo mismo -- Ana lo probó y no le gustó
+// ("no se ve tan cool, me gusta más como antes").
+//
+// Arreglo final: se vuelve a `theaSpacingAnnotated` CON columna de
+// leyenda (el diseño que a Ana le gustaba), con columnas DISTINTAS a
+// propósito -- la limpia más chica, la anotada más grande -- tal como
+// pidió ("pon la vista limpia más chica y la otra un poco más grande").
+//
+// 2026-10-13, a pedido de Ana ("¿y si quitamos la captura original y
+// solamente dejamos la captura con la explicación... porque se sigue
+// sin ver?"): aun agrandando la columna de la anotada (flex 3 contra 2),
+// seguía compartiendo ancho con la limpia y la leyenda no terminaba de
+// leerse bien. Se quita la comparación de 2 columnas -- ya no se
+// muestra `theaSpacingClean` en esta sección -- y queda solo
+// `theaSpacingAnnotated`, a ancho completo (80%, igual que el resto del
+// case), para que la cuadrícula y la leyenda se vean a buen tamaño.
+function TheaSpacingGridShowcase() {
+  return (
+    <div style={{width:'100%', marginTop:'72px'}}>
+      {/* 2026-10-13, a pedido de Ana: primero se quitó el párrafo técnico
+        * ("Valores verificados en código... no estimados"), y después
+        * ("quitalo") se quitó también el eyebrow ("Spacing & Grid —
+        * Descubrir (pantalla real)") que quedaba solo -- la sección ahora
+        * entra directo a la imagen, sin texto de apertura. */}
+      {/* 2026-10-13, a pedido de Ana ("mas chica, pero que la letra no
+        * deje de verse"): la imagen tiene texto horneado (la leyenda
+        * lateral y las etiquetas "px-5 · 20px") a un tamaño de fuente que
+        * ya se agrandó 2 veces antes porque no se leía -- si se achica
+        * mucho el contenedor, ese texto horneado se achica proporcional
+        * y vuelve a ser ilegible. Por eso el recorte es moderado (80% ->
+        * 68%, no más), para que siga siendo más chica sin arriesgar la
+        * legibilidad que ya se había corregido. */}
+      <div style={{width:'100%', display:'flex', flexDirection:'column', alignItems:'center'}}>
+        <div style={{width:'68%', marginTop:'40px'}}>
+          <img
+            src={theaSpacingAnnotated}
+            alt="La pantalla real de Descubrir con la grilla, las medidas reales de código y una leyenda lateral superpuestas"
+            style={{width:'100%', height:'auto', borderRadius:'16px', display:'block'}}
+          />
+        </div>
+      </div>
+      {/* 2026-10-13, a pedido de Ana ("el texto que sigue debajo de la
+        * captura no tiene que tener ese margen, sino el mismo margen
+        * normal de todo el panel"): estos 3 párrafos vivían DENTRO del
+        * div de 68% centrado de la imagen -- por eso heredaban su ancho
+        * angosto y quedaban centrados en vez de alineados a la izquierda
+        * como el resto del texto del panel. Se sacan a su propio div,
+        * hermano del de la imagen (no dentro del flex centrado), con el
+        * mismo patrón width:'80%'+paddingLeft:'8px' que usa el resto de
+        * los bloques de texto del caso. */}
+      {/* 2026-10-13, a pedido de Ana ("dejale a la captura el mismo margen
+        * de espacio que tiene arriba"): arriba de la captura hay 72px
+        * (marginTop del componente, el espacio desde la sección anterior)
+        * + 40px (marginTop del wrapper de la imagen) = 112px en total
+        * antes de que arranque la imagen. Este marginTop se iguala a esos
+        * 112px para que el espacio de abajo (imagen -> texto) sea
+        * simétrico al de arriba. */}
+      <div style={{width:'80%', paddingLeft:'8px', marginTop:'112px'}}>
+        <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'#2ECCA6', lineHeight:1.7, margin:0}}>
+          Las mismas reglas, en toda la experiencia.
+        </p>
+        <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.7, marginTop:'24px'}}>
+          Los fundamentos visuales se traducen en componentes y patrones reutilizables que mantienen la coherencia de la interfaz. Botones, campos de entrada, estados de feedback y elementos de navegación siguen criterios compartidos de apariencia y comportamiento.
+        </p>
+        <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'#2ECCA6', lineHeight:1.7, marginTop:'24px'}}>
+          El resultado es un sistema documentado que conecta las decisiones visuales con su aplicación en el producto.
+        </p>
+      </div>
+    </div>
+  )
+}
+
+// 2026-10-15, a pedido de Ana: embed en vivo del archivo real de Figma del
+// Design System (un iframe conectado al archivo, no una captura estática)
+// -- reemplaza el bloque de capturas que vivía acá antes
+// (TheaComponentSystemShowcase, eliminado). Requiere que el archivo de
+// Figma esté compartido como "Anyone with the link can view"; si ese
+// permiso se cambia a privado, el embed deja de cargar para los
+// visitantes del portfolio. Código de embed copiado tal cual del propio
+// menú "Share" de Figma (fileKey Bas9SSdMLitN1S37kjFeOy, node-id 0-1 =
+// la página completa "THEAVELING — DESIGN SYSTEM").
+function TheaDesignSystemEmbed() {
+  return (
+    <div style={{ width: '100%', marginTop: '96px' }}>
+      <div style={{ width: '80%', paddingLeft: '8px' }}>
+        <p style={{
+          fontFamily: "'IBM Plex Mono', monospace",
+          fontSize: '13px',
+          color: '#2ECCA6',
+          textTransform: 'uppercase',
+          letterSpacing: '0.5px',
+          margin: 0,
+        }}>
+          Design System — en vivo
+        </p>
+      </div>
+      <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '24px' }}>
+        <div style={{ width: '80%' }}>
+          <iframe
+            style={{ border: 'none', display: 'block', width: '100%' }}
+            height="600"
+            src="https://embed.figma.com/design/Bas9SSdMLitN1S37kjFeOy/Design-System-Theaveling?node-id=0-1&embed-host=share"
+            allowFullScreen
+          />
+        </div>
+      </div>
+      <div style={{width:'80%', paddingLeft:'8px', marginTop:'64px'}}>
+        <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:300, fontSize:'32px', color:'rgba(255,255,255,0.5)', lineHeight:1.5}}>
+          También diseñé más allá de Figma.
+        </p>
+        <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.7, marginTop:'24px'}}>
+          {/* 2026-10-19, a pedido de Ana: esta oración en Mint (#2ECCA6),
+              igual que el resto de las oraciones destacadas de este case. */}
+          <span style={{color:'#2ECCA6'}}>Durante el proyecto combiné herramientas de diseño con inteligencia artificial para explorar, desarrollar y llevar las decisiones de diseño más allá del prototipo.</span><br/><br/>La IA formó parte de mi proceso de trabajo, ayudándome a avanzar en la construcción del producto mientras mantenía el foco en las decisiones de experiencia, estructura e interfaz.
+        </p>
+      </div>
+      {/* 2026-10-19, a pedido de Ana: antes esta fila usaba flex-wrap dentro
+          del mismo div de texto (width:'80%', pegado a la izquierda como el
+          resto del copy del case) -- cada contenedor tomaba el ancho de su
+          propio contenido (la caja de Investigación, con 3 logos, quedaba
+          más ancha que las de 2) y no había garantía de que terminara en 3
+          arriba y 3 abajo alineados en columnas. Ahora es su propio bloque,
+          centrado en el panel (igual que el embed de Figma de arriba) y más
+          ancho que el texto (92% en vez de 80%) para que cubra bien el
+          centro y la periferia, no solo el carril angosto del texto. Grid de
+          3 columnas fijas -> las 6 cajas quedan del mismo ancho y las dos
+          filas coinciden en columnas (Descubrimiento sobre Diseño,
+          Investigación sobre Desarrollo, Definición sobre Lanzamiento). Los
+          íconos suben de 20px a 26px (un poco más anchos), y la etiqueta de
+          cada categoría pasa de gris a Mint (#2ECCA6, el mismo mint que ya
+          usa este case en el eyebrow "Design System — en vivo" arriba). */}
+      {/* 2026-10-19, a pedido de Ana: mismo tratamiento que se hizo para
+          Beacon -- nombre de la herramienta arriba (letra normal del case) e
+          ícono abajo, todos del mismo tamaño e ícono-solo (sin wordmark),
+          en vez de una fila de logos a tamaño fijo. Se reusan los mismos
+          íconos nuevos ya recortados que se usan en Beacon (iconChatgpt,
+          iconClaude, iconGithub, iconVercel, iconGranola, iconArena) en vez
+          de las versiones viejas (logoChatgpt, logoGithub, logoVercel eran
+          wordmarks completos). notionIcon y logoFigma ya eran ícono-solo
+          desde siempre, así que se mantienen igual.
+          UXtweak ya tiene su ícono-solo también (iconUxtweak): el hexágono +
+          la flechita, recortados de fondo transparente -- antes tenía fondo
+          blanco opaco detrás del stroke naranja Y relleno blanco adentro del
+          hexágono, así que con el filter normal (brightness(0) invert(1))
+          todo eso se iba a blanco sólido, tapando la forma. Ahora el stroke y
+          la flechita quedan como tinta (se vuelven blancos con el filter) y
+          el interior del hexágono queda transparente, igual que todos los
+          demás íconos de esta sección. */}
+      <div style={{width:'100%', display:'flex', justifyContent:'center', marginTop:'40px'}}>
+        <div style={{width:'92%', display:'grid', gridTemplateColumns:'repeat(3, 1fr)', gap:'16px'}}>
+          {[
+            // 2026-10-19, a pedido de Ana: Notion era solo donde documentaba
+            // lo que ya iba descubriendo (organización, no descubrimiento en
+            // sí), así que no representa bien esta categoría -- se cambia
+            // por NotebookLM, igual que en Beacon.
+            {label:'Descubrimiento', tools:[{name:'NotebookLM', icon:iconNotebooklm}, {name:'ChatGPT', icon:iconChatgpt}]},
+            {label:'Investigación', tools:[{name:'UXtweak', icon:iconUxtweak}, {name:'ChatGPT', icon:iconChatgpt}, {name:'Granola', icon:iconGranola}]},
+            {label:'Definición', tools:[{name:'Notion', icon:notionIcon}, {name:'ChatGPT', icon:iconChatgpt}]},
+            // 2026-10-19, a pedido de Ana: "Claude" y "Cowork" van separados
+            // (mismo ícono -- Cowork es un modo dentro de la app de Claude,
+            // no tiene logo propio -- pero dos entradas distintas), igual
+            // que en Beacon "Claude" y "Claude Code" van separados.
+            {label:'Diseño', tools:[{name:'Figma', icon:logoFigma}, {name:'Are.na', icon:iconArena}, {name:'Claude', icon:iconClaude}]},
+            {label:'Desarrollo', tools:[{name:'Claude', icon:iconClaude}, {name:'Cowork', icon:iconClaude}, {name:'GitHub', icon:iconGithub}]},
+            {label:'Lanzamiento', tools:[{name:'Vercel', icon:iconVercel}, {name:'GitHub', icon:iconGithub}]}
+          ].map((item, i) => (
+            <div key={i} style={{background:'rgba(255,255,255,0.03)', border:'1px solid rgba(255,255,255,0.15)', borderRadius:'16px', padding:'20px 16px', display:'flex', flexDirection:'column', gap:'16px'}}>
+              <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'14px', color:'#2ECCA6', margin:0}}>{item.label}</p>
+              <div style={{display:'flex', gap:'20px', flexWrap:'wrap', alignItems:'flex-end', justifyContent:'center'}}>
+                {item.tools.map((tool, j) => (
+                  <div key={j} style={{display:'flex', flexDirection:'column', alignItems:'center', gap:'10px'}}>
+                    <span style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'12px', color:'rgba(245,247,247,0.85)', whiteSpace:'nowrap'}}>{tool.name}</span>
+                    <img src={tool.icon} style={{height:'34px', width:'auto', maxWidth:'44px', objectFit:'contain', filter:'brightness(0) invert(1)', opacity:0.9}}/>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function VerProductoBtn({ texto = 'Ver producto', icon, href, onClick, width = '130px', hoverWidth = '145px', iconSize = '16px', contentJustify = 'center' }) {
   const [hovered, setHovered] = React.useState(false)
+  // 2026-10-19, a pedido de Ana: el botón "Ver case" (navegación interna
+  // dentro del portfolio, no un link externo) necesita un onClick propio,
+  // así que ahora el botón acepta `onClick` además de `href` -- si vienen
+  // los dos, gana `onClick` (navegación interna) sobre abrir una pestaña.
   return (
     <div
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      onClick={href ? () => window.open(href, '_blank', 'noopener,noreferrer') : undefined}
+      onClick={onClick ? onClick : href ? () => window.open(href, '_blank', 'noopener,noreferrer') : undefined}
       style={{
         display: 'inline-flex',
         alignItems: 'center',
         cursor: 'pointer',
-        justifyContent: 'flex-end'
+        justifyContent: 'flex-end',
+        // 2026-10-19, a pedido de Ana ("tienen como un bug... si uno los
+        // toca por el ladito izquierdo"): antes este div no tenía ancho
+        // propio, así que su ancho total cambiaba con el hover (el círculo
+        // de 36px+6px de margen desaparece Y la píldora crece a la vez) --
+        // el borde izquierdo del área "hoverable" saltaba hacia adentro
+        // justo al entrar el mouse, lo que producía un parpadeo hover/no-
+        // hover en esa franja. Fijar acá el ancho total (el máximo posible:
+        // la píldora en su ancho de hover + el espacio que ocupaba el
+        // círculo) hace que el área de hover nunca cambie de tamaño --
+        // solo lo que hay DENTRO se reacomoda, alineado a la derecha.
+        width: `calc(${hoverWidth} + 42px)`
       }}
     >
       <div style={{
@@ -587,10 +1570,18 @@ function VerProductoBtn({ texto = 'Ver producto', icon, href, width = '130px', h
         overflow: 'hidden',
         transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
         background: '#F5F2EE',
-        justifyContent: 'center'
+        justifyContent: contentJustify
       }}>
+        {/* 2026-10-13, a pedido de Ana ("pon bien el icono, mas grande y
+          * mas hacia la izq del boton" -- para el botón de Moodbar): este
+          * componente se reusa en varios botones del case (Notion, etc.)
+          * que SIGUEN con su tamaño/alineación original -- por eso
+          * `iconSize`/`contentJustify` son props opcionales con los
+          * valores de siempre como default, y solo el botón de Moodbar
+          * pasa unos distintos (ícono más grande + contenido pegado a la
+          * izquierda en vez de centrado). */}
         {icon && (
-          <img src={icon} alt="" style={{width:'16px', height:'16px', borderRadius:'4px', marginRight:'8px', flexShrink:0}}/>
+          <img src={icon} alt="" style={{width:iconSize, height:iconSize, borderRadius:'4px', marginRight:'8px', flexShrink:0}}/>
         )}
         <span style={{
           fontFamily: "'Plus Jakarta Sans', sans-serif",
@@ -708,7 +1699,7 @@ const InsightTypingText = React.memo(React.forwardRef(function InsightTypingText
   )
 }))
 
-function ProjectTransition({ color, onClose, projectName, projectColor }) {
+function ProjectTransition({ color, onClose, projectName, projectColor, onViewBeacon, onViewTheaveling }) {
   const [progress, setProgress] = React.useState(0)
   const [showRightContent, setShowRightContent] = React.useState(false)
   const [closing, setClosing] = React.useState(false)
@@ -722,11 +1713,69 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
   const diagramRef = React.useRef(null)
   const [checkVisible, setCheckVisible] = React.useState(false)
   const checkRef = React.useRef(null)
+  // 2026-10-18, a pedido de Ana: scroll-reveal por bloque de "aprendizajes"
+  // (Thea), mismo patrón que diagramVisible/checkVisible.
+  const [learn1Visible, setLearn1Visible] = React.useState(false)
+  const learn1Ref = React.useRef(null)
+  const [learn2Visible, setLearn2Visible] = React.useState(false)
+  const learn2Ref = React.useRef(null)
+  const [learn3Visible, setLearn3Visible] = React.useState(false)
+  const learn3Ref = React.useRef(null)
+  // 2026-10-19, a pedido de Ana: scroll-reveal para el bloque de cierre
+  // ("Explora el trabajo completo"), mismo patrón que learn1/2/3Visible.
+  const [closingCtaVisible, setClosingCtaVisible] = React.useState(false)
+  const closingCtaRef = React.useRef(null)
   const [brandIndex, setBrandIndex] = React.useState(0)
   const [isCarouselTransitioning, setIsCarouselTransitioning] = React.useState(false)
   const brandAutoRef = React.useRef(false)
+  // 2026-10-19, a pedido de Ana: si el usuario toca cualquiera de los
+  // puntitos del carrusel de marcas/Beacon mientras todavía está avanzando
+  // solo, el auto-avance se debe cortar ahí mismo -- de ahí en adelante
+  // manda el usuario. brandIntervalRef guarda el id del setInterval (antes
+  // era una variable local dentro del efecto, inalcanzable desde el click
+  // del punto) para poder cancelarlo desde afuera.
+  const brandIntervalRef = React.useRef(null)
+  const brandUserInteractedRef = React.useRef(false)
+  // 2026-10-19, a pedido de Ana: el video de demo (5ta bolita del carrusel
+  // de marcas) está siempre montado, solo se le cambia la opacidad -- así
+  // que si el usuario se va a otra bolita y vuelve, lo encontraba a mitad
+  // de reproducción en vez de arrancar de nuevo. Este ref + efecto lo
+  // reinician (currentTime a 0 + play) cada vez que brandIndex vuelve a 4.
+  const brandVideoRef = React.useRef(null)
+  React.useEffect(() => {
+    if (brandIndex === 4 && brandVideoRef.current) {
+      brandVideoRef.current.currentTime = 0
+      brandVideoRef.current.play().catch(() => {})
+    }
+  }, [brandIndex])
   const [dotHovered, setDotHovered] = React.useState(false)
+  // 2026-10-19, a pedido de Ana: hover para las dos mini-cards de "Sigue
+  // viendo cómo trabajo" (la de Beacon y el recuadro vacío) -- al pasar el
+  // mouse se levantan un poco (translateY) y, en la de Beacon, "Beacon" y
+  // "Ver caso de estudio" se ponen más gruesos (fontWeight).
+  const [beaconMiniCardHovered, setBeaconMiniCardHovered] = React.useState(false)
+  const [emptyMiniCardHovered, setEmptyMiniCardHovered] = React.useState(false)
+  // 2026-10-20, a pedido de Ana: mismo patrón "Sigue viendo cómo trabajo"
+  // pero del lado de Beacon -- la mini-card de Theaveling y el recuadro
+  // vacío de reserva. emptyMiniCardHovered se reusa (nunca se renderizan
+  // los dos recuadros vacíos al mismo tiempo, solo uno según projectName).
+  const [theavelingMiniCardHovered, setTheavelingMiniCardHovered] = React.useState(false)
   const [dotPressed, setDotPressed] = React.useState(false)
+  const [testHandHover, setTestHandHover] = React.useState(false)
+  const [testVideoOpen, setTestVideoOpen] = React.useState(false)
+  const [testDotScreenPos, setTestDotScreenPos] = React.useState(null)
+  const testDotRef = React.useRef(null)
+  const openTestVideo = () => {
+    if (testDotRef.current) {
+      const r = testDotRef.current.getBoundingClientRect()
+      setTestDotScreenPos({ left: r.left, top: r.top })
+    }
+    setTestVideoOpen(true)
+  }
+  const closeTestVideo = () => {
+    setTestVideoOpen(false)
+    setTestHandHover(false)
+  }
   const [slideOffset, setSlideOffset] = React.useState(0)
   const [slideIndex, setSlideIndex] = React.useState(0)
   const slideTimerRef = React.useRef(null)
@@ -760,18 +1809,17 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
     ? ['Origen', 'Investigación', 'Decisiones de producto', 'Diseño', 'Testing', 'Aprendizajes']
     : ['Contexto', 'Investigación', 'Discovery', 'Decisiones de producto', 'Diseño', 'IA aplicada', 'Impacto', 'Aprendizajes']
 
-  // sec06Ref/sec07Ref en el case de Thea todavía son parte de "Decisiones
-  // de producto" (el framework Recopilar/Curar/Descubrir/Reservar,
-  // TODO/ESCENA/CULTURA, "Curar también es dar contexto...") — Testing y
-  // Aprendizajes todavía NO tienen su propio contenido con encabezado
-  // propio. "Diseño" (sec05Ref) ya sí tiene el suyo (2026-10-08, sexagésima
-  // tercera vuelta: "La interfaz tenía que sentirse como la escena que
-  // estaba intentando descubrir."), así que el cap sube de 3 a 4. Por eso
-  // el scroll-spy no debe resaltar más allá de "Diseño" (índice 3) todavía,
-  // aunque la barra sí muestre "Testing"/"Aprendizajes" como lo que viene.
-  // Esto se actualiza el día que cada uno tenga su propio título dentro
-  // del case.
-  const sectionHighlightCap = projectName === 'Theaveling' ? 4 : sectionLabels.length
+  // 2026-10-18, a pedido de Ana: sec07Ref (el ref que marca dónde empieza
+  // "Aprendizajes" en la barra lateral) ya no vive prestado en "Curar
+  // también es dar contexto..." (eso sigue siendo parte de "Decisiones de
+  // producto") -- se movió al heading real de cierre del case, "¿Qué
+  // cambió en mi manera de entender y abordar el problema después de
+  // trabajar en Theaveling?". Con eso, las 6 secciones de Thea (Origen,
+  // Investigación, Decisiones de producto, Diseño, Testing, Aprendizajes)
+  // ya tienen su propio contenido con encabezado propio, así que el cap
+  // sube de 5 a sectionLabels.length -- el scroll-spy ya puede resaltar
+  // "Aprendizajes" también.
+  const sectionHighlightCap = sectionLabels.length
 
   const scrollToSection = (i) => {
     if (sectionRefs[i].current && contentRef.current) {
@@ -924,14 +1972,14 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
 
   const quotes = [
     [
-      '"Las herramientas que usamos no están optimizadas para que esa búsqueda se realice de una manera rápida."',
-      '"Si hubiese una manera donde se nos notifique, por medio de las herramientas que usamos, que ya una venta está generando atribución, en lugar de nosotros tener que buscar, sería beneficioso."',
-      '"Si no se cierra en un marco de tiempo, ese dinero de la venta no nos atribuye a nosotros."'
+      { text: '"Las herramientas que usamos no están optimizadas para que esa búsqueda se realice de una manera rápida."', name: 'Carlos', role: 'Channel Account Manager' },
+      { text: '"Si hubiese una manera donde se nos notifique, por medio de las herramientas que usamos, que ya una venta está generando atribución, en lugar de nosotros tener que buscar, sería beneficioso."', name: 'Mariana', role: 'Digital Account Specialist' },
+      { text: '"Si no se cierra en un marco de tiempo, ese dinero de la venta no nos atribuye a nosotros."', name: 'Laura', role: 'Channel Account Manager' }
     ],
     [
-      '"Lo mas frustrante es que el cliente o el partner no respondan seguido o no mantengan la conversación activa. Muchas oportunidades se caen por eso"',
-      '"Si me ha pasado, no he podido reclamar lo de esa compra y queda cerrada como lost, pierdo esa opp, pierdo tambien para mis métricas. Por eso intento tener cuidado."',
-      '"Yo personalmente manejo partner grandes, muchas opps quedan perdidas porque no me da el tiempo de revisar cada una con un manager diferente, entonces podría reorganizar mejor"'
+      { text: '"Lo mas frustrante es que el cliente o el partner no respondan seguido o no mantengan la conversación activa. Muchas oportunidades se caen por eso"', name: 'Andrés', role: 'Channel Account Manager' },
+      { text: '"Si me ha pasado, no he podido reclamar lo de esa compra y queda cerrada como lost, pierdo esa opp, pierdo tambien para mis métricas. Por eso intento tener cuidado."', name: 'Diego', role: 'Channel Account Manager' },
+      { text: '"Yo personalmente manejo partner grandes, muchas opps quedan perdidas porque no me da el tiempo de revisar cada una con un manager diferente, entonces podría reorganizar mejor"', name: 'Sofía', role: 'Channel Account Manager' }
     ]
   ]
 
@@ -1182,6 +2230,54 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
   }, [checkVisible])
 
   React.useEffect(() => {
+    if (!learn1Ref.current || learn1Visible) return
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) setLearn1Visible(true)
+      },
+      { threshold: 0.3, root: contentRef.current }
+    )
+    observer.observe(learn1Ref.current)
+    return () => observer.disconnect()
+  }, [learn1Visible])
+
+  React.useEffect(() => {
+    if (!learn2Ref.current || learn2Visible) return
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) setLearn2Visible(true)
+      },
+      { threshold: 0.3, root: contentRef.current }
+    )
+    observer.observe(learn2Ref.current)
+    return () => observer.disconnect()
+  }, [learn2Visible])
+
+  React.useEffect(() => {
+    if (!learn3Ref.current || learn3Visible) return
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) setLearn3Visible(true)
+      },
+      { threshold: 0.3, root: contentRef.current }
+    )
+    observer.observe(learn3Ref.current)
+    return () => observer.disconnect()
+  }, [learn3Visible])
+
+  React.useEffect(() => {
+    if (!closingCtaRef.current || closingCtaVisible) return
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) setClosingCtaVisible(true)
+      },
+      { threshold: 0.3, root: contentRef.current }
+    )
+    observer.observe(closingCtaRef.current)
+    return () => observer.disconnect()
+  }, [closingCtaVisible])
+
+  React.useEffect(() => {
     if (brandAutoRef.current) return
     const observer = new IntersectionObserver(
       (entries) => {
@@ -1189,6 +2285,10 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
           brandAutoRef.current = true
           let count = 0
           const timer = setInterval(() => {
+            if (brandUserInteractedRef.current) {
+              clearInterval(timer)
+              return
+            }
             count++
             setIsCarouselTransitioning(true)
             setTimeout(() => {
@@ -1197,6 +2297,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
             }, 300)
             if (count >= 4) clearInterval(timer)
           }, 2000)
+          brandIntervalRef.current = timer
         }
       },
       { threshold: 0.3, root: contentRef.current }
@@ -1421,7 +2522,17 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                     <div style={{position:'absolute', top:0, bottom:0, left:'50%', width:'1px', marginLeft:'-0.5px', background:'linear-gradient(to bottom, transparent, rgba(255,255,255,0.15), transparent)'}}/>
                     <div style={{position:'absolute', left:0, right:0, top:'50%', height:'1px', marginTop:'-0.5px', background:'linear-gradient(to right, transparent, rgba(255,255,255,0.15), transparent)'}}/>
                     {[
-                      { num:'15 min', label:'Seguimiento manual por oportunidad.', desc:'Tiempo promedio que un CAM invierte verificando el estado de un solo deal entre diferentes herramientas.' },
+                      // 2026-10-19, a pedido de Ana (feedback de Anthony, su mentor):
+                      // el "15 min" no se entendía bien porque no decía CON QUÉ
+                      // FRECUENCIA -- lo confirmamos con la encuesta real (Tali):
+                      // "¿Con qué frecuencia revisas manualmente si una oportunidad
+                      // se cerró?" dio Semanal 75% / Cada 2-3 días 25%. Se agrega
+                      // "una vez por semana" al label/desc para anclarlo, sin forzar
+                      // que el lector multiplique esto por las 70-80 oportunidades
+                      // para llegar a las 13.3h de más abajo (ver conversación: esa
+                      // cuenta da ~81h/mes, mucho más que 13.3h -- las 13.3h quedan
+                      // conservadoras a propósito, no hace falta que cuadren exacto).
+                      { num:'15 min', label:'Seguimiento manual por oportunidad, una vez por semana.', desc:'Tiempo promedio que un CAM invierte cada semana verificando el estado de un solo deal entre diferentes herramientas.' },
                       { num:'70–80', label:'Oportunidades activas simultáneas.', desc:'Un volumen que hace prácticamente imposible mantener el seguimiento de forma manual.' },
                       { num:'2 meses', label:'Ventana para registrar la atribución.', desc:'Si una venta no se registra a tiempo, la comisión puede perderse aunque el trabajo comercial ya se haya realizado.' },
                       { num:'USD 400K', label:'Valor de una sola oportunidad.', desc:'Un deal puede representar cientos de miles de dólares y perderse simplemente por falta de visibilidad.' }
@@ -1464,12 +2575,13 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                           fontFamily:"'Plus Jakarta Sans', sans-serif",
                           fontWeight:150,
                           fontSize:'18px',
-                          color:'rgba(255,255,255,0.8)',
+                          color:'rgba(255,255,255,0.95)',
                           lineHeight:1.8,
                           width:'33%',
                           textShadow:'0 0 20px rgba(255,255,255,0.1)'
-                        }}>{quote}
+                        }}>{quote.text}
                           <span style={{display:'inline-block', width:'6px', height:'6px', borderRadius:'50%', background:'#B0FF92', boxShadow:'0 0 6px #B0FF92', marginLeft:'6px', verticalAlign:'middle'}}/>
+                          <span style={{display:'block', marginTop:'12px', fontSize:'14px', fontWeight:150, color:'rgba(255,255,255,0.4)'}}>— {quote.name} · {quote.role}</span>
                         </p>
                       ))}
                     </div>
@@ -1518,6 +2630,12 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                     <div style={{display:'flex', gap:'8px', justifyContent:'flex-start', paddingLeft:'8px', position:'absolute', top:'110px', left:'8px', zIndex:2}}>
                       {[0,1,2,3,4].map(i => (
                         <div key={i} onClick={() => {
+                          // 2026-10-19, a pedido de Ana: al tocar cualquier
+                          // punto, se corta el auto-avance ahí mismo -- de
+                          // ahí en adelante el carrusel solo se mueve si el
+                          // usuario lo mueve.
+                          brandUserInteractedRef.current = true
+                          if (brandIntervalRef.current) clearInterval(brandIntervalRef.current)
                           setIsCarouselTransitioning(true)
                           setTimeout(() => {
                             setBrandIndex(i)
@@ -1568,7 +2686,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                                 <div style={{width:'10px',height:'10px',borderRadius:'50%',background:'#FFBD2E'}}/>
                                 <div style={{width:'10px',height:'10px',borderRadius:'50%',background:'#28C840'}}/>
                               </div>
-                              <video autoPlay loop muted playsInline style={{width:'100%', display:'block'}}>
+                              <video ref={brandVideoRef} autoPlay loop muted playsInline style={{width:'100%', display:'block'}}>
                                 <source src={demoBeacon} type="video/mp4"/>
                               </video>
                             </div>
@@ -1613,7 +2731,12 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                         ].map((col, i) => (
                           <div key={i} style={{padding:'10px 16px', display:'flex', alignItems:'center', gap:'8px'}}>
                             <span style={{fontFamily:"'IBM Plex Mono', monospace", fontWeight:300, fontSize: col.icon === '✓' ? '16px' : '14px', color: col.icon === '✓' ? '#B0FF92' : col.icon === '✔' ? '#B0FF92' : '#FF6B35', lineHeight: col.icon === '✓' ? 1 : 'inherit', verticalAlign: 'middle', marginTop: col.icon === '✓' ? '0' : '0', flexShrink:0}}>{col.icon}</span>
-                            <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:300, fontSize:'14px', color:'#7B58F8', lineHeight:1.4, margin:0}}>{col.value}</p>
+                            {/* 2026-10-19, a pedido de Ana: estos textos del benchmark
+                              * (columnas de Partnerstack/Crossbeam/Impartner, antes en
+                              * morado #7B58F8) ahora usan el mismo color que el bloque
+                              * de Beacon (brandIndex===4, más abajo) -- rgba(255,255,255,0.7) --
+                              * la tipografía/tamaño/peso ya eran idénticos, solo cambia el color. */}
+                            <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:300, fontSize:'14px', color:'rgba(255,255,255,0.7)', lineHeight:1.4, margin:0}}>{col.value}</p>
                           </div>
                         ))}
                       </div>
@@ -1679,49 +2802,97 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'#B0FF92', lineHeight:1.7, marginTop:'40px', width:'80%'}}>
                     La primera decisión fue dejar de pensar en listas.
                   </p>
+                  {/* 2026-10-16, a pedido de Ana (video de Vic Rojo Studio
+                    * de nuevo: "el puntito está muy hacia la derecha...
+                    * cuando salga la mano, se corre un poquito el puntito
+                    * con la mano, pero la mano obviamente lo alcanza" +
+                    * "la mano no sale de ese lado, sale con los dedos hacia
+                    * la izquierda, no así"): se rota beacon-hand.png -90°
+                    * (mismo criterio que tap-hand.png en Theaveling) para
+                    * que el brazo quede a la derecha y el índice/pulgar
+                    * apunten a la izquierda, hacia el punto. El punto se
+                    * aleja un poco del borde (40px -> 70px) y gana un
+                    * "nudge" (dotNudge) sincronizado con la llegada de la
+                    * mano -- se corre unos px y vuelve, como en el
+                    * referente, sin perder el toque de la mano. slideHandIn
+                    * (y dotPulse, que tampoco existía) se reemplazan por
+                    * keyframes reales definidos acá mismo. */}
+                  <style>{`
+                    @keyframes beaconHandSlideIn {
+                      from { transform: translateY(-28%) translateX(50px); opacity: 0; }
+                      to { transform: translateY(-28%) translateX(0); opacity: 0.92; }
+                    }
+                    @keyframes dotNudge {
+                      0% { transform: translateY(-50%) translateX(0); }
+                      100% { transform: translateY(-50%) translateX(-10px); }
+                    }
+                  `}</style>
                   <div style={{position:'relative', marginTop:'8px', height:'40px', width:'100%'}}>
                     <>
+                      {/* 2026-10-16, a pedido de Ana ("el tamano y como esta
+                        * la pelotita me gusta asi, no se te ocurra
+                        * cambiarlo, solo haz que la toquen los dedos" +
+                        * "deja la pelota quieta... mides el movimiento para
+                        * que los dedos la agarren" + "la mano no se queda
+                        * quieta"): LA BOLITA (right:115px, tamaño, glow,
+                        * zIndex) ya NO se vuelve a tocar. En vez de mover el
+                        * punto, se mueve la MANO (right:0 -> 24px) para que
+                        * la punta del dedo llegue exactamente a donde está
+                        * el punto, sin tocar su posición.
+                        * El jitter ("la mano no se queda quieta") era que
+                        * el hover solo se detectaba sobre los 10x10px
+                        * reales del punto -- en cuanto el cursor se movía
+                        * hacia la mano (que tiene pointerEvents:none, no
+                        * puede sostener el hover) el mouse "salía" del
+                        * punto, se ocultaba la mano, el cursor volvía a
+                        * quedar sobre el punto, y se repetía en loop. Se
+                        * agrega un wrapper invisible más grande (200px) que
+                        * ahora sostiene el hover, así no importa si el
+                        * cursor se mueve sobre la mano. */}
                       <div
-                        style={{
-                          position:'absolute',
-                          right:'40px',
-                          top:'50%',
-                          transform:'translateY(-50%)',
-                          width:'10px',
-                          height:'10px',
-                          borderRadius:'50%',
-                          background:'rgba(255,255,255,0.9)',
-                          boxShadow:'0 0 8px rgba(255,255,255,0.7)',
-                          cursor:'pointer',
-                          zIndex:3,
-                          animation: 'dotPulse 2s ease-in-out infinite'
+                        style={{position:'absolute', right:'0px', top:0, bottom:0, width:'200px'}}
+                        onMouseEnter={() => setDotHovered(true)}
+                        onMouseLeave={() => {
+                          setDotPressed(false)
+                          setDotHovered(false)
+                          setSlideIndex(0)
+                          clearInterval(slideTimerRef.current)
                         }}
-                      onMouseEnter={() => setDotHovered(true)}
-                      onMouseDown={() => {
-                        setDotPressed(true)
-                        setSlideIndex(0)
-                        slideTimerRef.current = setInterval(() => {
-                          setSlideIndex(i => (i + 1) % 3)
-                        }, 2000)
-                      }}
-                      onMouseUp={() => {
-                        setDotPressed(false)
-                        setSlideIndex(0)
-                        clearInterval(slideTimerRef.current)
-                      }}
-                      onMouseLeave={() => {
-                        setDotPressed(false)
-                        setDotHovered(false)
-                        setSlideIndex(0)
-                        clearInterval(slideTimerRef.current)
-                      }}
-                    />
-                    {dotHovered && (
-                      <div style={{position:'absolute', right:'0px', top:'120%', transform:'translateY(-50%)', display:'flex', alignItems:'center', animation:'slideHandIn 0.6s cubic-bezier(0.4,0,0.2,1) forwards', pointerEvents:'none', zIndex:4}}>
-                        <img src={handPinch} style={{width:'60px', filter:'invert(1)', display:'block'}}/>
-                        <div style={{width:'24px', height:'20px', background:'rgba(255,255,255,0.9)', borderRadius:'0 6px 8px 0', marginLeft:'-6px', marginTop:'40px', transform:'rotate(15deg)'}}/>
+                      >
+                        <div
+                          style={{
+                            position:'absolute',
+                            right:'78px',
+                            top:'50%',
+                            transform:'translateY(-50%)',
+                            width:'13px',
+                            height:'13px',
+                            borderRadius:'50%',
+                            background:'rgba(255,255,255,0.9)',
+                            boxShadow:'0 0 10px rgba(255,255,255,0.8)',
+                            cursor:'pointer',
+                            zIndex:3,
+                            animation: dotHovered ? 'dotPulse 2s ease-in-out infinite, dotNudge 0.3s ease-out forwards' : 'dotPulse 2s ease-in-out infinite'
+                          }}
+                        onMouseDown={() => {
+                          setDotPressed(true)
+                          setSlideIndex(0)
+                          slideTimerRef.current = setInterval(() => {
+                            setSlideIndex(i => (i + 1) % 3)
+                          }, 2000)
+                        }}
+                        onMouseUp={() => {
+                          setDotPressed(false)
+                          setSlideIndex(0)
+                          clearInterval(slideTimerRef.current)
+                        }}
+                      />
+                      {dotHovered && (
+                        <div style={{position:'absolute', right:'0px', top:'50%', width:'105px', animation:'beaconHandSlideIn 0.4s cubic-bezier(0.4,0,0.2,1) forwards', pointerEvents:'none', zIndex:4}}>
+                          <img src={beaconHand} style={{width:'105px', height:'auto', display:'block'}}/>
+                        </div>
+                      )}
                       </div>
-                    )}
                     </>
                   </div>
                   <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.8, marginTop:'4px', width:'80%'}}>
@@ -1879,18 +3050,40 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                     <div style={{position:'absolute', top:0, bottom:0, left:'66.6%', width:'1px', background:'linear-gradient(to bottom, transparent, rgba(255,255,255,0.15), transparent)'}}/>
                     <div style={{position:'absolute', left:0, right:0, top:'55%', height:'1px', background:'linear-gradient(to right, transparent, rgba(255,255,255,0.15), transparent)'}}/>
                     {[
-                      {label:'Descubrimiento', logos:[logoNotebooklm, logoClaude]},
-                      {label:'Investigación', logos:[logoTally, logoGranola, logoChatgpt]},
-                      {label:'Definición', logos:[logoClaude]},
-                      {label:'Diseño', logos:[logoClaude, logoLovable]},
-                      {label:'Desarrollo', logos:[logoClaude, logoGithub]},
-                      {label:'Lanzamiento', logos:[logoVercel]}
+                      // 2026-10-19, a pedido de Ana: cada herramienta ahora es
+                      // un ícono solo (sin el wordmark), todos en blanco/mono
+                      // vía el mismo filter de siempre, con el nombre arriba
+                      // en la letra normal del case (Plus Jakarta Sans, el
+                      // mismo peso 150 que usa todo el texto de cuerpo acá).
+                      // Así el tamaño visual queda parejo entre todas, en vez
+                      // de depender de cuánto texto traía cada wordmark.
+                      {label:'Descubrimiento', tools:[{name:'NotebookLM', icon:iconNotebooklm}, {name:'Claude', icon:iconClaude}]},
+                      {label:'Investigación', tools:[{name:'Tally', icon:iconTally}, {name:'Granola', icon:iconGranola}, {name:'ChatGPT', icon:iconChatgpt}]},
+                      {label:'Definición', tools:[{name:'Claude', icon:iconClaude}, {name:'ChatGPT', icon:iconChatgpt}, {name:'Notion', icon:notionIcon}]},
+                      {label:'Diseño', tools:[{name:'Claude', icon:iconClaude}, {name:'Lovable', icon:iconLovable}]},
+                      // 2026-10-19, a pedido de Ana: Beacon lo armó directo con
+                      // Claude Code (a diferencia de Thea, que fue con Cowork),
+                      // así que en Desarrollo va también el logo de Claude Code.
+                      {label:'Desarrollo', tools:[{name:'Claude', icon:iconClaude}, {name:'Claude Code', icon:iconClaudeCode}, {name:'GitHub', icon:iconGithub}]},
+                      // 2026-10-19, a pedido de Ana: se agrega GitHub acá para
+                      // que quede consistente con Theaveling (Vercel + GitHub
+                      // en los dos) -- el deploy real es push a GitHub y
+                      // Vercel lo toma automático, así que GitHub participa
+                      // en el lanzamiento, no solo en Desarrollo.
+                      {label:'Lanzamiento', tools:[{name:'Vercel', icon:iconVercel}, {name:'GitHub', icon:iconGithub}]}
                     ].map((item, i) => (
-                      <div key={i} style={{background:'rgba(255,255,255,0.03)', padding:'16px', display:'flex', flexDirection:'column', gap:'12px'}}>
+                      <div key={i} style={{background:'rgba(255,255,255,0.03)', padding:'20px 16px', display:'flex', flexDirection:'column', gap:'16px'}}>
                         <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'14px', color:'#B0FF92', margin:0}}>{item.label}</p>
-                        <div style={{display:'flex', gap:'8px', flexWrap:'wrap', alignItems:'center'}}>
-                          {item.logos.map((src, j) => (
-                            <img key={j} src={src} style={{height: (i === 1 && j === 2) ? '60px' : '20px', width:'auto', filter:'brightness(0) invert(1)', opacity:0.8}}/>
+                        {/* 2026-10-19, a pedido de Ana: las celdas con 1-2 herramientas
+                            quedaban pegadas a la izquierda del bloque -- ahora se
+                            centran dentro de su propia celda (justifyContent:'center'),
+                            en vez de alinearse al borde. */}
+                        <div style={{display:'flex', gap:'20px', flexWrap:'wrap', alignItems:'flex-end', justifyContent:'center'}}>
+                          {item.tools.map((tool, j) => (
+                            <div key={j} style={{display:'flex', flexDirection:'column', alignItems:'center', gap:'10px'}}>
+                              <span style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'12px', color:'rgba(245,247,247,0.85)', whiteSpace:'nowrap'}}>{tool.name}</span>
+                              <img src={tool.icon} style={{height:'34px', width:'auto', maxWidth:'44px', objectFit:'contain', filter:'brightness(0) invert(1)', opacity:0.9}}/>
+                            </div>
                           ))}
                         </div>
                       </div>
@@ -1912,7 +3105,11 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                     <div style={{position:'absolute', top:0, bottom:0, left:'50%', width:'1px', marginLeft:'-0.5px', background:'linear-gradient(to bottom, transparent, rgba(255,255,255,0.15), transparent)'}}/>
                     <div style={{position:'absolute', left:0, right:0, top:'50%', height:'1px', marginTop:'-0.5px', background:'linear-gradient(to right, transparent, rgba(255,255,255,0.15), transparent)'}}/>
                     {[
-                      {num:'13.3 h', label:'Recuperadas al mes por CAM.', desc:'Al automatizar el seguimiento y centralizar la visibilidad del pipeline.'},
+                      // 2026-10-19, a pedido de Ana: mismo número (13.3h, a propósito
+                      // conservador frente al cálculo ingenuo de ~81h/mes -- ver
+                      // conversación), pero enmarcado en días laborales para que
+                      // pegue más fuerte sin inflar nada.
+                      {num:'13.3 h', label:'Recuperadas al mes por CAM.', desc:'Casi 2 días laborales completos, al automatizar el seguimiento y centralizar la visibilidad del pipeline.'},
                       {num:'1 clic', label:'Para conocer el estado de un deal.', desc:'En lugar de revisar múltiples herramientas y conversaciones.'},
                       {num:'0 cuentas', label:'Que el partner necesita crear.', desc:'Toda la interacción ocurre desde un email, reduciendo la fricción de adopción.'},
                       {num:'100 %', label:'De Pulse Checks contextualizados con IA.', desc:'Cada mensaje se adapta automáticamente al estado de la oportunidad.'}
@@ -1933,11 +3130,27 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', marginTop:'8px', lineHeight:1.7}}>
                     Nace de eliminar las fricciones correctas.
                   </p>
-                  <div style={{display:'flex', flexDirection:'column', gap:'24px', marginTop:'80px', width:'fit-content', minWidth:'300px', marginLeft:'auto', marginRight:'auto'}}>
+                  {/* 2026-10-19, a pedido de Ana: suma más intención a los
+                      aprendizajes de Beacon -- en el verde de marca (#B0FF92),
+                      igual que el resto de las frases destacadas del case. */}
+                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'#B0FF92', marginTop:'24px', lineHeight:1.7}}>
+                    El diseño puede generar valor real en problemas de negocio que no son obvios ni atractivos.
+                  </p>
+                  {/* 2026-10-19, a pedido de Ana: versión corta de los 3
+                      aprendizajes (eligió esta por encima de una versión más
+                      larga/detallada -- la profundidad ya la cubre el resto
+                      del case, acá va la síntesis, pensando en que un
+                      reclutador la lea rápido). Cada tarjeta ahora tiene
+                      título + un párrafo corto, en vez de una sola línea
+                      suelta -- por eso el contenedor pasa de 'fit-content'
+                      (pensado para texto de una línea) a un ancho fijo más
+                      cómodo para párrafos, y el texto se alinea a la
+                      izquierda en vez de centrado. */}
+                  <div style={{display:'flex', flexDirection:'column', gap:'24px', marginTop:'80px', width:'640px', maxWidth:'90%', marginLeft:'auto', marginRight:'auto'}}>
                     {[
-                      {num:'01', text:'Investigar bien\nevita construir de más.'},
-                      {num:'02', text:'La IA acelera la ejecución.\n\nEl criterio sigue siendo humano.'},
-                      {num:'03', text:'La parte más difícil no fue diseñar Beacon.\n\nFue decidir qué podía esperar a la siguiente versión.'}
+                      {num:'01', title:'El valor no siempre está en los problemas más visibles.', text:'Beacon me enseñó que diseñar también es encontrar oportunidades en problemas que, a primera vista, no parecen atractivos. Cuando entiendes cómo funciona realmente una industria, aparecen fricciones que tienen un impacto real en el negocio.'},
+                      {num:'02', title:'Investigar antes de construir cambia lo que la IA produce.', text:'La IA podía generar una interfaz rápidamente, pero las primeras propuestas eran genéricas. El discovery fue lo que permitió convertirla en una herramienta diseñada alrededor de un problema específico.'},
+                      {num:'03', title:'La IA acelera la ejecución. El criterio sigue siendo humano.', text:'La IA me permitió pasar de decisiones de producto a un producto funcional mucho más rápido. Pero decidir qué construir, qué descartar y qué debía esperar siguió dependiendo del criterio detrás del producto.'}
                     ].map((item, i) => (
                       <div key={i} style={{position:'relative', paddingTop:'20px'}}>
                         <span style={{position:'absolute', top:'-10px', left:'16px', color:'#B0FF92', fontSize:'36px', fontWeight:700, fontFamily:"'Plus Jakarta Sans', sans-serif"}}>{item.num}</span>
@@ -1949,36 +3162,84 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                           borderRadius:'12px',
                           boxShadow:'0 8px 32px rgba(0,0,0,0.3)'
                         }}>
-                          <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.8)', lineHeight:1.5, margin:0, whiteSpace:'pre-line', textAlign:'center'}}>{item.text}</p>
+                          <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:500, fontSize:'19px', color:'#F5F7F7', lineHeight:1.4, margin:'0 0 12px'}}>{item.title}</p>
+                          <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'16px', color:'rgba(255,255,255,0.7)', lineHeight:1.7, margin:0}}>{item.text}</p>
                         </div>
                       </div>
                     ))}
                   </div>
-                  <div style={{marginTop:'120px', paddingBottom:'80px', display:'flex', flexDirection:'column', alignItems:'center', gap:'24px'}}>
-                    <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:300, fontSize:'32px', color:'rgba(255,255,255,0.5)', textAlign:'center'}}>
-                      Explora otros proyectos
+                  {/* 2026-10-19, a pedido de Ana: link a la documentación
+                      completa de Beacon. A diferencia del bloque de cierre
+                      de Theaveling (caja verde, todo centrado, título +
+                      subtítulo + botón -- "mucho drama" según Ana), acá va
+                      sin caja ni fondo de color: un párrafo normal, alineado
+                      a la izquierda como el resto del body del case, con el
+                      botón debajo. Mismo patrón de ancho (80% + paddingLeft
+                      8px) que usa el resto del texto de este case. */}
+                  <div style={{width:'80%', paddingLeft:'8px', marginTop:'120px'}}>
+                    {/* 2026-10-20, a pedido de Ana: "más blanquito, no
+                        resaltado, pero sí más blanco" -- sube de
+                        rgba(255,255,255,0.5) (el gris apagado del resto del
+                        body) a rgba(255,255,255,0.8), sin pasar a un color
+                        de acento como el mint/verde. */}
+                    <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.8)', lineHeight:1.7}}>
+                      ¿Quieres ver el proceso completo? Documenté cada decisión, paso a paso.
                     </p>
-                    <div
-                      onClick={() => {
-                        onClose()
-                      }}
-                      style={{
-                        display:'inline-flex',
-                        alignItems:'center',
-                        cursor:'pointer',
-                        border:'1px solid rgba(255,255,255,0.3)',
-                        height:'36px',
-                        padding:'0 16px',
-                        gap:'8px',
-                        transition:'all 0.3s ease'
-                      }}
-                      onMouseEnter={e => e.currentTarget.style.borderColor='rgba(255,255,255,0.7)'}
-                      onMouseLeave={e => e.currentTarget.style.borderColor='rgba(255,255,255,0.3)'}
-                    >
-                      <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
-                        <path d="M12 7H2M2 7L6 3M2 7L6 11" stroke="#F5F7F7" strokeWidth="1.5" strokeLinecap="round"/>
-                      </svg>
-                      <span style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontSize:'13px', fontWeight:400, color:'#F5F7F7'}}>Volver a proyectos</span>
+                    <div style={{marginTop:'24px'}}>
+                      <VerProductoBtn texto="Documentación" icon={notionIcon} href="https://app.notion.com/p/Beacon-3ecf6a9b19048045bb43c323de1c0cef?source=copy_link" width="170px" hoverWidth="190px" />
+                    </div>
+                  </div>
+                  {/* 2026-10-20, a pedido de Ana: mismo patrón "Sigue viendo
+                      cómo trabajo" que ya existe del lado de Theaveling
+                      (título + subtítulo centrados sobre todo el ancho del
+                      panel, dos mini-cards debajo: Theaveling real + un
+                      recuadro vacío de reserva para un futuro proyecto que
+                      todavía no tiene). Mismo truco de ancho completo
+                      (calc(100% + 8px) + marginLeft:-8px) para centrar sobre
+                      TODO el panel, no solo el 80% del texto. */}
+                  <div style={{marginTop:'120px'}}>
+                    <div style={{width:'calc(100% + 8px)', marginLeft:'-8px', display:'flex', flexDirection:'column', alignItems:'center'}}>
+                      <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:300, fontSize:'32px', color:'#F5F7F7', lineHeight:1.3, margin:0, textAlign:'center'}}>
+                        Sigue viendo cómo trabajo.
+                      </p>
+                      <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'16px', color:'rgba(255,255,255,0.5)', lineHeight:1.5, margin:0, marginTop:'8px', maxWidth:'480px', textAlign:'center'}}>
+                        Mismo enfoque, otro contexto, otras decisiones.
+                      </p>
+                    </div>
+                    <div style={{width:'calc(100% + 8px)', marginLeft:'-8px', display:'flex', justifyContent:'center'}}>
+                      <div style={{width:'80%', display:'flex', gap:'24px', marginTop:'40px'}}>
+                        <div
+                          onMouseEnter={() => setTheavelingMiniCardHovered(true)}
+                          onMouseLeave={() => setTheavelingMiniCardHovered(false)}
+                          style={{
+                            flex:1, display:'flex', flexDirection:'column', borderRadius:'20px', overflow:'hidden', background:'#F5F2EE',
+                            transform: theavelingMiniCardHovered ? 'translateY(-6px)' : 'translateY(0)',
+                            transition:'transform 0.3s ease'
+                          }}>
+                          <img src={cardTheavelingMini} style={{width:'100%', height:'320px', objectFit:'cover', objectPosition:'top', display:'block'}}/>
+                          <div style={{padding:'24px'}}>
+                            <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontSize:'13px', fontWeight:500, color:'rgba(26,26,26,0.65)', margin:0}}>
+                              {['Investigación UX', 'Diseño de Interfaz', 'Prototipado', 'Testing'].join(' ✳ ')}
+                            </p>
+                            <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight: theavelingMiniCardHovered ? 800 : 700, fontSize:'24px', color:'#1A1A1A', marginTop:'14px', marginBottom:0, transition:'font-weight 0.2s ease'}}>Theaveling</p>
+                            <div onClick={onViewTheaveling} style={{display:'flex', alignItems:'center', gap:'8px', marginTop:'12px', cursor:'pointer'}}>
+                              <span style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontSize:'14px', lineHeight:1, fontWeight: theavelingMiniCardHovered ? 700 : 400, color:'rgba(26,26,26,0.6)', transition:'font-weight 0.2s ease'}}>Ver caso de estudio</span>
+                              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{display:'block', flexShrink:0}}>
+                                <path d="M2 7H12M12 7L8 3M12 7L8 11" stroke="rgba(26,26,26,0.6)" strokeWidth={theavelingMiniCardHovered ? "2.2" : "1.5"} strokeLinecap="round"/>
+                              </svg>
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          onMouseEnter={() => setEmptyMiniCardHovered(true)}
+                          onMouseLeave={() => setEmptyMiniCardHovered(false)}
+                          style={{
+                            flex:1, borderRadius:'20px', minHeight:'320px',
+                            border: emptyMiniCardHovered ? '2px dashed rgba(245,247,247,0.35)' : '1px dashed rgba(245,247,247,0.2)',
+                            transform: emptyMiniCardHovered ? 'translateY(-6px)' : 'translateY(0)',
+                            transition:'transform 0.3s ease, border 0.2s ease'
+                          }}/>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -2204,9 +3465,9 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
               <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.7, marginTop:'24px', width:'80%', paddingLeft:'8px'}}>
                 Organicé la experiencia alrededor de distintas puertas de entrada al descubrimiento, según lo que una persona puede querer explorar.
               </p>
-              <div ref={sec06Ref} style={{display:'flex', flexDirection:'column', alignItems:'center', gap:'20px', width:'80%', margin:'110px auto 0 auto'}}>
+              <div style={{display:'flex', flexDirection:'column', alignItems:'center', gap:'20px', width:'80%', margin:'110px auto 0 auto'}}>
                 {[
-                  {label:'TODO', items:['Curado por Theaveling', 'Más reservados', 'Más descubrimientos']},
+                  {label:'TODO', items:['Curado por Theaveling', 'Más reservados', 'Descubrimientos']},
                   {label:'ESCENA', items:['Teatro', 'Danza', 'Performance', 'Música']},
                   {label:'CULTURA', items:['Cine local', 'Cineclub', 'Charlas', 'Talleres', 'Festivales']}
                 ].map((group, i) => (
@@ -2243,16 +3504,19 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                 <VerProductoBtn texto="Benchmark" icon={notionIcon} href="#" width="140px" hoverWidth="160px" />
               </div>
               <div data-hairline='true' style={{width:'calc(100% + 8px)', height:'0.5px', marginTop:'64px', marginLeft:'-8px', backgroundColor:'rgba(255,255,255,0.12)'}}/>
-              <p ref={sec07Ref} style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'#2ECCA6', lineHeight:1.7, marginTop:'48px', width:'80%', paddingLeft:'8px'}}>
+              <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'#2ECCA6', lineHeight:1.7, marginTop:'48px', width:'80%', paddingLeft:'8px'}}>
                 Curar también es dar contexto.
               </p>
+              {/* 2026-10-09 (centésima decimocuarta vuelta), a pedido de
+               * Ana: texto actualizado -- antes eran 4 oraciones en dos
+               * párrafos, ahora 2 oraciones por párrafo, mismo estilo y
+               * resaltado en mint en la segunda parte. */}
               <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.7, marginTop:'24px', width:'80%', paddingLeft:'8px'}}>
-                Una experiencia no se vuelve relevante solo porque aparezca en la pantalla.<br/>
-                Para decidir si algo puede interesarle, una persona necesita suficiente contexto para imaginar qué va a encontrar.
+                Una experiencia no se vuelve relevante solo por aparecer en pantalla. Para reconocer si puede interesarle, una persona necesita entender qué la hace particular y qué puede esperar de ella.
               </p>
               <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.7, marginTop:'24px', width:'80%', paddingLeft:'8px'}}>
-                Por eso, curar no era solamente seleccionar experiencias.<br/>
-                <span style={{color:'#2ECCA6'}}>También implicaba decidir qué información debía acompañarlas, qué lugar debía ocupar y cuánto contexto necesitaba cada propuesta para poder ser descubierta.</span>
+                Curar no era solamente seleccionar experiencias.<br/>
+                <span style={{color:'#2ECCA6'}}>También implicaba decidir cómo presentarlas, qué información destacar y qué contexto necesitaba cada propuesta para despertar interés.</span>
               </p>
               <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:700, fontSize:'18px', color:'#F5F2EE', lineHeight:1.7, marginTop:'48px', width:'80%', paddingLeft:'8px'}}>
                 Las cards son el primer filtro.
@@ -2284,8 +3548,29 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                   </div>
                 ))}
               </div>
-              <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.7, marginTop:'90px', width:'80%', paddingLeft:'8px'}}>
-                No todas las experiencias se presentan desde la misma lógica. La card cambia según la razón por la que esa experiencia está siendo mostrada.
+              {/* 2026-10-09 (septuagésima segunda vuelta), a pedido de Ana:
+               * reordena el "aire" de este trío de párrafos. Antes: este
+               * bloque ("No todas las experiencias...") tenía 90px de
+               * separación de la galería de arriba, y "Pero la card no
+               * podía..."/"La card despierta..." (que van juntos, el
+               * segundo es la continuación directa del primero) solo
+               * 24px entre ellos -- se sentían igual de separados que
+               * cosas que no tienen relación directa. Ahora: este bloque
+               * se sube más cerca de la galería (90px -> 56px, "tirarlo
+               * para arriba"), gana más aire antes de la pareja
+               * "Pero la card.../La card despierta..." (24px -> 56px, le
+               * da más espacio a modo de respiro antes de empezar algo
+               * nuevo), y esa pareja se junta (24px -> 8px, "juntalos un
+               * poco") porque son una sola idea en dos frases. */}
+              {/* 2026-10-09 (centésima decimoquinta vuelta), a pedido de
+               * Ana: texto actualizado.
+               * 2026-10-09 (centésima decimosexta vuelta), a pedido de Ana
+               * ("esto en mint"): la lista de ejemplos ("destacar una
+               * selección editorial... nuevos descubrimientos") se resalta
+               * en mint, mismo color que el resto de los resaltados del
+               * case (#2ECCA6). */}
+              <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.7, marginTop:'56px', width:'80%', paddingLeft:'8px'}}>
+                No todas las experiencias se presentan desde la misma lógica. Cada variante responde a una intención distinta: <span style={{color:'#2ECCA6'}}>destacar una selección editorial, mostrar las experiencias más reservadas o dar visibilidad a nuevos descubrimientos.</span>
               </p>
               {/* 2026-10-08 (quincuagésima segunda vuelta), a pedido de Ana
                * ("por este texto 'Pero la card no podía contarlo todo.'
@@ -2294,11 +3579,17 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                * información debía acompañar la decisión..."). Se mueve
                * acá, justo antes de "La card despierta el interés...",
                * sin tocar su estilo. */}
-              <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:300, fontSize:'32px', color:'rgba(255,255,255,0.5)', lineHeight:1.5, marginTop:'24px', width:'80%', paddingLeft:'8px'}}>
+              {/* 2026-10-09 (septuagésima tercera vuelta), a pedido de Ana
+               * ("tirar un poquito más hacia abajo" el bloque "Pero la
+               * card.../La card despierta..."): sube el aire que lo
+               * separa del bloque de arriba (56px -> 88px). El gap entre
+               * "Pero la card..." y "La card despierta..." (8px) no se
+               * toca, siguen juntas. */}
+              <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:300, fontSize:'32px', color:'rgba(255,255,255,0.5)', lineHeight:1.5, marginTop:'88px', width:'80%', paddingLeft:'8px'}}>
                 Pero la card no podía contarlo todo.
               </p>
-              <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'#2ECCA6', lineHeight:1.7, marginTop:'24px', width:'80%', paddingLeft:'8px'}}>
-                La card despierta el interés. La experiencia necesita contexto para sostenerlo.
+              <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'#2ECCA6', lineHeight:1.7, marginTop:'8px', width:'80%', paddingLeft:'8px'}}>
+                Una card puede despertar curiosidad, pero la persona necesita más información para decidir si quiere vivir esa experiencia.
               </p>
 
               {/*
@@ -3002,7 +4293,13 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                * ("separalo un poco hacia abajo"): marginTop sube de 24px a
                * 56px — más aire respecto al mockup justo encima. */}
               <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.7, marginTop:'56px', width:'80%', paddingLeft:'8px'}}>
-                La información debía acompañar la decisión sin convertir la experiencia en una ficha interminable. <span style={{color:'#2ECCA6'}}>El objetivo era que una persona pudiera entender qué iba a encontrar, reconocer si conectaba con sus intereses y decidir si quería avanzar.</span>
+                La página de detalle amplía la información sin perder el carácter de la propuesta. Su función es ayudar a la persona a comprender qué encontrará y valorar si esa experiencia conecta con sus intereses.
+              </p>
+              {/* 2026-10-09 (centésima decimoséptima vuelta), a pedido de
+               * Ana ("esto ponlo en un párrafo a parte"): la frase en mint
+               * se saca del párrafo anterior y pasa a ser su propio <p>. */}
+              <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'#2ECCA6', lineHeight:1.7, marginTop:'24px', width:'80%', paddingLeft:'8px'}}>
+                El objetivo era que una persona pudiera entender qué iba a encontrar, reconocer si conectaba con sus intereses y decidir si quería avanzar.
               </p>
               {/* 2026-10-08 (quincuagésima sexta vuelta), a pedido de Ana
                * ("¿quién te dijo que esa monda iba ahí? Es abajo de todo lo
@@ -3020,8 +4317,8 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                * la secuencia del flujo completo (Descubrir → conocer →
                * decidir → reservar). */}
               <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.7, marginTop:'24px', width:'80%', paddingLeft:'8px'}}>
-                El descubrimiento no terminaba cuando una experiencia llamaba la atención.<br/>
-                Tenía que existir un camino claro entre encontrar algo interesante, entenderlo y convertir ese interés en una acción concreta.
+                El descubrimiento no terminaba al encontrar una experiencia interesante.<br/>
+                La persona necesitaba un camino claro para conocerla, decidir si quería vivirla y avanzar hacia la reserva.
               </p>
               {/* 2026-10-08 (quincuagésima octava vuelta), a pedido de Ana
                * ("esto ponlo normal y solo las flechas en mint"): se quita
@@ -3053,25 +4350,25 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                * todavía era de "Decisiones de producto" (ver nota de
                * arriba). `sectionHighlightCap` sube de 3 a 4 para que la
                * barra de contenido ya resalte "Diseño" al llegar acá. */}
-              <p ref={sec05Ref} style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.7, marginTop:'64px', width:'80%', paddingLeft:'8px'}}>
-                <span style={{display:'inline-block', width:'4px', height:'22px', background:'#2ECCA6', borderRadius:'2px', marginRight:'10px', verticalAlign:'middle', position:'relative', top:'-6px'}}/><span style={{fontFamily:"'Satoshi', sans-serif", fontWeight:500, fontSize:'30px', color:'#F5F7F7'}}>La interfaz tenía que sentirse como la escena que estaba intentando descubrir.</span>
-              </p>
-              {/* 2026-10-08 (sexagésima primera vuelta), a pedido de Ana:
-               * párrafo normal debajo del título con barrita. */}
-              {/* 2026-10-08 (sexagésima segunda vuelta), a pedido de Ana
-               * ("esto en mint"): el cierre de la frase se envuelve en
-               * <span> menta, mismo mecanismo usado en otros acentos de
-               * esta página. */}
-              <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.7, marginTop:'24px', width:'80%', paddingLeft:'8px'}}>
-                El lenguaje visual de Theaveling debía alejarse de la lógica de catálogo turístico y transmitir una escena cultural más <span style={{color:'#2ECCA6'}}>independiente, contemporánea y editorial.</span>
-              </p>
+              {/* 2026-10-09 (octogésima séptima vuelta), a pedido de Ana
+               * ("lo pudiéramos hacer que hiciera lo mismo... cuando este
+               * texto completo llegara al borde izquierdo superior"):
+               * este párrafo (con ref={sec05Ref}) y el siguiente ("El
+               * lenguaje visual de Theaveling...") se mueven adentro de
+               * TheaMoodbarGallery, junto con "Una identidad..." que ya
+               * vivía ahí -- los tres quedan pegados (sticky) juntos
+               * mientras sube el carrusel. sec05Ref se pasa como prop. */}
               {/* 2026-10-08 (sexagésima cuarta vuelta), a pedido de Ana:
                * "abajo de todo eso y solo en resaltado". Mismo patrón que
                * "La card despierta el interés..." (color:'#2ECCA6' entero,
                * sin la barrita ni el tamaño grande de los títulos). */}
-              <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'#2ECCA6', lineHeight:1.7, marginTop:'24px', width:'80%', paddingLeft:'8px'}}>
-                Una identidad que no compitiera con las experiencias.
-              </p>
+              {/* 2026-10-09 (octogésima sexta vuelta), a pedido de Ana
+               * ("esta subiendo y desapareciendo el texto, necesito que se
+               * quede quieto arriba y el carrusel suba"): el párrafo "Una
+               * identidad..." que iba acá se mueve adentro de
+               * TheaMoodbarGallery (ver arriba), pegado (sticky) junto con
+               * el carrusel, en vez de vivir en el flujo normal de scroll
+               * de la página como cualquier otro párrafo. */}
               {/* 2026-10-08 (sexagésima octava vuelta), a pedido de Ana
                * ("quita la img primro"): saca el moodboard de acá -- no
                * terminó de convencerle. Va a mandar las piezas por
@@ -3083,7 +4380,428 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
                * agrega separación respecto al párrafo anterior
                * (marginTop 0 -> 64px) para bajarla. Sigue pegada al
                * borde izquierdo real (marginLeft:'-8px'). */}
-              <img src={theaCortinaIzq} style={{width:'420px', marginTop:'64px', marginLeft:'-8px', display:'block'}}/>
+              {/* 2026-10-09 (septuagésima primera vuelta), a pedido de Ana
+               * ("quita la img del telon que tenemos abajo dee todo el
+               * case de thea"): saca la cortina roja de acá también --
+               * mismo criterio que el moodboard, va a rearmar las piezas
+               * por separado antes de decidir qué va en este cierre. El
+               * import y el archivo (thea-cortina-izq.webp) se dejan en
+               * assets por si se reusa. */}
+              {/* 2026-10-09 (septuagésima cuarta vuelta), a pedido de Ana:
+               * acá va el "mood bar", el cierre del case -- la galería
+               * animada con framer-motion (ver TheaMoodbarGallery arriba).
+               * Reemplaza al moodboard/cortina que se sacaron de este
+               * mismo lugar. `scrollContainerRef={contentRef}` porque el
+               * scroll real de este panel es el de contentRef, no el de
+               * la ventana. */}
+              <TheaMoodbarGallery scrollContainerRef={contentRef} sec05Ref={sec05Ref} />
+              {/* 2026-10-10 (centésima vigésima vuelta), a pedido de Ana
+               * ("no me llega a gustar, me estanqué con cómo mostrar la
+               * paleta"): grilla estática simple, sin animación ni foto de
+               * fondo. Ver TheaColorGrid arriba. */}
+              <TheaColorGrid />
+              <TheaTypographyShowcase />
+              <TheaSpacingGridShowcase />
+              <TheaDesignSystemEmbed />
+              {/* 2026-10-15, a pedido de Ana ("abajo del design system en
+               * vivo, abajo de eso"): título de "Testing" va DESPUÉS del
+               * embed de Figma, al final de todo el case -- no después del
+               * mood bar como quedó en el primer intento. `ref={sec06Ref}`
+               * -- es el índice 4 en `sectionRefs`/`sectionLabels`
+               * ("Testing" ya estaba en el array de labels, solo le
+               * faltaba contenido propio). El ref se sacó del bloque
+               * TODO/ESCENA/CULTURA (dentro de "Decisiones de producto")
+               * donde vivía prestado mientras Testing no tenía encabezado
+               * -- `sectionHighlightCap` sube de 4 a 5 para que el
+               * scroll-spy ya resalte "Testing". */}
+              {/* 2026-10-16, a pedido de Ana ("cambiemos de posicion este
+                * texto... arriba de Poner a prueba el recorrido. y con
+                * letra grande translucida"): este párrafo vivía DESPUÉS del
+                * heading sec06Ref, mismo patrón chico (18px) que el resto
+                * del case. Ahora pasa a ser el texto de apertura de la
+                * sección, arriba del heading, en formato grande y
+                * translúcido (mismo rgba(255,255,255,0.5) de siempre, pero
+                * a 42px en vez de 18px). */}
+              <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'32px', color:'rgba(255,255,255,0.5)', lineHeight:1.35, marginTop:'96px', width:'80%', paddingLeft:'8px'}}>
+                Después de diseñar la experiencia, necesitaba comprobar cómo las personas interactuaban con Theaveling:
+              </p>
+              {/* 2026-10-16, a pedido de Ana ("abajo de ese... en mint,
+                * antes de Poner a prueba el recorrido."): se separa en su
+                * propio párrafo, en menta sólido (#2ECCA6). Primero se puso
+                * grande (42px) junto con el párrafo de arriba, pero Ana
+                * pidió después ("en body normal") que este quedara en el
+                * tamaño de cuerpo normal (18px) -- el de arriba
+                * ("Después de diseñar...") se queda grande. */}
+              <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'#2ECCA6', lineHeight:1.7, marginTop:'16px', width:'80%', paddingLeft:'8px'}}>
+                si podían descubrir una propuesta de su interés, comprender la información disponible y avanzar en el proceso de reserva.
+              </p>
+              <p ref={sec06Ref} style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.7, marginTop:'24px', width:'80%', paddingLeft:'8px'}}>
+                <span style={{display:'inline-block', width:'4px', height:'22px', background:'#2ECCA6', borderRadius:'2px', marginRight:'10px', verticalAlign:'middle', position:'relative', top:'-6px'}}/><span style={{fontFamily:"'Satoshi', sans-serif", fontWeight:500, fontSize:'30px', color:'#F5F7F7'}}>Poner a prueba el recorrido.</span>
+              </p>
+              {/* 2026-10-16, a pedido de Ana ("borra esto"): se elimina el
+                * párrafo "Las pruebas de usabilidad me permitieron
+                * observar..." -- quedaba redundante con los dos párrafos
+                * nuevos de abajo. */}
+              {/* 2026-10-16, a pedido de Ana (CAMBIA/POR): reemplaza el
+                * bloque de "5 participantes..." + "La tarea" por estos
+                * dos párrafos de cuerpo normal. */}
+              <style>{`
+                @keyframes testHandSlideIn {
+                  from { transform: translateY(-43%) translateX(50px); opacity: 0; }
+                  to { transform: translateY(-43%) translateX(0); opacity: 0.92; }
+                }
+              `}</style>
+              <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.7, marginTop:'24px', width:'80%', paddingLeft:'8px'}}>
+                Probé el prototipo con cinco personas de Bogotá para observar cómo <span style={{color:'#2ECCA6'}}>descubrían experiencias artísticas y qué valor encontraban en la información presentada.</span>
+              </p>
+              {testVideoOpen && createPortal(
+                <>
+                  <div
+                    style={{position:'fixed', top:0, left:0, width:'60vw', height:'100vh', zIndex:999999, display:'flex', alignItems:'center', justifyContent:'center', background:'rgba(10,10,9,0.45)', backdropFilter:'blur(8px)', WebkitBackdropFilter:'blur(8px)', cursor:'pointer'}}
+                    onClick={closeTestVideo}
+                  >
+                    <video
+                      src={usabilityTestVideo}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      style={{width:'auto', height:'82vh', maxWidth:'90vw', borderRadius:'24px', boxShadow:'0 20px 60px rgba(0,0,0,0.5)'}}
+                      onClick={(e) => e.stopPropagation()}
+                    />
+                  </div>
+                  {testDotScreenPos && (
+                    <div
+                      style={{position:'fixed', left: testDotScreenPos.left, top: testDotScreenPos.top, width:'14px', height:'14px', zIndex:1000000, cursor:'pointer'}}
+                      onMouseEnter={() => setTestHandHover(true)}
+                      onMouseLeave={() => setTestHandHover(false)}
+                      onClick={closeTestVideo}
+                    >
+                      <span style={{width:'14px', height:'14px', borderRadius:'50%', background:'#CC1F1F', display:'block'}}/>
+                      {testHandHover && (
+                        <img src={tapHand} alt="" style={{position:'absolute', left:'4px', top:'50%', width:'130px', height:'auto', animation:'testHandSlideIn 0.4s cubic-bezier(0.4,0,0.2,1) forwards', pointerEvents:'none'}}/>
+                      )}
+                    </div>
+                  )}
+                </>,
+                document.body
+              )}
+              {/* 2026-10-16, a pedido de Ana (CAMBIA/POR + "resaltando
+                * pero no en mint"): resaltado normal = blanco/semibold,
+                * mismo patrón ya usado para "5 participantes..." más
+                * arriba (ver historial). */}
+              {/* 2026-10-16, a pedido de Ana ("el punto alinealo mas con
+                * este texto... solo bajalo, no lo hagas mas a la izquierda
+                * ni nada, ahi la ubicacion con respecto al borde izq esta
+                * perfecta"): el punto+mano+video-trigger se mueve de al
+                * lado de "Probé el prototipo..." a acá, mismo gap (64px)
+                * para que la posición horizontal quede exactamente igual
+                * (mismo width:80% + paddingLeft:8px del párrafo). */}
+              <div style={{display:'flex', alignItems:'flex-start', justifyContent:'flex-start', gap:'64px', marginTop:'24px'}}>
+                <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:500, fontSize:'18px', color:'#F5F7F7', lineHeight:1.7, margin:0, width:'80%', paddingLeft:'8px'}}>
+                  Un recorrido que pudieron completar
+                </p>
+                <div
+                  ref={testDotRef}
+                  style={{position:'relative', width:'14px', height:'14px', flexShrink:0, marginTop:'5px', cursor:'pointer', visibility: testVideoOpen ? 'hidden' : 'visible'}}
+                  onMouseEnter={() => setTestHandHover(true)}
+                  onMouseLeave={() => setTestHandHover(false)}
+                  onClick={openTestVideo}
+                >
+                  <span style={{width:'14px', height:'14px', borderRadius:'50%', background:'#CC1F1F', display:'block'}}/>
+                  {testHandHover && (
+                    <img src={tapHand} alt="" style={{position:'absolute', left:'4px', top:'50%', width:'130px', height:'auto', animation:'testHandSlideIn 0.4s cubic-bezier(0.4,0,0.2,1) forwards', pointerEvents:'none'}}/>
+                  )}
+                </div>
+              </div>
+              <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.7, marginTop:'24px', width:'80%', paddingLeft:'8px'}}>
+                Las cinco personas completaron la tarea hasta el final del recorrido de reserva. Durante las pruebas aparecieron algunas confusiones con elementos propios del demo, pero los comentarios también permitieron identificar qué aspectos de la propuesta resultaban útiles para descubrir y evaluar experiencias.
+              </p>
+              {/* 2026-10-16, a pedido de Ana ("abajo de eso esto...
+                * resaltado tambien"): mismo resaltado normal (blanco/
+                * semibold, no mint). */}
+              <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:500, fontSize:'18px', color:'#F5F7F7', lineHeight:1.7, marginTop:'120px', width:'80%', paddingLeft:'8px'}}>
+                Descubrir sin tener que buscar en tantos lugares
+              </p>
+              {/* 2026-10-16, a pedido de Ana: cita de participante (María
+                * José) -- estilo propio de Thea (sin el sistema de
+                * carrusel/quotes[] que usa Beacon más arriba, que es otro
+                * componente con su propio color #B0FF92). Comillas tal
+                * como las escribió Ana, atribución debajo en mint. */}
+              <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.8)', lineHeight:1.8, margin:'64px auto 32px auto', width:'80%', textAlign:'center'}}>
+                <span style={{color:'#2ECCA6'}}>"</span>Intuitiva, relevante. Creo que no hubiera encontrado tan fácil una experiencia así y no en un mismo lugar, buenas opciones, lo que también destaca es que tiene una ficha muy completa.<span style={{color:'#2ECCA6'}}>"</span>
+              </p>
+              {/* 2026-10-16, a pedido de Ana: foto de la participante --
+                * mismo patrón que las fotos de entrevistas más arriba
+                * (ver `card.photo`, línea ~2910: 80x80, borderRadius 50%,
+                * objectFit cover, junto al nombre). */}
+              <div style={{display:'flex', alignItems:'center', justifyContent:'flex-end', gap:'8px', margin:'12px auto 0 auto', width:'80%'}}>
+                <img src={mariaJosePhoto} alt="María José" style={{width:'80px', height:'80px', borderRadius:'50%', objectFit:'cover', flexShrink:0}}/>
+                <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'13px', color:'rgba(255,255,255,0.4)', lineHeight:1.4, margin:0, textAlign:'left'}}>
+                  — María José
+                </p>
+              </div>
+              {/* 2026-10-16, a pedido de Ana: párrafo de análisis después
+                * de la cita, mismo patrón de cuerpo normal. */}
+              <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.7, marginTop:'24px', width:'80%', paddingLeft:'8px'}}>
+                Reunir propuestas en un mismo lugar fue un aspecto valorado de la experiencia. El comentario también destaca la ficha como parte de ese valor: no se trata únicamente de encontrar opciones, <span style={{color:'#2ECCA6'}}>sino de disponer de información sobre ellas sin tener que reconstruirla a partir de distintas fuentes.</span>
+              </p>
+              {/* 2026-10-16, a pedido de Ana ("abajo de eso esto
+                * resaltado"): mismo resaltado normal (blanco/semibold,
+                * no mint). */}
+              <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:500, fontSize:'18px', color:'#F5F7F7', lineHeight:1.7, marginTop:'120px', width:'80%', paddingLeft:'8px'}}>
+                El conocimiento local influye en lo que descubres
+              </p>
+              {/* 2026-10-16, a pedido de Ana: segunda cita de participante
+                * (Juan Sebastián), mismo patrón que la de María José. */}
+              <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.8)', lineHeight:1.8, margin:'64px auto 32px auto', width:'80%', textAlign:'center'}}>
+                <span style={{color:'#2ECCA6'}}>"</span>Como no conozco mucho la ciudad lo más probable es que esta app me sirva para darme una idea de los lugares y planes a los que tengo que ir.<span style={{color:'#2ECCA6'}}>"</span>
+              </p>
+              <div style={{display:'flex', alignItems:'center', justifyContent:'flex-end', gap:'8px', margin:'12px auto 0 auto', width:'80%'}}>
+                <img src={juanSebastianPhoto} alt="Juan Sebastián" style={{width:'80px', height:'80px', borderRadius:'50%', objectFit:'cover', flexShrink:0}}/>
+                <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'13px', color:'rgba(255,255,255,0.4)', lineHeight:1.4, margin:0, textAlign:'left'}}>
+                  — Juan Sebastián
+                </p>
+              </div>
+              {/* 2026-10-16, a pedido de Ana ("y abajo"): párrafo de
+                * análisis después de la cita, mismo patrón de cuerpo
+                * normal. */}
+              <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.7, marginTop:'24px', width:'80%', paddingLeft:'8px'}}>
+                El descubrimiento también depende del conocimiento que una persona tenga de la ciudad. <span style={{color:'#2ECCA6'}}>Theaveling podía servir como punto de partida para orientarse y explorar propuestas que todavía no conoce.</span>
+              </p>
+              {/* 2026-10-16, a pedido de Ana ("abajo esto resaltado" +
+                * "ponle el punto a esa frase"): mismo resaltado normal
+                * (blanco/semibold, no mint). */}
+              <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:500, fontSize:'18px', color:'#F5F7F7', lineHeight:1.7, marginTop:'120px', width:'80%', paddingLeft:'8px'}}>
+                La información ayuda a tomar una decisión.
+              </p>
+              {/* 2026-10-16, a pedido de Ana: tercera cita de participante
+                * (María Sofía), mismo patrón que las anteriores. */}
+              <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.8)', lineHeight:1.8, margin:'64px auto 32px auto', width:'80%', textAlign:'center'}}>
+                <span style={{color:'#2ECCA6'}}>"</span>Me interesó el contenido y toda la información que brinda la ficha. Sí te hace elegir con más seguridad.<span style={{color:'#2ECCA6'}}>"</span>
+              </p>
+              <div style={{display:'flex', alignItems:'center', justifyContent:'flex-end', gap:'8px', margin:'12px auto 0 auto', width:'80%'}}>
+                <img src={mariaSofiaPhoto} alt="María Sofía" style={{width:'80px', height:'80px', borderRadius:'50%', objectFit:'cover', flexShrink:0}}/>
+                <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'13px', color:'rgba(255,255,255,0.4)', lineHeight:1.4, margin:0, textAlign:'left'}}>
+                  — María Sofía
+                </p>
+              </div>
+              {/* 2026-10-16, a pedido de Ana ("debajo de la cita de maria
+                * sofia pon..."): párrafo de análisis después de la cita,
+                * mismo patrón de cuerpo normal. */}
+              <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.7, marginTop:'24px', width:'80%', paddingLeft:'8px'}}>
+                La ficha no solo amplía la información de una experiencia: también ayuda a evaluarla. Este comentario refuerza la importancia de ofrecer <span style={{color:'#2ECCA6'}}>contexto suficiente para que una persona pueda decidir si una propuesta le interesa antes de reservar.</span>
+              </p>
+              {/* 2026-10-16, a pedido de Ana ("abajo esto resaltado"):
+                * mismo resaltado normal (blanco/semibold, no mint). */}
+              {/* 2026-10-18, a pedido de Ana ("subelo un poquito mas"):
+                * marginTop 120px -> 96px, acerca el bloque de "¿Qué me
+                * dejaron las pruebas?" al párrafo de arriba. */}
+              <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:500, fontSize:'18px', color:'#F5F7F7', lineHeight:1.7, marginTop:'96px', width:'80%', paddingLeft:'8px'}}>
+                ¿Qué me dejaron las pruebas?
+              </p>
+              {/* 2026-10-16, a pedido de Ana ("y abajo"): cierre de la
+                * sección de testing, dos párrafos de cuerpo normal. */}
+              <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.7, marginTop:'24px', width:'80%', paddingLeft:'8px'}}>
+                Las pruebas reforzaron dos aspectos de la propuesta: facilitar el descubrimiento mediante una oferta reunida y ofrecer información suficiente para evaluar cada experiencia.
+              </p>
+              <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.7, marginTop:'24px', width:'80%', paddingLeft:'8px'}}>
+                El recorrido de reserva también pudo completarse con el prototipo, aunque esto no significa que todas las decisiones de diseño estén validadas ni que el comportamiento sea equivalente al de un producto en funcionamiento.
+              </p>
+              {/* 2026-10-16, a pedido de Ana ("abajo de todo lo que te
+                * dije ahora pones un boton notion"): mismo componente y
+                * estilo que "Userflow"/"Contexto de entrevistas" más
+                * arriba, cierre de toda la sección de Testing. */}
+              <div style={{marginTop:'40px', width:'80%', paddingLeft:'8px', display:'flex'}}>
+                <VerProductoBtn texto="Registro de pruebas" icon={notionIcon} href="https://app.notion.com/p/Registro-de-pruebas-de-usabilidad-3faf6a9b19048064ab16f1005f27e11b?source=copy_link" width="230px" hoverWidth="250px" />
+              </div>
+              <p ref={sec07Ref} style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:300, fontSize:'32px', color:'rgba(255,255,255,0.5)', lineHeight:1.5, marginTop:'56px', width:'80%', paddingLeft:'8px'}}>
+                ¿Qué cambió en mi manera de entender y abordar el problema después de trabajar en Theaveling?
+              </p>
+              <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.7, marginTop:'24px', width:'80%', paddingLeft:'8px'}}>
+                Cada decisión de diseño parte de una pregunta, pero no todas las respuestas aparecen al principio. A lo largo de Theaveling, la investigación, las decisiones de producto y las pruebas fueron cambiando mi manera de entender el problema y de abordar sus soluciones.
+              </p>
+              <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'#2ECCA6', lineHeight:1.7, marginTop:'24px', width:'80%', paddingLeft:'8px'}}>
+                Estos son algunos de los aprendizajes que me llevo del proyecto.
+              </p>
+              {/* 2026-10-18, a pedido de Ana: tratamiento propio para los
+                * tres aprendizajes en vez de párrafo corrido — número
+                * grande en mint (mismo patrón que el cierre de Beacon),
+                * tarjeta con stroke sin fondo, línea vertical conectando
+                * los tres números, scroll-reveal por bloque (mismo patrón
+                * IntersectionObserver que diagramVisible/checkVisible) y
+                * una frase corta resaltada en mint por aprendizaje. */}
+              {[
+                {
+                  num: '01',
+                  titulo: 'Diseñar no siempre significa añadir más',
+                  ref: learn1Ref,
+                  visible: learn1Visible,
+                  pre: 'Al principio, el reto podía parecer una cuestión de reunir experiencias culturales en una plataforma. La investigación me ayudó a entender que ',
+                  mint: 'el valor no estaba en mostrarlo todo, sino en facilitar el descubrimiento de propuestas que podían resultar relevantes.',
+                  p2: 'Aprendí que diseñar también implica decidir qué mostrar, cómo organizarlo y qué merece recibir atención.'
+                },
+                {
+                  num: '02',
+                  titulo: 'La información también forma parte de la experiencia',
+                  ref: learn2Ref,
+                  visible: learn2Visible,
+                  pre: 'Descubrir una propuesta despierta interés, pero comprenderla permite valorar si realmente vale la pena. Por eso, ',
+                  mint: 'la forma de presentar una experiencia, el contexto que la acompaña y la información disponible son parte de la experiencia de usuario, no elementos secundarios de la interfaz.',
+                  p2: 'En Theaveling, esto se tradujo en una relación entre las tarjetas, las fichas de detalle y el recorrido hacia la reserva.'
+                },
+                {
+                  num: '03',
+                  titulo: 'Una interfaz coherente necesita algo más que buenas decisiones visuales',
+                  ref: learn3Ref,
+                  visible: learn3Visible,
+                  pre: 'Construir una identidad visual fue solo una parte del trabajo. También tuve que traducirla en reglas de tipografía, espaciado, composición y componentes reutilizables, ',
+                  mint: 'para que las decisiones mantuvieran su sentido a lo largo del producto.',
+                  p2: 'Las pruebas me recordaron, además, que diseñar un recorrido desde mi propia perspectiva no basta: es necesario observar cómo lo interpretan otras personas y distinguir entre las dificultades del prototipo y las de la experiencia diseñada.'
+                }
+              ].map((item, i) => (
+                <div key={i} ref={item.ref} style={{
+                  display: 'flex',
+                  gap: '20px',
+                  width: '80%',
+                  paddingLeft: '8px',
+                  marginTop: i === 0 ? '80px' : '0',
+                  opacity: item.visible ? 1 : 0,
+                  transform: item.visible ? 'translateY(0)' : 'translateY(28px)',
+                  transition: 'opacity 0.7s ease, transform 0.7s ease'
+                }}>
+                  <div style={{display:'flex', flexDirection:'column', alignItems:'center', width:'48px', flexShrink:0}}>
+                    <span style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:700, fontSize:'36px', color:'#2ECCA6', lineHeight:1}}>{item.num}</span>
+                    {i < 2 && (
+                      <div style={{width:'1px', flex:1, marginTop:'14px', background:'linear-gradient(to bottom, rgba(46,204,166,0.35), rgba(46,204,166,0.08))'}}/>
+                    )}
+                  </div>
+                  <div style={{flex:1, display:'flex', flexDirection:'column'}}>
+                    <div style={{border:'1px solid rgba(255,255,255,0.15)', borderRadius:'16px', padding:'28px 32px'}}>
+                      <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:500, fontSize:'18px', color:'#F5F7F7', lineHeight:1.5, margin:0}}>
+                        {item.titulo}
+                      </p>
+                      <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.7, marginTop:'16px'}}>
+                        {item.pre}<span style={{color:'#2ECCA6'}}>{item.mint}</span>
+                      </p>
+                      <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.7, marginTop:'16px'}}>
+                        {item.p2}
+                      </p>
+                    </div>
+                    {i < 2 && <div style={{height:'48px'}}/>}
+                  </div>
+                </div>
+              ))}
+              <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:300, fontSize:'32px', color:'rgba(255,255,255,0.5)', lineHeight:1.5, marginTop:'80px', width:'80%', paddingLeft:'8px'}}>
+                Diseñar con sentido es conectar las decisiones.
+              </p>
+              <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.5)', lineHeight:1.7, marginTop:'24px', width:'80%', paddingLeft:'8px'}}>
+                En Theaveling, aprendí a mirar más allá de las pantallas: entender qué necesitaba resolver el producto, decidir cómo debía funcionar y cuidar cómo se expresaba cada decisión en la interfaz.
+              </p>
+              <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'#2ECCA6', lineHeight:1.7, marginTop:'24px', width:'80%', paddingLeft:'8px'}}>
+                Porque el detalle importa, pero importa todavía más cuando responde a algo.
+              </p>
+              {/* 2026-10-18, a pedido de Ana: bloque de cierre de todo el
+                * case, lado a lado (sin margen de los lados en el panel) --
+                * mismo truco de ancho completo que los data-hairline de
+                * arriba (calc(100% + 8px) + marginLeft:-8px). Fondo Thea
+                * Green (#112C2C), el verde MÁS CLARO del design system (el
+                * fondo del panel es Thea Deep, rgb(1,20,20), más oscuro --
+                * ver la nota junto al color={...} de ProjectTransition más
+                * abajo), para que este bloque se note como cierre. */}
+              {/* 2026-10-20, a pedido de Ana: se quita la caja verde clara
+                  (#112C2C, fondo + padding grande + todo centrado) -- mismo
+                  cambio que se hizo del lado de Beacon: un párrafo normal,
+                  alineado a la izquierda como el resto del body del case
+                  (ancho 80% + paddingLeft 8px), con el botón debajo. Sin
+                  caja, sin centrado. */}
+              <div ref={closingCtaRef} style={{
+                width:'80%',
+                paddingLeft:'8px',
+                marginTop:'96px',
+                opacity: closingCtaVisible ? 1 : 0,
+                transform: closingCtaVisible ? 'translateY(0)' : 'translateY(28px)',
+                transition:'opacity 0.7s ease, transform 0.7s ease'
+              }}>
+                <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'rgba(255,255,255,0.8)', lineHeight:1.7}}>
+                  El proceso completo, paso a paso, desde la primera entrevista hasta la última decisión de interfaz.
+                </p>
+                <div style={{marginTop:'24px'}}>
+                  <VerProductoBtn texto="Documentación" icon={notionIcon} href="https://app.notion.com/p/Theaveling-3ecf6a9b19048018b9a9dc3c7eead8e3" width="170px" hoverWidth="190px" />
+                </div>
+              </div>
+              {/* 2026-10-19, a pedido de Ana: ya cerrado el bloque verde de
+                * cierre, de vuelta en el fondo Thea Deep del panel, una
+                * invitación a seguir explorando el portfolio. Card de
+                * Beacon resumida a la izq (misma imagen/etiquetas que usa
+                * el panel blanco del case de Beacon, botón "Ver case" que
+                * navega internamente -- ver onViewBeacon más abajo, no abre
+                * pestaña nueva) y, por ahora, solo el recuadro vacío a la
+                * der como reserva para un próximo proyecto. */}
+              <div style={{marginTop:'120px'}}>
+                {/* 2026-10-19, a pedido de Ana ("centralo bien, no quedo
+                  * centrado" / "centra las cards tambien"): tanto el
+                  * título/subtítulo como la fila de cards necesitan ir
+                  * centrados sobre TODO el ancho del panel (igual que
+                  * "Explora el trabajo completo" arriba), no solo dentro
+                  * del 80% donde vive el resto del contenido -- por eso
+                  * ambos bloques usan el mismo truco de ancho completo
+                  * (calc(100% + 8px) + marginLeft:-8px) y centran su
+                  * contenido con justifyContent/alignItems:'center', con
+                  * las cards contenidas en un ancho de 80% del panel para
+                  * no quedar pegadas a los bordes. */}
+                <div style={{width:'calc(100% + 8px)', marginLeft:'-8px', display:'flex', flexDirection:'column', alignItems:'center'}}>
+                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:300, fontSize:'32px', color:'#FFFFFF', lineHeight:1.3, margin:0, textAlign:'center'}}>
+                    Sigue viendo cómo trabajo.
+                  </p>
+                  <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'16px', color:'rgba(245,242,238,0.5)', lineHeight:1.5, margin:0, marginTop:'8px', maxWidth:'480px', textAlign:'center'}}>
+                    Mismo enfoque, otro contexto, otras decisiones.
+                  </p>
+                </div>
+                {/* 2026-10-19, a pedido de Ana ("ten en cuenta el formato de
+                  * card de la ref"): formato tipo card de referencia que
+                  * mandó (imagen grande con esquinas redondeadas, etiquetas
+                  * en pills con borde fino, título en bold, y abajo un link
+                  * de texto + flecha -- "no utilices el boton del
+                  * rectangulo con el circulo y flecha aca, solo pongamos
+                  * una flecha con el texto dentro de la card", así que NO
+                  * se usa VerProductoBtn acá, solo texto + svg de flecha). */}
+                <div style={{width:'calc(100% + 8px)', marginLeft:'-8px', display:'flex', justifyContent:'center'}}>
+                  <div style={{width:'80%', display:'flex', gap:'24px', marginTop:'40px'}}>
+                    <div
+                      onMouseEnter={() => setBeaconMiniCardHovered(true)}
+                      onMouseLeave={() => setBeaconMiniCardHovered(false)}
+                      style={{
+                        flex:1, display:'flex', flexDirection:'column', borderRadius:'20px', overflow:'hidden', background:'#F5F2EE',
+                        transform: beaconMiniCardHovered ? 'translateY(-6px)' : 'translateY(0)',
+                        transition:'transform 0.3s ease'
+                      }}>
+                      <img src={cardBeaconMini} style={{width:'100%', height:'320px', objectFit:'cover', objectPosition:'top', display:'block'}}/>
+                      <div style={{padding:'24px'}}>
+                        <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontSize:'13px', fontWeight:500, color:'rgba(26,26,26,0.65)', margin:0}}>
+                          {['Channel Sales', 'B2B', 'Pipeline', 'Partners', 'Visibilidad'].join(' ✳ ')}
+                        </p>
+                        <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight: beaconMiniCardHovered ? 800 : 700, fontSize:'24px', color:'#1A1A1A', marginTop:'14px', marginBottom:0, transition:'font-weight 0.2s ease'}}>Beacon</p>
+                        <div onClick={onViewBeacon} style={{display:'flex', alignItems:'center', gap:'8px', marginTop:'12px', cursor:'pointer'}}>
+                          <span style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontSize:'14px', lineHeight:1, fontWeight: beaconMiniCardHovered ? 700 : 400, color:'rgba(26,26,26,0.6)', transition:'font-weight 0.2s ease'}}>Ver caso de estudio</span>
+                          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{display:'block', flexShrink:0}}>
+                            <path d="M2 7H12M12 7L8 3M12 7L8 11" stroke="rgba(26,26,26,0.6)" strokeWidth={beaconMiniCardHovered ? "2.2" : "1.5"} strokeLinecap="round"/>
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      onMouseEnter={() => setEmptyMiniCardHovered(true)}
+                      onMouseLeave={() => setEmptyMiniCardHovered(false)}
+                      style={{
+                        flex:1, borderRadius:'20px', minHeight:'320px',
+                        border: emptyMiniCardHovered ? '2px dashed rgba(245,242,238,0.35)' : '1px dashed rgba(245,242,238,0.2)',
+                        transform: emptyMiniCardHovered ? 'translateY(-6px)' : 'translateY(0)',
+                        transition:'transform 0.3s ease, border 0.2s ease'
+                      }}/>
+                  </div>
+                </div>
+              </div>
             </>
           )}
         </div>
@@ -3202,7 +4920,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
         }}>
           {(projectName === 'Beacon' ?
             ['Channel Sales', 'B2B', 'Pipeline', 'Partners', 'Visibilidad'] :
-            ['Arte', 'Teatro', 'Viaje', 'Cultura', 'Conexión humana']
+            ['Descubrimiento', 'Curaduría', 'Cultura independiente', 'Escena local']
           ).map((tag, i) => (
             <div key={i} style={{overflow:'hidden'}}>
               <p style={{
@@ -3220,7 +4938,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
             </div>
           ))}
         </div>
-        {projectName === 'Beacon' && (
+        {(projectName === 'Beacon' || projectName === 'Theaveling') && (
           <div style={{
             position: 'absolute',
             bottom: '40px',
@@ -3229,7 +4947,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
             {[
               {text:'Completado', size:'12px', weight:300, color:'#888'},
               {text:'Product Designer', size:'14px', weight:600, color:'#1A1A1A'},
-              {text:'3 meses · 2026', size:'13px', weight:300, color:'#1A1A1A'}
+              {text: projectName === 'Beacon' ? '3 meses · 2026' : '4 meses · 2026', size:'13px', weight:300, color:'#1A1A1A'}
             ].map((item, i) => (
               <div key={i} style={{overflow:'hidden'}}>
                 <p style={{
@@ -3255,7 +4973,10 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
             transform: closing ? 'translateY(20px)' : 'translateY(0)',
             transition: 'opacity 0.4s ease, transform 0.4s ease'
           }}>
-            <VerProductoBtn texto="Ver producto" />
+            {/* 2026-10-20, a pedido de Ana: link real de Beacon (das-b2b.vercel.app)
+                para el panel blanco derecho del case -- antes quedaba undefined
+                (sin botón funcional) para cualquier proyecto que no fuera Theaveling. */}
+            <VerProductoBtn texto="Ver la app en vivo" width="200px" hoverWidth="220px" href={projectName === 'Theaveling' ? 'https://theaveling.vercel.app' : 'https://das-b2b.vercel.app'} />
           </div>
         )}
       </div>
@@ -3304,6 +5025,17 @@ function ProjectTransition({ color, onClose, projectName, projectColor }) {
 }
 
 export default function Home() {
+  // 2026-10-20, a pedido de Ana: en vez de intentar un rediseño responsive
+  // completo de todo el portfolio (una sola página gigante con estilos
+  // inline pensados para desktop), se muestra una pantalla de "abre esto en
+  // desktop" por debajo de 768px de ancho. Ese corte deja pasar tablets en
+  // vertical (iPad = 768px) y laptops pequeñas, y solo tapa celulares.
+  const [isMobileGate, setIsMobileGate] = React.useState(() => typeof window !== 'undefined' && window.innerWidth < 768)
+  React.useEffect(() => {
+    const checkWidth = () => setIsMobileGate(window.innerWidth < 768)
+    window.addEventListener('resize', checkWidth)
+    return () => window.removeEventListener('resize', checkWidth)
+  }, [])
   const [activeLink, setActiveLink] = React.useState('Intro')
   const [projectTransition, setProjectTransition] = React.useState(null)
   const [scrolled, setScrolled] = React.useState(false)
@@ -3450,6 +5182,9 @@ export default function Home() {
   const conectemosProgressRef = React.useRef(0)
   const conectemosAutoRef = React.useRef(false)
   const [emailCopied, setEmailCopied] = React.useState(false)
+  // Botón de copiar link en la pantalla de "abre esto en desktop" (ver
+  // isMobileGate): mismo patrón de copyEmail/emailCopied más abajo.
+  const [gateLinkCopied, setGateLinkCopied] = React.useState(false)
 
   React.useEffect(() => {
     // El favicon NO es hijo del panel negro: es un elemento aparte, fijo en
@@ -3819,6 +5554,39 @@ export default function Home() {
     }
   }
 
+  // Copia el link del portfolio en la pantalla de "abre esto en desktop"
+  // (isMobileGate) -- mismo patrón de copyEmail de arriba.
+  const copyGateLink = () => {
+    const text = window.location.href
+    const showCopied = () => {
+      setGateLinkCopied(true)
+      setTimeout(() => setGateLinkCopied(false), 1500)
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(showCopied).catch(() => {
+        const ta = document.createElement('textarea')
+        ta.value = text
+        ta.style.position = 'fixed'
+        ta.style.opacity = '0'
+        document.body.appendChild(ta)
+        ta.select()
+        try { document.execCommand('copy') } catch (err) {}
+        document.body.removeChild(ta)
+        showCopied()
+      })
+    } else {
+      const ta = document.createElement('textarea')
+      ta.value = text
+      ta.style.position = 'fixed'
+      ta.style.opacity = '0'
+      document.body.appendChild(ta)
+      ta.select()
+      try { document.execCommand('copy') } catch (err) {}
+      document.body.removeChild(ta)
+      showCopied()
+    }
+  }
+
   const typeProjectsText = () => {
     if (typingIntervalRef.current) {
       clearTimeout(typingIntervalRef.current)
@@ -4121,6 +5889,75 @@ export default function Home() {
     window.addEventListener('wheel', handleWheel, { passive: false })
     return () => window.removeEventListener('wheel', handleWheel)
   }, [phase])
+
+  // 2026-10-20, a pedido de Ana: por debajo de 768px (celulares), en vez de
+  // montar todo el portfolio (pensado para desktop, sin ningún media query),
+  // se muestra esta pantalla -- mismo video del footer (conectemos-koi.mp4)
+  // de fondo a toda pantalla, velo oscuro encima para contraste, y una card
+  // brutalista centrada (mismo estilo que el nav/los botones: fondo crema,
+  // borde negro 1px, sombra dura offset) con el mensaje + un botón de copiar
+  // link para que quien abrió desde el celular lo tenga a la mano y lo abra
+  // después en su compu.
+  if (isMobileGate) {
+    return (
+      <div style={{position:'fixed', inset:0, width:'100vw', height:'100vh', background:'#000', overflow:'hidden'}}>
+        <video
+          src="/videos/conectemos-koi.mp4"
+          autoPlay loop muted playsInline
+          style={{position:'absolute', inset:0, width:'100%', height:'100%', objectFit:'cover'}}
+        />
+        <div style={{position:'absolute', inset:0, background:'rgba(10,10,10,0.45)'}}/>
+        <div style={{position:'absolute', inset:0, display:'flex', alignItems:'center', justifyContent:'center', padding:'24px'}}>
+          <div style={{
+            background:'#F5F2EE',
+            border:'1px solid #1A1A1A',
+            boxShadow:'2px 2px 0px #1A1A1A',
+            padding:'36px 28px',
+            maxWidth:'320px',
+            textAlign:'center'
+          }}>
+            <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:600, fontSize:'20px', color:'#1A1A1A', lineHeight:1.4, margin:0}}>
+              Hecho para pantallas grandes.
+            </p>
+            <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:400, fontSize:'15px', color:'#1A1A1A', lineHeight:1.5, margin:'12px 0 0'}}>
+              Vale la pena abrir este link desde tu compu.
+            </p>
+            <div style={{display:'flex', alignItems:'center', justifyContent:'center', gap:'8px', marginTop:'24px'}}>
+              <button
+                onClick={copyGateLink}
+                aria-label={gateLinkCopied ? 'Link copiado' : 'Copiar link'}
+                title={gateLinkCopied ? 'Copiado' : 'Copiar link'}
+                style={{
+                  background:'#F5F2EE',
+                  border:'none',
+                  boxShadow:'inset 0 0 0 1px #1A1A1A',
+                  borderRadius:'50%',
+                  width:'34px', height:'34px',
+                  flexShrink:0,
+                  display:'flex', alignItems:'center', justifyContent:'center',
+                  cursor:'pointer'
+                }}
+              >
+                {gateLinkCopied ? (
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1A1A1A" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                ) : (
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#1A1A1A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2"/>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                  </svg>
+                )}
+              </button>
+              <span style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:400, fontSize:'13px', letterSpacing:'0.02em', color:'#1A1A1A'}}>
+                {gateLinkCopied ? 'Copiado' : 'Copiar link'}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div style={{background:'#F5F2EE', minHeight:'100vh', color:'#1A1A1A', fontFamily:'sans-serif', paddingTop:'200px', overflowY: phase === 'projects' ? 'auto' : 'hidden', overflowX:'hidden', height: phase === 'projects' ? 'auto' : '100vh'}}>
@@ -4810,7 +6647,9 @@ export default function Home() {
                     top:'-52px',
                     marginLeft:'-8px'
                   }}>
-                    <VerProductoBtn />
+                    {/* 2026-10-20, a pedido de Ana: link real de la tarjeta de
+                        Beacon en la home. */}
+                    <VerProductoBtn texto="Ver la app en vivo" width="200px" hoverWidth="220px" href="https://das-b2b.vercel.app" />
                   </div>
                 </div>
               )}
@@ -4819,7 +6658,7 @@ export default function Home() {
               setTheaHovered(true)
               setTheaTyping('')
               let i = 0
-              const text = 'Un turista conoce una ciudad\na través de algoritmos.\nUn local,\na través de experiencias.'
+              const text = 'La escena cultural está ahí.\nLo difícil es saber\ndónde encontrarla.'
               theaIntervalRef.current = setInterval(() => {
                 if (i < text.length) {
                   setTheaTyping(text.slice(0, i + 1))
@@ -4922,7 +6761,7 @@ export default function Home() {
                     top:'-52px',
                     marginLeft:'-8px'
                   }}>
-                    <VerProductoBtn />
+                    <VerProductoBtn texto="Ver la app en vivo" width="200px" hoverWidth="220px" />
                   </div>
                 </div>
               )}
@@ -4956,6 +6795,8 @@ export default function Home() {
             setShowBeaconT(true)
             setShowTheaT(true)
           }}
+          onViewBeacon={() => setProjectTransition('beacon')}
+          onViewTheaveling={() => setProjectTransition('theaveling')}
         />
       )}
 
