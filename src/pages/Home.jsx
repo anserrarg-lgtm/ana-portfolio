@@ -5912,44 +5912,50 @@ export default function Home() {
             background:'#F5F2EE',
             border:'1px solid #1A1A1A',
             boxShadow:'2px 2px 0px #1A1A1A',
-            padding:'36px 28px',
-            maxWidth:'320px',
+            padding:'64px 28px',
+            width:'280px',
+            minHeight:'360px',
+            display:'flex',
+            flexDirection:'column',
+            alignItems:'center',
+            justifyContent:'center',
             textAlign:'center'
           }}>
             <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:600, fontSize:'20px', color:'#1A1A1A', lineHeight:1.4, margin:0}}>
               Hecho para pantallas grandes.
             </p>
-            <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:400, fontSize:'15px', color:'#1A1A1A', lineHeight:1.5, margin:'12px 0 0'}}>
+            <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:400, fontSize:'15px', color:'#1A1A1A', lineHeight:1.5, margin:'16px 0 0'}}>
               Vale la pena abrir este link desde tu compu.
             </p>
-            <div style={{display:'flex', alignItems:'center', justifyContent:'center', gap:'8px', marginTop:'24px'}}>
+            <div style={{display:'flex', alignItems:'center', justifyContent:'center', gap:'8px', marginTop:'40px'}}>
               <button
                 onClick={copyGateLink}
                 aria-label={gateLinkCopied ? 'Link copiado' : 'Copiar link'}
                 title={gateLinkCopied ? 'Copiado' : 'Copiar link'}
                 style={{
-                  background:'#F5F2EE',
+                  background:'transparent',
                   border:'none',
-                  boxShadow:'inset 0 0 0 1px #1A1A1A',
-                  borderRadius:'50%',
-                  width:'34px', height:'34px',
+                  padding:0,
                   flexShrink:0,
                   display:'flex', alignItems:'center', justifyContent:'center',
                   cursor:'pointer'
                 }}
               >
                 {gateLinkCopied ? (
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1A1A1A" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1A1A1A" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                     <polyline points="20 6 9 17 4 12"/>
                   </svg>
                 ) : (
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#1A1A1A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#1A1A1A" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                     <rect x="9" y="9" width="13" height="13" rx="2"/>
                     <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
                   </svg>
                 )}
               </button>
-              <span style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:400, fontSize:'13px', letterSpacing:'0.02em', color:'#1A1A1A'}}>
+              <span
+                onClick={copyGateLink}
+                style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:400, fontSize:'13px', letterSpacing:'0.02em', color:'#1A1A1A', textDecoration:'underline', cursor:'pointer'}}
+              >
                 {gateLinkCopied ? 'Copiado' : 'Copiar link'}
               </span>
             </div>
