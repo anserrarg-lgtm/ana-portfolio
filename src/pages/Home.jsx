@@ -41,6 +41,7 @@ import cardBeacon from '../assets/card-beacon.webp'
 import cardBeaconMini from '../assets/card-beacon-mini.webp'
 import cardTheaveling from '../assets/card-theaveling.webp'
 import cardTheavelingMini from '../assets/card-theaveling-mini.webp'
+import cardHuella from '../assets/card-huella.webp'
 import procesoBea1 from '../assets/proceso-beacon-1.webp'
 import mockupBeacon from '../assets/mockup-beacon.webp'
 import partnerstack from '../assets/partnerstack.webp'
@@ -157,6 +158,26 @@ import theaChorusLineScroll from '../assets/thea-chorusline-scroll.jpg'
 // mandó Ana), procesado para dejar la pantalla transparente — ver la nota
 // grande junto a `thea-chorusline-scroll.jpg` más abajo en este archivo.
 import theaIphoneBezel from '../assets/thea-iphone-bezel.png'
+// 2026-11-11, a pedido de Ana: material real para "00.1. Huella, en
+// imágenes" -- las 3 capturas son pantallas REALES exportadas de Figma
+// (no inventadas), los 5 frames de logo son los frames reales de la
+// animación de construcción del isotipo (Garra 1/2/3, Hocico, Palabra,
+// también de Figma), y el comparativo de contraste es un pantallazo real
+// de la herramienta WebAIM Contrast Checker (no un gráfico armado a mano).
+import huellaScreenHome from '../assets/huella-screen-home.png'
+import huellaScreenReporteFotos from '../assets/huella-screen-reporte-fotos.png'
+import huellaScreenNotificaciones from '../assets/huella-screen-notificaciones.png'
+import huellaLogo1 from '../assets/huella-logo-1.png'
+import huellaLogo2 from '../assets/huella-logo-2.png'
+import huellaLogo3 from '../assets/huella-logo-3.png'
+import huellaLogo4 from '../assets/huella-logo-4.png'
+import huellaLogo5 from '../assets/huella-logo-5.png'
+import huellaContrasteAntes from '../assets/huella-contraste-antes.png'
+import huellaContrasteAhora from '../assets/huella-contraste-ahora.png'
+import huellaAnaAvatar from '../assets/huella-ana-avatar.png'
+import huellaWhatsapp1 from '../assets/huella-whatsapp-1.png'
+import huellaWhatsapp2 from '../assets/huella-whatsapp-2.png'
+import huellaWhatsapp3 from '../assets/huella-whatsapp-3.png'
 
 // 2026-10-09, a pedido de Ana: mood bar del cierre del case de Thea --
 // galería horizontal animada con scroll (framer-motion), basada en el
@@ -587,18 +608,27 @@ const SequentialTyping = React.forwardRef(({ onComplete, keepCursorVisible, hide
   )
 })
 
-function CarouselDots({ count, activeIndex, onChange, duration = 14000, color = '#2ECCA6' }) {
+function CarouselDots({ count, activeIndex, onChange, duration = 14000, color = '#2ECCA6', active = true }) {
   const [autoPlay, setAutoPlay] = React.useState(true)
 
+  // 2026-10-20, a pedido de Ana: el auto-avance arrancaba apenas se abría
+  // el case (este componente monta con el resto del panel), sin importar
+  // si el usuario ya había llegado hasta esta sección o seguía leyendo
+  // más arriba. `active` (pasado por el padre, en true solo cuando la
+  // sección de citas entra al viewport) ahora bloquea el timer hasta ese
+  // momento -- mientras `active` es false, el efecto no crea ningún
+  // setTimeout, así que no hay cuenta regresiva corriendo "a escondidas".
+  // El click manual (handleClick) sigue desactivando el auto-avance para
+  // siempre, igual que antes.
   React.useEffect(() => {
-    if (!autoPlay) return
+    if (!autoPlay || !active) return
     const timer = setTimeout(() => {
       const next = (activeIndex + 1) % count
       onChange(next)
       if (next === 0) setAutoPlay(false)
     }, duration)
     return () => clearTimeout(timer)
-  }, [autoPlay, activeIndex, count, duration, onChange])
+  }, [autoPlay, active, activeIndex, count, duration, onChange])
 
   const handleClick = (i) => {
     setAutoPlay(false)
@@ -625,7 +655,7 @@ function CarouselDots({ count, activeIndex, onChange, duration = 14000, color = 
               transition:'width 0.3s ease'
             }}
           >
-            {isActive && autoPlay && (
+            {isActive && autoPlay && active && (
               <div
                 key={`progress-${activeIndex}`}
                 style={{position:'absolute', top:0, left:0, bottom:0, width:'0%', background:color, borderRadius:'4px', transition:`width ${duration}ms linear`}}
@@ -1699,6 +1729,300 @@ const InsightTypingText = React.memo(React.forwardRef(function InsightTypingText
   )
 }))
 
+// 2026-11-11, a pedido de Ana: mockup de iPhone para "00.1. Huella, en
+// imágenes" -- reutiliza el mecanismo real del bisel de Theaveling (ver
+// thea-iphone-bezel.png y el bloque "A Chorus Line" más abajo: mismo
+// marco, mismo % de hueco de pantalla left:8.95%/right:9.09%/top:4.22%/
+// bottom:4.26%) pero SIN su parte de scroll interno ni la barra de estado
+// dibujada a mano -- acá cada pantalla es una captura ESTÁTICA real de
+// Figma que ya trae su propia barra de estado horneada en la imagen, así
+// que no hace falta reconstruir nada de eso.
+function HuellaPhoneMockup({ src, scale = 0.27 }) {
+  const w = 380 * scale
+  const h = 748 * scale
+  return (
+    <div style={{ position: 'relative', width: `${w}px`, height: `${h}px`, flexShrink: 0 }}>
+      <div style={{
+        position: 'absolute', left: '8.95%', right: '9.09%', top: '4.22%', bottom: '4.26%',
+        borderRadius: `${26 * scale}px`, overflow: 'hidden', background: '#F1F1F1'
+      }}>
+        <img src={src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top center', display: 'block' }} />
+      </div>
+      <img
+        src={theaIphoneBezel}
+        alt=""
+        aria-hidden="true"
+        style={{
+          position: 'absolute', inset: 0, width: '100%', height: '100%',
+          pointerEvents: 'none', zIndex: 5,
+          filter: 'drop-shadow(0 8px 20px rgba(0,0,0,0.4))'
+        }}
+      />
+    </div>
+  )
+}
+
+// 2026-11-11, a pedido de Ana: el cuarto "slot" de la cuadrícula 2x2 -- en
+// vez de una pantalla estática, hace un crossfade entre los 5 frames
+// reales de la animación de construcción del isotipo (Garra 1 -> Garra 2
+// -> Garra 3 -> Hocico -> Palabra). Se queda quieto en el frame 0 hasta
+// que `frameIndex` avanza -- eso lo controla quien use este componente,
+// disparado por scroll (ver huellaLeftPanelRef / triggerHuellaLogoAnim).
+function HuellaLogoMockup({ frames, frameIndex, scale = 0.27 }) {
+  const w = 380 * scale
+  const h = 748 * scale
+  return (
+    <div style={{ position: 'relative', width: `${w}px`, height: `${h}px`, flexShrink: 0 }}>
+      <div style={{
+        position: 'absolute', left: '8.95%', right: '9.09%', top: '4.22%', bottom: '4.26%',
+        borderRadius: `${26 * scale}px`, overflow: 'hidden', background: '#F1F1F1',
+        display: 'flex', alignItems: 'center', justifyContent: 'center'
+      }}>
+        {frames.map((f, i) => (
+          <motion.img
+            key={i}
+            src={f}
+            alt={i === frames.length - 1 ? 'Construcción del isotipo de Huella' : ''}
+            initial={false}
+            animate={{ opacity: i === frameIndex ? 1 : 0 }}
+            transition={{ duration: 0.3 }}
+            style={{ position: 'absolute', width: '56%', height: 'auto', objectFit: 'contain' }}
+          />
+        ))}
+      </div>
+      <img
+        src={theaIphoneBezel}
+        alt=""
+        aria-hidden="true"
+        style={{
+          position: 'absolute', inset: 0, width: '100%', height: '100%',
+          pointerEvents: 'none', zIndex: 5,
+          filter: 'drop-shadow(0 8px 20px rgba(0,0,0,0.4))'
+        }}
+      />
+    </div>
+  )
+}
+
+// 2026-11-11, a pedido de Ana: recreación del panel real de "Colores" del
+// design system de Huella (no una paleta inventada de 4 chips) -- mismo
+// formato que la referencia que mandó: tarjeta blanca redondeada con
+// sombra suave, título + subtítulo, y una cuadrícula de swatches con
+// nombre + hex (y nota de uso donde aplica). Los 13 colores y sus hex son
+// los reales de esa referencia; "Semáforo amarillo" se verificó pixel por
+// pixel contra la captura (el hex ahí se leía ambiguo entre "0"/"O"/"D" a
+// esa escala -- #F9D111 es el que de verdad pinta amarillo, #F90111
+// pintaría rojo).
+// 2026-11-11, a pedido de Ana: las pantallas más grandes otra vez (0.48 ->
+// 0.58) y la columna derecha (paleta + contraste) ya NO es un ancho fijo
+// chico -- usa flex para estirarse y aprovechar el espacio libre que
+// sobraba a la derecha, con un máximo razonable para que no quede
+// absurdamente ancha en pantallas grandes.
+const HUELLA_PHONE_SCALE = 0.58
+const HUELLA_PHONE_TILE_H = Math.round(748 * HUELLA_PHONE_SCALE)
+const HUELLA_SIDE_COL_MIN_W = 390
+const HUELLA_SIDE_COL_MAX_W = 580
+// 2026-11-11, a pedido de Ana: la tarjeta de colores se veía "más arriba"
+// que las pantallas -- el PNG del bisel (thea-iphone-bezel.png) tiene un
+// ~2.18% de margen transparente arriba (y abajo) antes de que empiece el
+// contorno visible del teléfono, así que el teléfono "visualmente" empieza
+// más abajo que su propio div. Se compensa bajando la columna derecha
+// ese mismo margen para que ambos arranquen a la misma altura visual.
+const HUELLA_PHONE_BEZEL_TOP_PAD = Math.round(HUELLA_PHONE_TILE_H * 0.0218)
+
+const HUELLA_COLORS = [
+  { name: 'Azul Confianza', hex: '#2B8095' },
+  { name: 'Azul Calma', hex: '#2B8095', note: '20% opacidad (fondos decorativos)', swatch: 'rgba(43,128,149,0.2)' },
+  { name: 'Azul Lealtad', hex: '#1D5766', note: 'estado Pressed' },
+  { name: 'Morado Zoomies', hex: '#A64ADC' },
+  { name: 'Blanco Hogar', hex: '#F1F1F1', border: true },
+  { name: 'Negro Hocico', hex: '#1D1B20' },
+  { name: 'Gris Bigote', hex: '#56555A' },
+  { name: 'Gris Siamés', hex: '#8E8E93' },
+  { name: 'Gris Suave', hex: '#8E8E93', note: '20% (chips/toggles)', swatch: 'rgba(142,142,147,0.2)', border: true },
+  { name: 'Blanco Algodón', hex: '#FDFDFD', border: true },
+  { name: 'Semáforo rojo', hex: '#F8390C' },
+  { name: 'Semáforo amarillo', hex: '#F9D111' },
+  { name: 'Semáforo verde', hex: '#24AD64' }
+]
+
+function HuellaColorPanel({ compact = false }) {
+  /* 2026-11-11, a pedido de Ana: recreación verificada contra el frame
+   * real "Colores" del sistema de diseño de Huella (Figma, nodo
+   * 2398:8579, página "Sistema de diseño") -- capturado directo de
+   * Figma para confirmar cada hex, cada nombre y la estructura real: 5
+   * columnas, 13 swatches redondeados tipo "squircle". Tipografía
+   * verificada letra por letra vía get_design_context (no a ojo):
+   * título "Colores" = Poppins Medium 35px #1D1B20 (nodo 1826:1204);
+   * subtítulo = Manrope Regular 24px #4A474D (nodo 2414:1726), NO
+   * Poppins; nombre de cada color = Poppins Medium 13px #1D1B20
+   * centrado (nodo 1826:1220); hex de cada color = Manrope Regular
+   * 12px #8E8E93 centrado (nodo 1826:1221), NO Poppins. El nombre y el
+   * hex van al tamaño real (13px/12px) sin escalar por "compact", para
+   * que sigan siendo exactamente Poppins Medium 13 / Manrope Regular
+   * 12 sin importar el ancho de la tarjeta. */
+  return (
+    <div style={{
+      background: '#FFFFFF',
+      borderRadius: compact ? '24px' : '40px',
+      boxShadow: '0 12px 32px rgba(0,0,0,0.1)',
+      padding: compact ? '22px' : '56px 64px',
+      width: '100%',
+      height: '100%',
+      boxSizing: 'border-box'
+    }}>
+      <p style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 500, fontSize: compact ? '21px' : '35px', color: '#1D1B20', margin: 0 }}>
+        Colores
+      </p>
+      <p style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 400, fontSize: compact ? '12px' : '24px', color: '#4A474D', margin: compact ? '6px 0 16px' : '14px 0 40px', lineHeight: 1.4 }}>
+        Una paleta pensada para transmitir la calidez y el bienestar que despierta una mascota.
+      </p>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: compact ? '20px 16px' : '38px 36px' }}>
+        {HUELLA_COLORS.map((c, i) => (
+          <div key={i} style={{ textAlign: 'center' }}>
+            <div style={{
+              width: '100%', aspectRatio: '1', borderRadius: '28%',
+              background: c.swatch || c.hex,
+              border: c.border ? '1px solid rgba(0,0,0,0.08)' : 'none'
+            }} />
+            <p style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 500, fontSize: '13px', color: '#1D1B20', margin: '8px 0 2px', lineHeight: 1.25 }}>
+              {c.name}
+            </p>
+            <p style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 400, fontSize: '12px', color: '#8E8E93', margin: 0, lineHeight: 1.25 }}>
+              {c.hex}{!compact && c.note ? ` · ${c.note}` : ''}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// 2026-11-11, a pedido de Ana: recreación "tal cual" del pantallazo real
+// que mandó de un comentario de Figma (tarjeta oscura "Comment", avatar +
+// nombre + fecha, el globito/pin de anclaje a la derecha conectado con una
+// línea). Los dos comentarios originales del hilo se unificaron en uno
+// solo más corto, como pidió. El avatar es la foto que ella mandó
+// (fondo de playa), no la del pantallazo original (esa tenía un filtro
+// morado/azul). El globito ya NO tiene un recuadro blanco propio -- se
+// apoya directo sobre el fondo del panel izquierdo de la bitácora
+// (#F1F1F1), como pidió, en vez de cargar su propio fondo.
+function HuellaCommentPin({ size = 44 }) {
+  return (
+    <div style={{
+      width: `${size}px`,
+      height: `${size}px`,
+      borderRadius: '50% 50% 50% 4px',
+      background: '#0D99FF',
+      transform: 'rotate(-45deg)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      boxShadow: '0 3px 8px rgba(0,0,0,0.22)',
+      flexShrink: 0
+    }}>
+      <div style={{
+        width: `${size - 7}px`,
+        height: `${size - 7}px`,
+        borderRadius: '50%',
+        overflow: 'hidden',
+        transform: 'rotate(45deg)',
+        background: '#1D1B20'
+      }}>
+        <img src={huellaAnaAvatar} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+      </div>
+    </div>
+  )
+}
+
+function HuellaCommentCard({ width }) {
+  return (
+    <div style={{ position: 'relative', width: width ? `${width}px` : '100%' }}>
+      <div style={{
+        background: '#2C2C2C',
+        borderRadius: '14px',
+        boxShadow: '0 18px 40px rgba(0,0,0,0.22)',
+        overflow: 'hidden'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '13px 15px 11px' }}>
+          <p style={{ margin: 0, fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 700, fontSize: '13px', color: '#F5F5F5' }}>
+            Comment
+          </p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <span style={{ fontSize: '15px', letterSpacing: '1.5px', color: '#9A9A9A', lineHeight: 1 }}>•••</span>
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="#9A9A9A" strokeWidth="1.3" /><path d="M5 8.2l1.8 1.8 3.8-4.2" stroke="#9A9A9A" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" /></svg>
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M2 2l12 12M14 2L2 14" stroke="#9A9A9A" strokeWidth="1.4" strokeLinecap="round" /></svg>
+          </div>
+        </div>
+        <div style={{ height: '1px', background: 'rgba(255,255,255,0.08)' }} />
+        <div style={{ padding: '13px 15px 6px', display: 'flex', gap: '9px', alignItems: 'flex-start' }}>
+          <img src={huellaAnaAvatar} alt="" style={{ width: '27px', height: '27px', borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }} />
+          <div>
+            <p style={{ margin: 0, display: 'flex', gap: '7px', alignItems: 'baseline', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+              <span style={{ fontWeight: 700, fontSize: '12.5px', color: '#F5F5F5' }}>Ana</span>
+              <span style={{ fontWeight: 400, fontSize: '11px', color: '#8A8A8A' }}>hace 10 meses</span>
+            </p>
+            <p style={{ margin: '6px 0 0', fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: '12.5px', color: '#D9D9D9', lineHeight: 1.5 }}>
+              Acá puede que no le estemos dando al usuario funcionalidad con información que ya sabemos que es útil: fácilmente puede olvidar detalles en su narración, y además es imposible filtrar búsquedas con solamente comentarios.
+            </p>
+          </div>
+        </div>
+        <div style={{ padding: '10px 15px 14px', display: 'flex', gap: '9px', alignItems: 'center' }}>
+          <img src={huellaAnaAvatar} alt="" style={{ width: '22px', height: '22px', borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }} />
+          <div style={{ flex: 1, background: '#3A3A3A', borderRadius: '20px', padding: '7px 7px 7px 13px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <span style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: '11.5px', color: '#9A9A9A' }}>Reply</span>
+            <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: '#565656', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <svg width="9" height="9" viewBox="0 0 16 16" fill="none"><path d="M8 13V3M3 7l5-5 5 5" stroke="#E5E5E5" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+      <svg
+        width="48" height="48"
+        style={{ position: 'absolute', top: '16px', right: '-38px', overflow: 'visible' }}
+      >
+        <line x1="0" y1="8" x2="38" y2="20" stroke="#C9C9C9" strokeWidth="1" />
+      </svg>
+      <div style={{ position: 'absolute', top: '26px', right: '-54px' }}>
+        <HuellaCommentPin size={36} />
+      </div>
+    </div>
+  )
+}
+
+// 2026-11-11, a pedido de Ana: capturas reales de WhatsApp (conversación
+// con Kevin sobre el flujo de recuperación por código) tal como ella las
+// mandó -- 3 tarjetas de captura separadas, recortadas de su pantallazo
+// original (no una sola imagen fusionada), puestas en cascada (cada una
+// un poco más ancha que la anterior, con espacio entre ellas, igual que
+// en su captura). Van al lado del comentario, en la misma columna donde
+// arriba están la paleta y el contrast checker.
+function HuellaWhatsappCascade() {
+  const shots = [
+    { src: huellaWhatsapp1, w: 496 },
+    { src: huellaWhatsapp2, w: 518 },
+    { src: huellaWhatsapp3, w: 556 }
+  ]
+  const maxW = Math.max(...shots.map(s => s.w))
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%' }}>
+      {shots.map((s, i) => (
+        <img
+          key={i}
+          src={s.src}
+          alt="Captura real de WhatsApp: conversación con Kevin sobre el flujo de recuperación de contraseña por código."
+          style={{
+            width: `${(s.w / maxW) * 100}%`,
+            borderRadius: '10px',
+            display: 'block',
+            boxShadow: '0 10px 24px rgba(0,0,0,0.18)'
+          }}
+        />
+      ))}
+    </div>
+  )
+}
+
 function ProjectTransition({ color, onClose, projectName, projectColor, onViewBeacon, onViewTheaveling }) {
   const [progress, setProgress] = React.useState(0)
   const [showRightContent, setShowRightContent] = React.useState(false)
@@ -1725,6 +2049,18 @@ function ProjectTransition({ color, onClose, projectName, projectColor, onViewBe
   // ("Explora el trabajo completo"), mismo patrón que learn1/2/3Visible.
   const [closingCtaVisible, setClosingCtaVisible] = React.useState(false)
   const closingCtaRef = React.useRef(null)
+  // 2026-10-20, a pedido de Ana: el auto-avance del carrusel de citas (el
+  // de "Hablé con quienes viven este problema" en Beacon, y el de
+  // "Lo que encontré" en Theaveling) arrancaba apenas se abría el case,
+  // no cuando el usuario de verdad llegaba a esa sección scrolleando.
+  // Mismo patrón de scroll-reveal que closingCtaVisible/learn3Visible de
+  // arriba -- se pasa como `active` a CarouselDots (ver ese componente),
+  // que ahora no crea su timer hasta que esto sea true. Un solo
+  // par de estado/ref sirve para los dos cases porque las ramas de Beacon
+  // y Theaveling nunca están montadas al mismo tiempo en la misma
+  // instancia de ProjectTransition.
+  const [quotesCarouselVisible, setQuotesCarouselVisible] = React.useState(false)
+  const quotesCarouselRef = React.useRef(null)
   const [brandIndex, setBrandIndex] = React.useState(0)
   const [isCarouselTransitioning, setIsCarouselTransitioning] = React.useState(false)
   const brandAutoRef = React.useRef(false)
@@ -2278,6 +2614,18 @@ function ProjectTransition({ color, onClose, projectName, projectColor, onViewBe
   }, [closingCtaVisible])
 
   React.useEffect(() => {
+    if (!quotesCarouselRef.current || quotesCarouselVisible) return
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) setQuotesCarouselVisible(true)
+      },
+      { threshold: 0.3, root: contentRef.current }
+    )
+    observer.observe(quotesCarouselRef.current)
+    return () => observer.disconnect()
+  }, [quotesCarouselVisible])
+
+  React.useEffect(() => {
     if (brandAutoRef.current) return
     const observer = new IntersectionObserver(
       (entries) => {
@@ -2333,7 +2681,18 @@ function ProjectTransition({ color, onClose, projectName, projectColor, onViewBe
         position: 'fixed',
         top: 0,
         left: 0,
-        width: '0vw',
+        // 2026-10-20, a pedido de Ana: al cerrar, el panel izquierdo se
+        // retira "por donde vino" -- misma mecánica que la entrada (el
+        // ancho crecía de 0vw a 60vw), ahora en reversa (de 60vw a 0vw),
+        // impulsada por el mismo closeProgress (0→1, 800ms) que ya usa el
+        // resto del cierre. Igual que con el ancho de entrada (ver el
+        // comentario de arriba sobre por qué se escribe por ref): acá el
+        // valor estático '0vw' (closing=false) nunca cambia entre renders
+        // mientras no se está cerrando, así que React no pisa el ancho real
+        // que dejó el efecto de entrada -- recién cuando closing pasa a
+        // true hay un valor nuevo que aplicar, y coincide con el ancho real
+        // (60vw) en ese instante, sin salto visual.
+        width: closing ? `${(1 - closeProgress) * 60}vw` : '0vw',
         height: '100vh',
         background: color,
         zIndex: 9999,
@@ -2349,8 +2708,17 @@ function ProjectTransition({ color, onClose, projectName, projectColor, onViewBe
         zIndex: 10000,
         overflowY: 'auto',
         overflowX: 'hidden',
-        opacity: 0,
-        clipPath: 'inset(0 100% 0 0)',
+        // Mismo truco que el ancho de arriba: durante el cierre la opacidad
+        // se queda en 1 (ya la dejó ahí el efecto de entrada) -- es el
+        // clip-path el que hace todo el trabajo visual de "retirarse",
+        // reventando en reversa el wipe de entrada.
+        opacity: closing ? 1 : 0,
+        // Entrada: inset(0 100%→0% 0 0) -- el borde derecho del recorte se
+        // mueve hacia la derecha, revelando el panel de izq a der. Cierre:
+        // mismo recorrido en reversa, inset(0 0%→100% 0 0) -- el borde
+        // derecho del recorte vuelve a cerrarse hacia la izq, "deslizando"
+        // el contenido de vuelta hacia adentro por donde entró.
+        clipPath: closing ? `inset(0 ${closeProgress * 100}% 0 0)` : 'inset(0 100% 0 0)',
         filter: dotPressed ? 'blur(8px)' : 'none',
         transition: 'filter 0.3s ease',
         padding: '0'
@@ -2568,7 +2936,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor, onViewBe
                     No quería empezar dibujando pantallas.<br/>Primero necesitaba entender si el problema era realmente tan grande como parecía.
                   </p>
                   <span style={{fontFamily:"'Didact Gothic', sans-serif", fontSize:'200px', fontWeight:700, color:'transparent', WebkitTextStroke:'0.1px #B0FF92', lineHeight:0.5, display:'block', marginBottom:'-40px', marginTop:'60px'}}>❝</span>
-                  <div style={{width:'90%', marginTop:'60px', paddingLeft:'40px'}}>
+                  <div ref={quotesCarouselRef} style={{width:'90%', marginTop:'60px', paddingLeft:'40px'}}>
                     <div style={{display:'flex', flexDirection:'row', gap:'40px', alignItems:'flex-start'}}>
                       {quotes[quoteIndex].map((quote, i) => (
                         <p key={i} style={{
@@ -2586,7 +2954,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor, onViewBe
                       ))}
                     </div>
                     <div style={{display:'flex', marginTop:'24px'}}>
-                      <CarouselDots count={quotes.length} activeIndex={quoteIndex} onChange={setQuoteIndex} color="#B0FF92" />
+                      <CarouselDots count={quotes.length} activeIndex={quoteIndex} onChange={setQuoteIndex} color="#B0FF92" active={quotesCarouselVisible} />
                     </div>
                   </div>
                   <span style={{fontFamily:"'Didact Gothic', sans-serif", fontSize:'200px', fontWeight:700, color:'transparent', WebkitTextStroke:'0.1px #B0FF92', lineHeight:0.5, display:'block', textAlign:'right', marginTop:'-10px', paddingRight:'40px'}}>❞</span>
@@ -2772,6 +3140,14 @@ function ProjectTransition({ color, onClose, projectName, projectColor, onViewBe
                         ))}
                       </div>
                     )}
+                  </div>
+                  {/* 2026-10-20, a pedido de Ana: botón de Notion con el
+                      análisis competitivo (Partnerstack/Crossbeam/Impartner,
+                      los mismos competidores que se muestran en el carrusel
+                      de arriba), debajo del bloque del video/carrusel. Mismo
+                      componente y patrón que el de Theaveling. */}
+                  <div style={{marginTop:'40px', width:'80%', paddingLeft:'8px', display:'flex'}}>
+                    <VerProductoBtn texto="Análisis competitivo" icon={notionIcon} href="https://app.notion.com/p/An-lisis-competitivo-3edf6a9b190480918c4ac1b75e33ce8f?source=copy_link" width="200px" hoverWidth="220px" />
                   </div>
                   <p ref={sec03Ref} style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:300, fontSize:'32px', color:'rgba(255,255,255,0.5)', marginTop:'120px', lineHeight:1.2}}>
                     Antes de diseñar, validé la oportunidad utilizando un framework de Discovery para asegurarme de que el producto respondía a un problema real.
@@ -3200,7 +3576,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor, onViewBe
                   <div style={{marginTop:'120px'}}>
                     <div style={{width:'calc(100% + 8px)', marginLeft:'-8px', display:'flex', flexDirection:'column', alignItems:'center'}}>
                       <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:300, fontSize:'32px', color:'#F5F7F7', lineHeight:1.3, margin:0, textAlign:'center'}}>
-                        Sigue viendo cómo trabajo.
+                        Hay más por acá.
                       </p>
                       <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'16px', color:'rgba(255,255,255,0.5)', lineHeight:1.5, margin:0, marginTop:'8px', maxWidth:'480px', textAlign:'center'}}>
                         Mismo enfoque, otro contexto, otras decisiones.
@@ -3301,7 +3677,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor, onViewBe
               <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'#2ECCA6', lineHeight:1.7, marginTop:'24px', width:'80%', paddingLeft:'8px'}}>
                 La escena estaba ahí. Lo difícil era saber por dónde empezar a descubrirla.
               </p>
-              <div ref={imageRef} style={{display:'flex', flexDirection:'row', gap:'40px', width:'92%', margin:'64px auto 24px auto', minHeight:'245px'}}>
+              <div ref={(el) => { imageRef.current = el; quotesCarouselRef.current = el }} style={{display:'flex', flexDirection:'row', gap:'40px', width:'92%', margin:'64px auto 24px auto', minHeight:'245px'}}>
                 {theaCardLayers[theaCardsLayer].map((card, i) => (
                   <div key={i} style={{display:'flex', flexDirection:'column', flex:1}}>
                     <div style={{flex:1, display:'flex', flexDirection:'column', justifyContent:'center', gap:'10px'}}>
@@ -3321,7 +3697,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor, onViewBe
                 ))}
               </div>
               <div style={{display:'flex', marginTop:'20px', width:'92%', margin:'20px auto 0 auto', justifyContent:'flex-end'}}>
-                <CarouselDots count={theaCardLayers.length} activeIndex={theaCardsLayer} onChange={setTheaCardsLayer} color="#2ECCA6" />
+                <CarouselDots count={theaCardLayers.length} activeIndex={theaCardsLayer} onChange={setTheaCardsLayer} color="#2ECCA6" active={quotesCarouselVisible} />
               </div>
               <div style={{marginTop:'64px', width:'80%', paddingLeft:'8px', display:'flex'}}>
                 <VerProductoBtn texto="Contexto de entrevistas" icon={notionIcon} href="https://app.notion.com/p/Entrevistas-Theaveling-1a5f6a9b19048048bc19e69f946917fe?source=copy_link" width="230px" hoverWidth="250px" />
@@ -3501,7 +3877,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor, onViewBe
                 <span style={{display:'block', marginTop:'16px'}}>Ahí encontré el espacio para Theaveling: no solo reunir experiencias, <span style={{color:'#2ECCA6'}}>sino decidir cómo hacerlas visibles y descubribles.</span></span>
               </p>
               <div style={{marginTop:'40px', width:'80%', paddingLeft:'8px', display:'flex'}}>
-                <VerProductoBtn texto="Benchmark" icon={notionIcon} href="#" width="140px" hoverWidth="160px" />
+                <VerProductoBtn texto="Análisis competitivo" icon={notionIcon} href="https://app.notion.com/p/An-lisis-competitivo-3f3f6a9b190480bd8d94f40829481218?source=copy_link" width="200px" hoverWidth="220px" />
               </div>
               <div data-hairline='true' style={{width:'calc(100% + 8px)', height:'0.5px', marginTop:'64px', marginLeft:'-8px', backgroundColor:'rgba(255,255,255,0.12)'}}/>
               <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'18px', color:'#2ECCA6', lineHeight:1.7, marginTop:'48px', width:'80%', paddingLeft:'8px'}}>
@@ -4334,7 +4710,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor, onViewBe
                * componente y estilo que el botón "Benchmark" de más arriba
                * (línea ~2230), solo cambia el texto. */}
               <div style={{marginTop:'40px', width:'80%', paddingLeft:'8px', display:'flex'}}>
-                <VerProductoBtn texto="Userflow" icon={notionIcon} href="#" width="140px" hoverWidth="160px" />
+                <VerProductoBtn texto="Userflow" icon={notionIcon} href="https://app.notion.com/p/Userflow-3f2f6a9b190480748051f94d94e8b697?source=copy_link" width="140px" hoverWidth="160px" />
               </div>
               {/* 2026-10-08 (sexagésima vuelta), a pedido de Ana ("con
                * barrita mint"): mismo patrón que los títulos de sección de
@@ -4752,7 +5128,7 @@ function ProjectTransition({ color, onClose, projectName, projectColor, onViewBe
                   * no quedar pegadas a los bordes. */}
                 <div style={{width:'calc(100% + 8px)', marginLeft:'-8px', display:'flex', flexDirection:'column', alignItems:'center'}}>
                   <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:300, fontSize:'32px', color:'#FFFFFF', lineHeight:1.3, margin:0, textAlign:'center'}}>
-                    Sigue viendo cómo trabajo.
+                    Hay más por acá.
                   </p>
                   <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:150, fontSize:'16px', color:'rgba(245,242,238,0.5)', lineHeight:1.5, margin:0, marginTop:'8px', maxWidth:'480px', textAlign:'center'}}>
                     Mismo enfoque, otro contexto, otras decisiones.
@@ -4812,7 +5188,14 @@ function ProjectTransition({ color, onClose, projectName, projectColor, onViewBe
             <div key={i} style={{
               position:'absolute',
               width:'90%',
-              height:'90%',
+              // 2026-10-20, a pedido de Ana: "el texto lo están tapando las
+              // siguientes caps que se ve que son un poquito más grandes" --
+              // con object-fit:contain, una screenshot más vertical que otra
+              // llega más cerca del borde inferior de esta caja (90% de
+              // alto, casi sin margen con el caption de abajo). Bajar a 76%
+              // deja un colchón fijo antes del caption, sin importar la
+              // proporción de cada screenshot.
+              height:'76%',
               borderRadius:'24px',
               overflow:'hidden',
               opacity: slideIndex === i ? 1 : 0,
@@ -4823,15 +5206,49 @@ function ProjectTransition({ color, onClose, projectName, projectColor, onViewBe
               <img src={src} style={{width:'100%', height:'100%', objectFit:'contain'}}/>
             </div>
           ))}
+          {/* 2026-10-20, a pedido de Ana: caption chiquito debajo de las
+              primeras pantallas generadas con IA -- explica por qué dicen
+              "Orbit" en vez de "Beacon" (nombre original, cuando la idea
+              era que orbitara todo el ecosistema de venta por canal, no
+              solo el CAM). Vive pegado a las screenshots, no al párrafo de
+              "Decisiones que hicieron Beacon" de al lado -- es una
+              curiosidad del proceso, no parte del argumento de esa
+              sección. */}
+          <p style={{
+            position:'absolute',
+            bottom:'3%',
+            left:'50%',
+            transform:'translateX(-50%)',
+            width:'80%',
+            textAlign:'center',
+            fontFamily:"'Plus Jakarta Sans', sans-serif",
+            fontWeight:300,
+            fontSize:'13px',
+            lineHeight:1.5,
+            color:'rgba(255,255,255,0.9)',
+            textShadow:'0 1px 8px rgba(0,0,0,0.75), 0 1px 3px rgba(0,0,0,0.9)',
+            margin:0
+          }}>
+            Así se veía el producto en sus primeras pantallas — todavía bajo el nombre Orbit, cuando la idea era que orbitara alrededor de todo el ecosistema de venta por canal (CAM, agente y partner).
+          </p>
         </div>
       )}
       <div ref={rightPanelRef} style={{
         position: 'fixed',
         top: 0,
         right: 0,
-        width: closing ? `${(1 - closeProgress) * 40}vw` : '100vw',
+        // 2026-10-20, a pedido de Ana: "las letras son las primeras que se
+        // devuelven... y el blanco se desvanece" -- antes el cierre
+        // achicaba el ANCHO de este panel (40vw → 0vw), lo que competía
+        // visualmente con el texto retirándose (ambos encogiendo/moviéndose
+        // a la vez). Ahora el ancho se queda fijo en 40vw durante el
+        // cierre (ya no se anima) y es el FONDO el que se desvanece (alpha
+        // de 1 a 0), con un pequeño retraso (primer 20% del cierre) para
+        // que el texto (que ya se retira con su propio transform/opacity,
+        // más abajo) le lleve ventaja al blanco, tal cual se pidió.
+        width: closing ? '40vw' : '100vw',
         height: '100vh',
-        background: '#F5F2EE',
+        background: closing ? `rgba(245,242,238, ${Math.max(0, 1 - Math.max(0, closeProgress - 0.2) / 0.8)})` : '#F5F2EE',
         zIndex: 9999,
         transition: 'none',
         visibility: 'hidden'
@@ -5081,11 +5498,102 @@ export default function Home() {
   const [showTheaName, setShowTheaName] = React.useState(false)
   const [showBeaconT, setShowBeaconT] = React.useState(false)
   const [showTheaT, setShowTheaT] = React.useState(false)
+  // 2026-11-06, a pedido de Ana: tercera card de Proyectos (Huella /
+  // colaboración con desarrollo), en cascada debajo-izquierda de Thea.
+  // Mismo patrón de estados que Beacon/Thea, solo que esta todavía no abre
+  // un ProjectTransition propio (no existe la "bitácora" / página de detalle
+  // para este proyecto todavía), así que no tiene su "showHuellaInfo"
+  // conectado a nada visual por ahora -- se deja por simetría con el patrón
+  // existente (showBeaconInfo/showTheaInfo tampoco se usan en el render).
+  const [showHuellaCard, setShowHuellaCard] = React.useState(false)
+  const [showHuellaInfo, setShowHuellaInfo] = React.useState(false)
+  const [showHuellaName, setShowHuellaName] = React.useState(false)
+  const [showHuellaT, setShowHuellaT] = React.useState(false)
   const [cursorPos, setCursorPos] = React.useState(null)
   const [beaconHovered, setBeaconHovered] = React.useState(false)
   const [theaHovered, setTheaHovered] = React.useState(false)
   const [beaconTyping, setBeaconTyping] = React.useState('')
   const [theaTyping, setTheaTyping] = React.useState('')
+  const [huellaHovered, setHuellaHovered] = React.useState(false)
+  const [huellaTyping, setHuellaTyping] = React.useState('')
+  // 2026-11-06, a pedido de Ana: Huella todavía no tiene una "bitácora" /
+  // página de detalle como Beacon y Theaveling (ProjectTransition está
+  // armado específicamente para esos dos, con secciones de case study que
+  // Huella no tiene contenido para), así que en vez de forzar un tercer
+  // branch ahí adentro, el click en "huella.md" abre este panel propio y
+  // más simple: la misma portada de dos paneles (nombre + tags + estado a
+  // la derecha, descripción a la izquierda) pero sin el scroll de
+  // secciones.
+  const [showHuellaPanel, setShowHuellaPanel] = React.useState(false)
+  // 2026-11-06, a pedido de Ana: mismo patrón de entrada escalonada que usa
+  // ProjectTransition para el nombre/tags/estado (translateY + opacity,
+  // arrancando en false y pasando a true un instante después de montar para
+  // que el navegador alcance a pintar el estado inicial "oculto" antes de
+  // animar hacia el estado visible -- si se pone en true en el mismo
+  // render que abre el panel, no hay transición, aparece todo de golpe).
+  const [huellaPanelVisible, setHuellaPanelVisible] = React.useState(false)
+  React.useEffect(() => {
+    if (showHuellaPanel) {
+      // setTimeout en vez de doble requestAnimationFrame: rAF se pausa en
+      // pestañas en segundo plano (verificado probando con la pestaña del
+      // navegador in-app, que corre oculta) y ahí nunca se disparaba, así
+      // que la animación de entrada se quedaba trabada en su estado
+      // inicial (opacity:0) para siempre.
+      const id = setTimeout(() => setHuellaPanelVisible(true), 20)
+      return () => clearTimeout(id)
+    } else {
+      setHuellaPanelVisible(false)
+    }
+  }, [showHuellaPanel])
+  // 2026-11-06, a pedido de Ana: mismo efecto de cierre que Beacon/
+  // Theaveling en ProjectTransition (ver closing/closeProgress ahí) -- el
+  // texto se retira (mismo transform que el estado "oculto" de la entrada)
+  // mientras el panel se desvanece, animado con progress 0->1 en 800ms vía
+  // requestAnimationFrame, y recién AL TERMINAR se desmonta el panel
+  // (setShowHuellaPanel(false)) en vez de desaparecer de golpe.
+  const [huellaPanelClosing, setHuellaPanelClosing] = React.useState(false)
+  const [huellaPanelCloseProgress, setHuellaPanelCloseProgress] = React.useState(0)
+  const closeHuellaPanel = () => {
+    setHuellaPanelClosing(true)
+    let start = null
+    const duration = 800
+    const animate = (timestamp) => {
+      if (!start) start = timestamp
+      const elapsed = timestamp - start
+      const p = Math.min(1, elapsed / duration)
+      setHuellaPanelCloseProgress(p)
+      if (p < 1) {
+        requestAnimationFrame(animate)
+      } else {
+        setHuellaPanelClosing(false)
+        setHuellaPanelCloseProgress(0)
+        setShowHuellaPanel(false)
+      }
+    }
+    requestAnimationFrame(animate)
+  }
+  // 2026-11-11, a pedido de Ana: la animación de construcción del logo (ver
+  // HuellaLogoMockup) se dispara UNA SOLA VEZ, exactamente cuando el scroll
+  // del panel izquierdo llega al encabezado "00.1. Huella, en imágenes" --
+  // no antes, no al abrir el panel. huellaLeftPanelRef apunta al div que
+  // scrollea ese texto; se lo pasamos a Motion como `viewport.root` en el
+  // onViewportEnter de ese encabezado.
+  const huellaLeftPanelRef = React.useRef(null)
+  const [huellaLogoAnimStarted, setHuellaLogoAnimStarted] = React.useState(false)
+  const [huellaLogoFrame, setHuellaLogoFrame] = React.useState(0)
+  const huellaLogoFrames = [huellaLogo1, huellaLogo2, huellaLogo3, huellaLogo4, huellaLogo5]
+  const triggerHuellaLogoAnim = () => {
+    setHuellaLogoAnimStarted((already) => {
+      if (already) return true
+      let i = 0
+      const id = setInterval(() => {
+        i += 1
+        setHuellaLogoFrame(i)
+        if (i >= huellaLogoFrames.length - 1) clearInterval(id)
+      }, 260)
+      return true
+    })
+  }
   const [aboutPhase, setAboutPhase] = React.useState(null)
   const [aboutProgress, setAboutProgress] = React.useState(0)
   const [splashPhase, setSplashPhase] = React.useState('visible')
@@ -5097,6 +5605,7 @@ export default function Home() {
   const [navBlackout, setNavBlackout] = React.useState(null)
   const beaconIntervalRef = React.useRef(null)
   const theaIntervalRef = React.useRef(null)
+  const huellaIntervalRef = React.useRef(null)
   const notesCompleteRef = React.useRef(false)
   const zoomProgressRef = React.useRef(0)
   const rafRef = React.useRef(null)
@@ -5110,11 +5619,21 @@ export default function Home() {
   const showBeaconCardRef = React.useRef(false)
   const showBeaconTRef = React.useRef(false)
   const showTheaTRef = React.useRef(false)
+  const showHuellaTRef = React.useRef(false)
   const projectTransitionRef = React.useRef(null)
   const aboutPhaseRef = React.useRef(null)
   const aboutProgressRef = React.useRef(0)
   const projectsOverlayRef = React.useRef(null)
   const [tickerOffset, setTickerOffset] = React.useState(0)
+  // 2026-11-05, a pedido de Ana: justo al terminar la transición Intro→Proyectos
+  // (forward), puede quedar "momentum" residual del trackpad/mouse que dispara
+  // el mismo evento de wheel hacia atrás (deltaY < 0) una fracción de segundo
+  // después, dentro de este mismo gesto físico. Eso activaba el bloque de abajo
+  // que escribe "> Projects/" de golpe (sin animación letra por letra) y lo
+  // revierte casi al instante -- se veía como un parpadeo raro. Este ref guarda
+  // el timestamp exacto en que se llegó a 'projects' para poder ignorar ese
+  // rebote espurio por una ventana corta, sin tocar nada del resto del flujo.
+  const justEnteredProjectsRef = React.useRef(0)
   const tickerOffsetRef = React.useRef(0)
   const tickerActiveUntilRef = React.useRef(0)
   const tickerVelocityRef = React.useRef(0)
@@ -5377,6 +5896,7 @@ export default function Home() {
   React.useEffect(() => { showBeaconCardRef.current = showBeaconCard }, [showBeaconCard])
   React.useEffect(() => { showBeaconTRef.current = showBeaconT }, [showBeaconT])
   React.useEffect(() => { showTheaTRef.current = showTheaT }, [showTheaT])
+  React.useEffect(() => { showHuellaTRef.current = showHuellaT }, [showHuellaT])
   React.useEffect(() => { aboutPhaseRef.current = aboutPhase }, [aboutPhase])
   // El case study (Beacon/Theaveling) es un overlay que se monta ENCIMA de
   // Proyectos sin cambiar `phase` (sigue en 'projects' por debajo). El
@@ -5605,12 +6125,16 @@ export default function Home() {
         setTimeout(() => setShowCards(true), 500)
         setTimeout(() => setShowBeaconCard(true), 1500)
         setTimeout(() => setShowTheaCard(true), 1800)
+        setTimeout(() => setShowHuellaCard(true), 2100)
         setTimeout(() => setShowBeaconName(true), 2400)
         setTimeout(() => setShowTheaName(true), 2700)
+        setTimeout(() => setShowHuellaName(true), 3000)
         setTimeout(() => setShowBeaconT(true), 3100)
         setTimeout(() => setShowTheaT(true), 3400)
+        setTimeout(() => setShowHuellaT(true), 3700)
         setTimeout(() => setShowBeaconInfo(true), 1100)
         setTimeout(() => setShowTheaInfo(true), 1400)
+        setTimeout(() => setShowHuellaInfo(true), 1700)
       }
     }, 70)
     typingIntervalRef.current = interval
@@ -5810,6 +6334,7 @@ export default function Home() {
             setPhase('projects')
             setActiveLink('Proyectos')
             wheelLockRef.current = false
+            justEnteredProjectsRef.current = performance.now()
             if (!projectsTypedRef.current) {
               projectsTypedRef.current = true
               setTimeout(() => typeProjectsText(), 400)
@@ -5820,7 +6345,7 @@ export default function Home() {
         return
       }
 
-      if (phase === 'projects' && e.deltaY > 0 && showBeaconCardRef.current && showBeaconTRef.current && showTheaTRef.current) {
+      if (phase === 'projects' && e.deltaY > 0 && showBeaconCardRef.current && showBeaconTRef.current && showTheaTRef.current && showHuellaTRef.current) {
         const el = projectsOverlayRef.current
         const maxScroll = el ? Math.max(0, el.scrollHeight - el.clientHeight) : 0
         const atBottom = !el || el.scrollTop >= maxScroll - 4
@@ -5835,6 +6360,11 @@ export default function Home() {
       }
 
       if (phase === 'projects' && e.deltaY < 0) {
+        // Ventana de gracia: ignora el rebote de momentum justo después de
+        // haber entrado a 'projects' (ver comentario en justEnteredProjectsRef
+        // más arriba). Un scroll hacia arriba intencional, hecho después de
+        // ese medio segundo, sigue funcionando exactamente igual que antes.
+        if (performance.now() - justEnteredProjectsRef.current < 500) return
         const overlayEl = projectsOverlayRef.current
         const atTop = !overlayEl || overlayEl.scrollTop <= 4
         if (!atTop) return
@@ -5845,12 +6375,16 @@ export default function Home() {
         projectsTypedRef.current = false
         setShowBeaconCard(false)
         setShowTheaCard(false)
+        setShowHuellaCard(false)
         setShowBeaconInfo(false)
         setShowTheaInfo(false)
+        setShowHuellaInfo(false)
         setShowBeaconName(false)
         setShowTheaName(false)
+        setShowHuellaName(false)
         setShowBeaconT(false)
         setShowTheaT(false)
+        setShowHuellaT(false)
 
         setProjectsText('> Projects/')
         setShowSubtitle(true)
@@ -6140,15 +6674,20 @@ export default function Home() {
                   setShowCards(false)
                   setShowBeaconCard(false)
                   setShowTheaCard(false)
+                  setShowHuellaCard(false)
                   setShowBeaconInfo(false)
                   setShowTheaInfo(false)
+                  setShowHuellaInfo(false)
                   setShowBeaconName(false)
                   setShowTheaName(false)
+                  setShowHuellaName(false)
                   setShowBeaconT(false)
                   setShowTheaT(false)
+                  setShowHuellaT(false)
                   showBeaconCardRef.current = false
                   showBeaconTRef.current = false
                   showTheaTRef.current = false
+                  showHuellaTRef.current = false
                 })
               }
               if (link === 'Proyectos') {
@@ -6183,12 +6722,16 @@ export default function Home() {
                   setShowCards(true)
                   setShowBeaconCard(true)
                   setShowTheaCard(true)
+                  setShowHuellaCard(true)
                   setShowBeaconName(true)
                   setShowTheaName(true)
+                  setShowHuellaName(true)
                   setShowBeaconT(true)
                   setShowTheaT(true)
+                  setShowHuellaT(true)
                   setShowBeaconInfo(true)
                   setShowTheaInfo(true)
+                  setShowHuellaInfo(true)
                 })
               }
               if (link === 'Sobre mí') {
@@ -6282,15 +6825,20 @@ export default function Home() {
                   setShowCards(true)
                   setShowBeaconCard(true)
                   setShowTheaCard(true)
+                  setShowHuellaCard(true)
                   setShowBeaconName(true)
                   setShowTheaName(true)
+                  setShowHuellaName(true)
                   setShowBeaconT(true)
                   setShowTheaT(true)
+                  setShowHuellaT(true)
                   setShowBeaconInfo(true)
                   setShowTheaInfo(true)
+                  setShowHuellaInfo(true)
                   showBeaconCardRef.current = true
                   showBeaconTRef.current = true
                   showTheaTRef.current = true
+                  showHuellaTRef.current = true
                   tickerOffsetRef.current = 0
                   setTickerOffset(0)
                   aboutProgressRef.current = 1
@@ -6334,15 +6882,20 @@ export default function Home() {
                   setShowCards(true)
                   setShowBeaconCard(true)
                   setShowTheaCard(true)
+                  setShowHuellaCard(true)
                   setShowBeaconName(true)
                   setShowTheaName(true)
+                  setShowHuellaName(true)
                   setShowBeaconT(true)
                   setShowTheaT(true)
+                  setShowHuellaT(true)
                   setShowBeaconInfo(true)
                   setShowTheaInfo(true)
+                  setShowHuellaInfo(true)
                   showBeaconCardRef.current = true
                   showBeaconTRef.current = true
                   showTheaTRef.current = true
+                  showHuellaTRef.current = true
                   tickerOffsetRef.current = 0
                   setTickerOffset(0)
                   aboutProgressRef.current = 1
@@ -6491,7 +7044,7 @@ export default function Home() {
           const maxScroll = Math.max(0, el.scrollHeight - el.clientHeight)
           const atBottom = el.scrollTop >= maxScroll - 4
           const engaged = aboutPhaseRef.current === 'ticker'
-          const canEngage = showBeaconCardRef.current && showBeaconTRef.current && showTheaTRef.current
+          const canEngage = showBeaconCardRef.current && showBeaconTRef.current && showTheaTRef.current && showHuellaTRef.current
           if (!engaged) {
             if (atBottom && canEngage && el.scrollTop > maxScroll - 4) {
               aboutProgressRef.current = 0.02
@@ -6542,7 +7095,7 @@ export default function Home() {
             </h3>
           </div>
 
-          <div style={{display:'flex', gap:'40px', position:'absolute', top:'12px', left:'80px', right:'80px'}}>
+          <div style={{display:'flex', gap:'40px', position:'absolute', top:'64px', left:'80px', right:'80px'}}>
             <div style={{flex:1, opacity: showBeaconCard ? 1 : 0, transform: showBeaconCard ? 'translateY(0)' : 'translateY(100vh)', transition: skipProjectsEntranceAnim ? 'none' : 'opacity 0.8s ease, transform 0.8s ease', position:'relative', alignSelf:'stretch', height:'70vh'}} onMouseEnter={() => {
               setBeaconHovered(true)
               setBeaconTyping('')
@@ -6661,7 +7214,7 @@ export default function Home() {
                 </div>
               )}
             </div>
-            <div style={{flex:1, opacity: showTheaCard ? 1 : 0, transform: showTheaCard ? 'translateY(0)' : 'translateY(100vh)', transition: skipProjectsEntranceAnim ? 'none' : 'opacity 0.8s ease, transform 0.8s ease', paddingLeft:'40px', position:'relative', height:'70vh'}} onMouseEnter={() => {
+            <div style={{flex:1, opacity: showTheaCard ? 1 : 0, transform: showTheaCard ? 'translateY(0)' : 'translateY(100vh)', transition: skipProjectsEntranceAnim ? 'none' : 'opacity 0.8s ease, transform 0.8s ease', paddingLeft:'40px', position:'relative', top:'35vh', height:'70vh'}} onMouseEnter={() => {
               setTheaHovered(true)
               setTheaTyping('')
               let i = 0
@@ -6768,13 +7321,468 @@ export default function Home() {
                     top:'-52px',
                     marginLeft:'-8px'
                   }}>
-                    <VerProductoBtn texto="Ver la app en vivo" width="200px" hoverWidth="220px" />
+                    <VerProductoBtn texto="Ver la app en vivo" width="200px" hoverWidth="220px" href="https://theaveling.vercel.app" />
                   </div>
                 </div>
               )}
             </div>
+
+            {/* 2026-11-06, a pedido de Ana: tercera card (Huella / colaboración
+                con desarrollo), en cascada -- pegada a la izquierda (debajo de
+                Beacon), empezando antes de que termine el bloque de Thea.
+                OJO: Beacon y Huella están en la MISMA columna (izquierda), así
+                que el top no puede ser un simple "50vh" -- tiene que quedar
+                por debajo de TODO el contenido de Beacon (imagen + nombre +
+                tags + descripción, que mide ~306px extra bajo su imagen de
+                70vh), si no la card nueva queda montada encima del texto de
+                Beacon. calc(70vh + 360px) la deja empezar justo
+                después de que termina Beacon (con margen), y sigue
+                solapándose un poco con la cola de Thea (que termina más abajo
+                todavía), que es lo que sí se pidió. Usa framer-motion
+                (ya es dependencia del proyecto, mismo import que el resto del
+                archivo) para la animación de entrada, a pedido de Ana. No está
+                wireada a un ProjectTransition propio todavía -- no existe la
+                "bitácora"/página de detalle para este proyecto, así que no
+                tiene link ".md" ni botón "ver la app en vivo" como
+                Beacon/Thea. */}
+            <motion.div
+              initial={false}
+              animate={{ opacity: showHuellaCard ? 1 : 0, y: showHuellaCard ? 0 : '100vh' }}
+              transition={skipProjectsEntranceAnim ? { duration: 0 } : { duration: 0.8, ease: 'easeOut' }}
+              style={{
+                position:'absolute',
+                top:'calc(70vh + 340px)',
+                left:0,
+                width:'calc(50% - 20px)',
+                height:'70vh'
+              }} onMouseEnter={() => {
+              setHuellaHovered(true)
+              setHuellaTyping('')
+              let i = 0
+              const text = 'Diseñar en conjunto también implica decidir qué vale la pena construir.'
+              huellaIntervalRef.current = setInterval(() => {
+                if (i < text.length) {
+                  setHuellaTyping(text.slice(0, i + 1))
+                  i++
+                } else {
+                  clearInterval(huellaIntervalRef.current)
+                }
+              }, 50)
+            }} onMouseLeave={() => {
+              setHuellaHovered(false)
+              clearInterval(huellaIntervalRef.current)
+              setHuellaTyping('')
+            }}>
+              <img src={cardHuella} style={{width:'100%', height:'70vh', display:'block', objectFit:'contain', animation: showHuellaCard ? 'kenBurns 3s ease-out forwards' : 'none', filter: huellaHovered ? 'brightness(0.15)' : 'none', transition: 'filter 0.3s ease', cursor: 'pointer'}}/>
+              {huellaHovered && (
+                <div style={{
+                  position:'absolute',
+                  top:'0',
+                  left:'0',
+                  width:'100%',
+                  height:'100%',
+                  display:'flex',
+                  alignItems:'center',
+                  justifyContent:'center',
+                  flexDirection:'column',
+                  padding:'0 32px'
+                }}>
+                  <div>
+                    <p style={{fontFamily:"'IBM Plex Mono', monospace", fontSize:'14px', fontWeight:150, color:'rgba(255,255,255,0.5)', marginBottom:'8px'}}>// insight:</p>
+                    <p style={{fontFamily:"'IBM Plex Mono', monospace", fontSize:'14px', fontWeight:150, color:'rgba(255,255,255,0.5)', textAlign:'center', lineHeight:1.8, maxWidth:'300px'}}>
+                      {huellaTyping}
+                      <span style={{display:'inline-block', width:'1px', height:'13px', background:'#fff', marginLeft:'2px', animation:'blink 1s step-end infinite'}}/>
+                    </p>
+                    <a onClick={(e) => { e.preventDefault(); setShowHuellaPanel(true) }} style={{
+                      fontFamily:"'IBM Plex Mono', monospace",
+                      fontSize:'16px',
+                      fontWeight:300,
+                      color:'#FFFFFF',
+                      textDecoration:'underline',
+                      marginTop:'8px',
+                      display:'block',
+                      textAlign:'center',
+                      cursor:'pointer'
+                    }}>huella.md</a>
+                  </div>
+                </div>
+              )}
+              {showHuellaT && (
+                <div style={{width:'100%', position:'relative', marginTop:'16px'}}>
+                  <p style={{
+                    fontFamily:"'Plus Jakarta Sans', sans-serif",
+                    fontSize:'14px',
+                    fontWeight:240,
+                    color:'#1A1A1A',
+                    marginTop:'16px',
+                    lineHeight:2
+                  }}>
+                    Investigación UX ✳ Estrategia de Producto ✳ Diseño de Interfaz ✳ Colaboración con desarrollo
+                  </p>
+                  <p style={{
+                    fontFamily:"'Plus Jakarta Sans', sans-serif",
+                    fontWeight:700,
+                    fontSize:'36px',
+                    color:'#1A1A1A',
+                    lineHeight:1.25,
+                    marginTop:'10px'
+                  }}>
+                    Una experiencia de diseño construida junto a desarrolladores
+                  </p>
+                  <p style={{
+                    fontFamily:"'Plus Jakarta Sans', sans-serif",
+                    fontWeight:400,
+                    fontSize:'19px',
+                    color:'rgba(26,26,26,0.85)',
+                    lineHeight:1.75,
+                    marginTop:'10px'
+                  }}>
+                    Una bitácora sobre cómo la investigación, las decisiones de producto y la colaboración con desarrollo dieron forma a una propuesta digital: desde definir su alcance hasta preparar una experiencia visual compartida.
+                  </p>
+                </div>
+              )}
+            </motion.div>
           </div>
-          <div style={{height:'120vh', pointerEvents:'none'}}/>
+          {/* 2026-11-06: este spacer es hijo de un flex-column con
+              overflowY:'auto'. Al no tener contenido propio, flexbox lo
+              comprimía a 0px (flex-shrink:1 + min-height:auto por default),
+              así que CAMBIARLE EL ALTO NUNCA HACÍA NADA -- esa fue la causa
+              real de que el texto de Huella quedara cortado antes de llegar
+              al panel de Sobre mí, sin importar qué valor de vh le pusiera.
+              flexShrink:0 lo fuerza a respetar su alto real. */}
+          <div style={{height:'120vh', flexShrink:0, pointerEvents:'none'}}/>
+        </div>
+      )}
+
+      {showHuellaPanel && (
+        <div style={{
+          position:'fixed', inset:0, zIndex:9999, display:'flex',
+          opacity: huellaPanelClosing ? Math.max(0, 1 - Math.max(0, huellaPanelCloseProgress - 0.2) / 0.8) : 1
+        }}>
+          <div ref={huellaLeftPanelRef} className="left-panel" style={{flex:'0 0 60vw', width:'60vw', height:'100vh', background:'#F1F1F1', position:'relative', display:'flex', flexDirection:'column', alignItems:'flex-start', padding:'0 60px 60px 20px', overflowY:'auto', overflowX:'hidden'}}>
+            <p style={{
+              fontFamily: "'Poppins', sans-serif",
+              fontWeight: 700,
+              fontSize: '150px',
+              color: '#2B8095',
+              marginTop: '14px',
+              lineHeight: 1,
+              paddingLeft: '0',
+              opacity: huellaPanelClosing ? (1 - huellaPanelCloseProgress) : huellaPanelVisible ? 1 : 0,
+              transform: huellaPanelClosing ? 'translateY(-14px)' : huellaPanelVisible ? 'translateY(0)' : 'translateY(-14px)',
+              transition: 'opacity 0.4s ease, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
+            }}>
+              Bitácora huella
+            </p>
+            <p style={{
+              fontFamily: "'Plus Jakarta Sans', sans-serif",
+              fontWeight: 500,
+              fontSize: '40px',
+              color: 'rgba(29,27,32,0.88)',
+              textAlign: 'left',
+              lineHeight: 1.5,
+              marginTop: '16px',
+              opacity: huellaPanelClosing ? (1 - huellaPanelCloseProgress) : huellaPanelVisible ? 1 : 0,
+              transform: huellaPanelClosing ? 'translateY(-14px)' : huellaPanelVisible ? 'translateY(0)' : 'translateY(-14px)',
+              transition: 'opacity 0.4s ease 60ms, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) 60ms'
+            }}>
+              Huella es la historia de cómo una idea de producto empieza a encontrarse con las condiciones reales para existir.
+            </p>
+            <p style={{
+              fontFamily: "'Plus Jakarta Sans', sans-serif",
+              fontWeight: 500,
+              fontSize: '28px',
+              color: '#8E8E93',
+              marginTop: '40px',
+              lineHeight: 1.3,
+              opacity: huellaPanelClosing ? (1 - huellaPanelCloseProgress) : huellaPanelVisible ? 1 : 0,
+              transform: huellaPanelClosing ? 'translateY(-14px)' : huellaPanelVisible ? 'translateY(0)' : 'translateY(-14px)',
+              transition: 'opacity 0.4s ease 120ms, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) 120ms'
+            }}>
+              00. Antes de empezar
+            </p>
+            <p style={{
+              fontFamily: "'Plus Jakarta Sans', sans-serif",
+              fontWeight: 500,
+              fontSize: '20px',
+              color: '#2B8095',
+              marginTop: '20px',
+              lineHeight: 1.6,
+              maxWidth: '100%',
+              opacity: huellaPanelClosing ? (1 - huellaPanelCloseProgress) : huellaPanelVisible ? 1 : 0,
+              transform: huellaPanelClosing ? 'translateY(-14px)' : huellaPanelVisible ? 'translateY(0)' : 'translateY(-14px)',
+              transition: 'opacity 0.4s ease 180ms, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) 180ms'
+            }}>
+              No todo estaba resuelto cuando empezamos.
+            </p>
+            <p style={{
+              fontFamily: "'Plus Jakarta Sans', sans-serif",
+              fontWeight: 300,
+              fontSize: '20px',
+              color: '#1D1B20',
+              marginTop: '24px',
+              lineHeight: 1.6,
+              maxWidth: '100%',
+              opacity: huellaPanelClosing ? (1 - huellaPanelCloseProgress) : huellaPanelVisible ? 1 : 0,
+              transform: huellaPanelClosing ? 'translateY(-14px)' : huellaPanelVisible ? 'translateY(0)' : 'translateY(-14px)',
+              transition: 'opacity 0.4s ease 240ms, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) 240ms'
+            }}>
+              Había una idea, una intención y muchas posibilidades sobre la mesa.
+            </p>
+            <p style={{
+              fontFamily: "'Plus Jakarta Sans', sans-serif",
+              fontWeight: 300,
+              fontSize: '20px',
+              color: '#1D1B20',
+              marginTop: '24px',
+              lineHeight: 1.6,
+              maxWidth: '100%',
+              opacity: huellaPanelClosing ? (1 - huellaPanelCloseProgress) : huellaPanelVisible ? 1 : 0,
+              transform: huellaPanelClosing ? 'translateY(-14px)' : huellaPanelVisible ? 'translateY(0)' : 'translateY(-14px)',
+              transition: 'opacity 0.4s ease 300ms, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) 300ms'
+            }}>
+              Huella buscaba facilitar el encuentro entre personas y animales perdidos o en adopción. Pero, a medida que empezamos a trabajar en el producto, aparecieron preguntas que no podíamos resolver simplemente diseñando una pantalla.
+            </p>
+            <p style={{
+              fontFamily: "'Plus Jakarta Sans', sans-serif",
+              fontWeight: 300,
+              fontSize: '20px',
+              color: '#1D1B20',
+              marginTop: '24px',
+              lineHeight: 1.6,
+              maxWidth: '100%',
+              opacity: huellaPanelClosing ? (1 - huellaPanelCloseProgress) : huellaPanelVisible ? 1 : 0,
+              transform: huellaPanelClosing ? 'translateY(-14px)' : huellaPanelVisible ? 'translateY(0)' : 'translateY(-14px)',
+              transition: 'opacity 0.4s ease 360ms, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) 360ms'
+            }}>
+              Algunas ideas necesitaban cambiar, otras tenían que aterrizarse y varias decisiones nos llevaron a conversar más de una vez sobre lo que realmente queríamos construir.
+            </p>
+            <p style={{
+              fontFamily: "'Plus Jakarta Sans', sans-serif",
+              fontWeight: 500,
+              fontSize: '20px',
+              color: '#2B8095',
+              marginTop: '24px',
+              lineHeight: 1.6,
+              maxWidth: '100%',
+              opacity: huellaPanelClosing ? (1 - huellaPanelCloseProgress) : huellaPanelVisible ? 1 : 0,
+              transform: huellaPanelClosing ? 'translateY(-14px)' : huellaPanelVisible ? 'translateY(0)' : 'translateY(-14px)',
+              transition: 'opacity 0.4s ease 420ms, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) 420ms'
+            }}>
+              Trabajé en este proyecto desde la investigación, la definición de la experiencia y el diseño de interfaz, en colaboración con otras personas de diseño y desarrollo.
+            </p>
+            <p style={{
+              fontFamily: "'Plus Jakarta Sans', sans-serif",
+              fontWeight: 300,
+              fontSize: '20px',
+              color: '#1D1B20',
+              marginTop: '24px',
+              lineHeight: 1.6,
+              maxWidth: '100%',
+              opacity: huellaPanelClosing ? (1 - huellaPanelCloseProgress) : huellaPanelVisible ? 1 : 0,
+              transform: huellaPanelClosing ? 'translateY(-14px)' : huellaPanelVisible ? 'translateY(0)' : 'translateY(-14px)',
+              transition: 'opacity 0.4s ease 480ms, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) 480ms'
+            }}>
+              Lo que sigue es un recorrido por algunas de esas conversaciones y decisiones. No necesariamente en el orden en que sucedieron, sino siguiendo las preguntas que fueron dando forma al proyecto.
+            </p>
+            <motion.p
+              onViewportEnter={triggerHuellaLogoAnim}
+              viewport={{ root: huellaLeftPanelRef, once: true, amount: 0.4 }}
+              style={{
+                fontFamily: "'Plus Jakarta Sans', sans-serif",
+                fontWeight: 500,
+                fontSize: '28px',
+                color: '#8E8E93',
+                marginTop: '40px',
+                lineHeight: 1.3,
+                opacity: huellaPanelClosing ? (1 - huellaPanelCloseProgress) : huellaPanelVisible ? 1 : 0,
+                transform: huellaPanelClosing ? 'translateY(-14px)' : huellaPanelVisible ? 'translateY(0)' : 'translateY(-14px)',
+                transition: 'opacity 0.4s ease 540ms, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) 540ms'
+              }}>
+              00.1. Huella, en imágenes
+            </motion.p>
+            <p style={{
+              fontFamily: "'Plus Jakarta Sans', sans-serif",
+              fontWeight: 500,
+              fontSize: '20px',
+              color: '#2B8095',
+              marginTop: '20px',
+              lineHeight: 1.6,
+              maxWidth: '100%',
+              opacity: huellaPanelClosing ? (1 - huellaPanelCloseProgress) : huellaPanelVisible ? 1 : 0,
+              transform: huellaPanelClosing ? 'translateY(-14px)' : huellaPanelVisible ? 'translateY(0)' : 'translateY(-14px)',
+              transition: 'opacity 0.4s ease 600ms, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) 600ms'
+            }}>
+              Una pequeña postal del proyecto: producto, identidad y proceso.
+            </p>
+            {/* 2026-11-11, a pedido de Ana: esto va ABAJO del subtítulo, en
+             * el mismo panel izquierdo donde vive todo el texto -- no al
+             * lado, no en el panel derecho (esa tarjeta es solo identidad
+             * del proyecto, nunca fue pensada para alojar esto). Cuadrícula
+             * 2x2 de mockups de celular (3 pantallas reales + 1 slot con la
+             * animación de construcción del logo, disparada por scroll --
+             * ver triggerHuellaLogoAnim) y al lado la paleta de colores +
+             * el comparativo real de contraste. */}
+            <div style={{
+              width: '100%',
+              marginTop: '40px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '32px',
+              opacity: huellaPanelClosing ? (1 - huellaPanelCloseProgress) : huellaPanelVisible ? 1 : 0,
+              transform: huellaPanelClosing ? 'translateY(-14px)' : huellaPanelVisible ? 'translateY(0)' : 'translateY(-14px)',
+              transition: 'opacity 0.4s ease 660ms, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) 660ms'
+            }}>
+              {/* 2026-11-11, a pedido de Ana: orden de pantallas = logo
+               * primero, luego Home, Nuevo reporte, Notificaciones.
+               * Pantallas más grandes (0.58) y la columna derecha ya no es
+               * un ancho fijo chico -- flex:1 para que use el espacio
+               * libre que sobraba a la derecha (paleta y contraste quedan
+               * más anchos, menos apretados), con un tope razonable
+               * (HUELLA_SIDE_COL_MAX_W) para pantallas muy anchas. */}
+              <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'nowrap', gap: '18px', alignItems: 'flex-start' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, auto)', gap: '14px', flexShrink: 0 }}>
+                  <HuellaLogoMockup frames={huellaLogoFrames} frameIndex={huellaLogoFrame} scale={HUELLA_PHONE_SCALE} />
+                  <HuellaPhoneMockup src={huellaScreenHome} scale={HUELLA_PHONE_SCALE} />
+                  <HuellaPhoneMockup src={huellaScreenReporteFotos} scale={HUELLA_PHONE_SCALE} />
+                  <HuellaPhoneMockup src={huellaScreenNotificaciones} scale={HUELLA_PHONE_SCALE} />
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', flex: `1 1 ${HUELLA_SIDE_COL_MIN_W}px`, minWidth: `${HUELLA_SIDE_COL_MIN_W}px`, maxWidth: `${HUELLA_SIDE_COL_MAX_W}px`, marginTop: `${HUELLA_PHONE_BEZEL_TOP_PAD}px` }}>
+                  <HuellaColorPanel compact />
+                  <div style={{ display: 'flex', gap: '12px' }}>
+                    <img
+                      src={huellaContrasteAntes}
+                      alt="Captura real del WebAIM Contrast Checker: #62C4DB sobre #F1F1F1, ratio 1.78:1, Normal Text / Large Text / Graphical Objects todos en Fail."
+                      style={{ width: 'calc(50% - 6px)', height: 'auto', borderRadius: '8px', display: 'block', border: '1px solid rgba(0,0,0,0.08)' }}
+                    />
+                    <img
+                      src={huellaContrasteAhora}
+                      alt="Captura real del WebAIM Contrast Checker: #2B8095 sobre #F1F1F1, ratio 4.02:1, Large Text y Graphical Objects en Pass."
+                      style={{ width: 'calc(50% - 6px)', height: 'auto', borderRadius: '8px', display: 'block', border: '1px solid rgba(0,0,0,0.08)' }}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* 2026-11-11, a pedido de Ana: segunda fila de dos columnas,
+               * misma estructura que la de arriba (pantallas | paleta+
+               * contraste) -- a la izquierda el comentario (un poco más
+               * chico ahora, para que el globito de anclaje no se meta en
+               * la columna de al lado), a la derecha, pegadito a donde
+               * arriba está el contrast checker, la cascada de capturas
+               * reales de WhatsApp. */}
+              <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'nowrap', gap: '18px', alignItems: 'flex-start' }}>
+                <div style={{ width: `${Math.round(380 * HUELLA_PHONE_SCALE * 2 + 14)}px`, flexShrink: 0 }}>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: '12px', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#8E8E93', margin: '0 0 10px' }}>
+                    Sobre el formulario de reporte
+                  </p>
+                  <HuellaCommentCard width={340} />
+                </div>
+
+                <div style={{ flex: `1 1 ${HUELLA_SIDE_COL_MIN_W}px`, minWidth: `${HUELLA_SIDE_COL_MIN_W}px`, maxWidth: `${HUELLA_SIDE_COL_MAX_W}px` }}>
+                  <HuellaWhatsappCascade />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style={{flex:'0 0 40vw', width:'40vw', background:'#56555A', position:'relative'}}>
+            <div style={{position:'relative', top:'0', left:'20px', right:'20px'}}>
+              <p style={{
+                position:'absolute',
+                top:'0',
+                left:'0',
+                right:'0',
+                margin:0,
+                fontFamily:"'Plus Jakarta Sans', sans-serif",
+                fontWeight:600,
+                fontSize:'90px',
+                color:'#F1F1F1',
+                lineHeight:1,
+                opacity: huellaPanelClosing ? (1 - huellaPanelCloseProgress) : huellaPanelVisible ? 1 : 0,
+                transform: huellaPanelClosing ? 'translateY(-14px)' : huellaPanelVisible ? 'translateY(0)' : 'translateY(-14px)',
+                transition: 'opacity 0.4s ease, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
+              }}>
+                Huella
+              </p>
+            </div>
+            <div style={{
+              position:'absolute',
+              top:'140px',
+              left:'20px',
+              right:'20px',
+              display:'flex',
+              flexDirection:'row',
+              gap:'8px',
+              marginTop:'8px',
+              flexWrap:'wrap'
+            }}>
+              {['Pet Tech', 'Adopción y rescate animal', 'MVP', 'Colaboración interdisciplinaria', 'Diseño y desarrollo'].map((tag, i) => (
+                <div key={i} style={{overflow:'hidden'}}>
+                  <p style={{
+                    fontFamily:"'Plus Jakarta Sans', sans-serif",
+                    fontSize:'16px',
+                    fontWeight:500,
+                    color:'#F1F1F1',
+                    lineHeight:1.2,
+                    margin:0,
+                    transform: (huellaPanelClosing || !huellaPanelVisible) ? 'translateY(-100%)' : 'translateY(0)',
+                    transition: `transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) ${i * 60}ms`
+                  }}>✳ {tag}</p>
+                </div>
+              ))}
+            </div>
+            <div style={{position:'absolute', bottom:'40px', left:'20px'}}>
+              {[
+                {text:'Archivado', size:'12px', weight:300, color:'rgba(241,241,241,0.6)'},
+                {text:'Product Designer', size:'14px', weight:600, color:'#F1F1F1'},
+                {text:'3 meses · 2025', size:'13px', weight:300, color:'#F1F1F1'}
+              ].map((item, i) => (
+                <div key={i} style={{overflow:'hidden'}}>
+                  <p style={{
+                    fontFamily:"'Plus Jakarta Sans', sans-serif",
+                    fontSize: item.size,
+                    fontWeight: item.weight,
+                    color: item.color,
+                    margin: 0,
+                    marginBottom: i < 2 ? '4px' : '0',
+                    transform: (huellaPanelClosing || !huellaPanelVisible) ? 'translateY(-100%)' : 'translateY(0)',
+                    transition: `transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) ${i * 60}ms`
+                  }}>{item.text}</p>
+                </div>
+              ))}
+            </div>
+            <div onClick={closeHuellaPanel} style={{
+              position:'absolute',
+              top:'24px',
+              right:'24px',
+              width:'36px',
+              height:'36px',
+              border:'1px solid #F1F1F1',
+              borderRadius:'50%',
+              display:'flex',
+              alignItems:'center',
+              justifyContent:'center',
+              cursor:'pointer',
+              background:'transparent',
+              opacity: huellaPanelClosing ? 0 : huellaPanelVisible ? 1 : 0,
+              transition: 'opacity 0.4s ease'
+            }}>
+              <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
+                <path d="M1 1L13 13M13 1L1 13" stroke="#F1F1F1" strokeWidth="1.5" strokeLinecap="round"/>
+              </svg>
+            </div>
+            <div style={{
+              position:'absolute',
+              bottom:'40px',
+              right:'20px',
+              opacity: huellaPanelClosing ? 0 : huellaPanelVisible ? 1 : 0,
+              transform: huellaPanelClosing ? 'translateY(20px)' : huellaPanelVisible ? 'translateY(0)' : 'translateY(20px)',
+              transition: 'opacity 0.4s ease, transform 0.4s ease'
+            }}>
+              <VerProductoBtn texto="Ver prototipo" width="160px" hoverWidth="180px" />
+            </div>
+          </div>
         </div>
       )}
 
@@ -6797,10 +7805,13 @@ export default function Home() {
             setShowSubtitle(true)
             setShowBeaconCard(true)
             setShowTheaCard(true)
+            setShowHuellaCard(true)
             setShowBeaconName(true)
             setShowTheaName(true)
+            setShowHuellaName(true)
             setShowBeaconT(true)
             setShowTheaT(true)
+            setShowHuellaT(true)
           }}
           onViewBeacon={() => setProjectTransition('beacon')}
           onViewTheaveling={() => setProjectTransition('theaveling')}

@@ -25,6 +25,29 @@
          600) son ambas Google Fonts de uso libre, mismas que usa la app
          real de Theaveling. -->
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@100&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- 2026-11-06, a pedido de Ana: panel de "Bitácora huella" (Home.jsx)
+         usa Poppins para el título (wordmark de Huella, mismo rol que
+         Satoshi en Beacon y Sansita en Theaveling: identidad del
+         producto, no texto narrativo). El texto narrativo del panel
+         (subtítulo, descripción, etiquetas) sigue el mismo patrón que
+         los otros dos cases y usa Plus Jakarta Sans -- la voz propia del
+         portfolio -- en vez de una tipografía real de Huella, así que
+         Manrope (que se había cargado acá para esto) ya no hace falta y
+         se quita. -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- 2026-11-11, a pedido de Ana: tarjeta "Colores" dentro de la
+         bitácora de Huella (HuellaColorPanel en Home.jsx) recrea el panel
+         real de la sección de colores del design system -- verificado
+         directo en Figma (get_design_context, nodo 2398:8579): el título
+         "Colores" y el nombre de cada color SÍ son Poppins Medium (ya
+         cargada arriba para el wordmark de Huella), pero el subtítulo y
+         el hex de cada color son Manrope Regular, no Poppins. Manrope se
+         había quitado el 2026-11-06 porque el texto NARRATIVO del panel
+         (ese es Plus Jakarta Sans), pero esta tarjeta en particular es
+         una recreación literal de una pantalla real que sí usa Manrope
+         para esas dos piezas de texto, así que se vuelve a cargar acá
+         solo para este caso puntual. -->
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
   </head>
   <body>
     <div id="root"></div>
