@@ -164,9 +164,7 @@ import theaIphoneBezel from '../assets/thea-iphone-bezel.png'
 // animación de construcción del isotipo (Garra 1/2/3, Hocico, Palabra,
 // también de Figma), y el comparativo de contraste es un pantallazo real
 // de la herramienta WebAIM Contrast Checker (no un gráfico armado a mano).
-import huellaScreenHome from '../assets/huella-screen-home.png'
 import huellaScreenReporteFotos from '../assets/huella-screen-reporte-fotos.png'
-import huellaScreenNotificaciones from '../assets/huella-screen-notificaciones.png'
 import huellaLogo1 from '../assets/huella-logo-1.png'
 import huellaLogo2 from '../assets/huella-logo-2.png'
 import huellaLogo3 from '../assets/huella-logo-3.png'
@@ -1562,7 +1560,7 @@ function TheaDesignSystemEmbed() {
   )
 }
 
-function VerProductoBtn({ texto = 'Ver producto', icon, href, onClick, width = '130px', hoverWidth = '145px', iconSize = '16px', contentJustify = 'center' }) {
+function VerProductoBtn({ texto = 'Ver producto', icon, href, onClick, width = '130px', hoverWidth = '145px', iconSize = '16px', contentJustify = 'center', containerJustify = 'flex-end' }) {
   const [hovered, setHovered] = React.useState(false)
   // 2026-10-19, a pedido de Ana: el botón "Ver case" (navegación interna
   // dentro del portfolio, no un link externo) necesita un onClick propio,
@@ -1577,7 +1575,7 @@ function VerProductoBtn({ texto = 'Ver producto', icon, href, onClick, width = '
         display: 'inline-flex',
         alignItems: 'center',
         cursor: 'pointer',
-        justifyContent: 'flex-end',
+        justifyContent: containerJustify,
         // 2026-10-19, a pedido de Ana ("tienen como un bug... si uno los
         // toca por el ladito izquierdo"): antes este div no tenía ancho
         // propio, así que su ancho total cambiaba con el hover (el círculo
@@ -1818,10 +1816,10 @@ function HuellaLogoMockup({ frames, frameIndex, scale = 0.27 }) {
 // chico -- usa flex para estirarse y aprovechar el espacio libre que
 // sobraba a la derecha, con un máximo razonable para que no quede
 // absurdamente ancha en pantallas grandes.
-const HUELLA_PHONE_SCALE = 0.58
+const HUELLA_PHONE_SCALE = 0.60
 const HUELLA_PHONE_TILE_H = Math.round(748 * HUELLA_PHONE_SCALE)
-const HUELLA_SIDE_COL_MIN_W = 390
-const HUELLA_SIDE_COL_MAX_W = 580
+const HUELLA_SIDE_COL_MIN_W = 320
+const HUELLA_SIDE_COL_MAX_W = 560
 // 2026-11-11, a pedido de Ana: la tarjeta de colores se veía "más arriba"
 // que las pantallas -- el PNG del bisel (thea-iphone-bezel.png) tiene un
 // ~2.18% de margen transparente arriba (y abajo) antes de que empiece el
@@ -1863,21 +1861,25 @@ function HuellaColorPanel({ compact = false }) {
    * 12 sin importar el ancho de la tarjeta. */
   return (
     <div style={{
-      background: '#FFFFFF',
-      borderRadius: compact ? '24px' : '40px',
-      boxShadow: '0 12px 32px rgba(0,0,0,0.1)',
-      padding: compact ? '22px' : '56px 64px',
+      background: compact ? 'transparent' : '#FFFFFF',
+      borderRadius: compact ? '0px' : '40px',
+      boxShadow: compact ? 'none' : '0 12px 32px rgba(0,0,0,0.1)',
+      padding: compact ? '0px' : '56px 64px',
       width: '100%',
-      height: '100%',
-      boxSizing: 'border-box'
+      maxWidth: compact ? '100%' : '560px',
+      margin: '0 auto',
+      boxSizing: 'border-box',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'flex-start'
     }}>
-      <p style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 500, fontSize: compact ? '21px' : '35px', color: '#1D1B20', margin: 0 }}>
+      <p style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 500, fontSize: compact ? '19px' : '35px', color: '#1D1B20', margin: 0 }}>
         Colores
       </p>
-      <p style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 400, fontSize: compact ? '12px' : '24px', color: '#4A474D', margin: compact ? '6px 0 16px' : '14px 0 40px', lineHeight: 1.4 }}>
+      <p style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 400, fontSize: compact ? '12px' : '24px', color: '#4A474D', margin: compact ? '4px 0 14px' : '14px 0 40px', lineHeight: 1.4 }}>
         Una paleta pensada para transmitir la calidez y el bienestar que despierta una mascota.
       </p>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: compact ? '20px 16px' : '38px 36px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: compact ? '14px 10px' : '38px 36px', width: '100%' }}>
         {HUELLA_COLORS.map((c, i) => (
           <div key={i} style={{ textAlign: 'center' }}>
             <div style={{
@@ -1885,7 +1887,7 @@ function HuellaColorPanel({ compact = false }) {
               background: c.swatch || c.hex,
               border: c.border ? '1px solid rgba(0,0,0,0.08)' : 'none'
             }} />
-            <p style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 500, fontSize: '13px', color: '#1D1B20', margin: '8px 0 2px', lineHeight: 1.25 }}>
+            <p style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 500, fontSize: '12px', color: '#1D1B20', margin: '6px 0 2px', lineHeight: 1.25 }}>
               {c.name}
             </p>
             <p style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 400, fontSize: '12px', color: '#8E8E93', margin: 0, lineHeight: 1.25 }}>
@@ -1945,7 +1947,7 @@ function HuellaCommentCard({ width }) {
         overflow: 'hidden'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '13px 15px 11px' }}>
-          <p style={{ margin: 0, fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 700, fontSize: '13px', color: '#F5F5F5' }}>
+          <p style={{ margin: 0, fontFamily: "'Inter', sans-serif", fontWeight: 700, fontSize: '13px', color: '#F5F5F5' }}>
             Comment
           </p>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -1958,11 +1960,11 @@ function HuellaCommentCard({ width }) {
         <div style={{ padding: '13px 15px 6px', display: 'flex', gap: '9px', alignItems: 'flex-start' }}>
           <img src={huellaAnaAvatar} alt="" style={{ width: '27px', height: '27px', borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }} />
           <div>
-            <p style={{ margin: 0, display: 'flex', gap: '7px', alignItems: 'baseline', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+            <p style={{ margin: 0, display: 'flex', gap: '7px', alignItems: 'baseline', fontFamily: "'Inter', sans-serif" }}>
               <span style={{ fontWeight: 700, fontSize: '12.5px', color: '#F5F5F5' }}>Ana</span>
               <span style={{ fontWeight: 400, fontSize: '11px', color: '#8A8A8A' }}>hace 10 meses</span>
             </p>
-            <p style={{ margin: '6px 0 0', fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: '12.5px', color: '#D9D9D9', lineHeight: 1.5 }}>
+            <p style={{ margin: '6px 0 0', fontFamily: "'Inter', sans-serif", fontSize: '12.5px', color: '#D9D9D9', lineHeight: 1.5 }}>
               Acá puede que no le estemos dando al usuario funcionalidad con información que ya sabemos que es útil: fácilmente puede olvidar detalles en su narración, y además es imposible filtrar búsquedas con solamente comentarios.
             </p>
           </div>
@@ -1970,19 +1972,13 @@ function HuellaCommentCard({ width }) {
         <div style={{ padding: '10px 15px 14px', display: 'flex', gap: '9px', alignItems: 'center' }}>
           <img src={huellaAnaAvatar} alt="" style={{ width: '22px', height: '22px', borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }} />
           <div style={{ flex: 1, background: '#3A3A3A', borderRadius: '20px', padding: '7px 7px 7px 13px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: '11.5px', color: '#9A9A9A' }}>Reply</span>
+            <span style={{ fontFamily: "'Inter', sans-serif", fontSize: '11.5px', color: '#9A9A9A' }}>Reply</span>
             <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: '#565656', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <svg width="9" height="9" viewBox="0 0 16 16" fill="none"><path d="M8 13V3M3 7l5-5 5 5" stroke="#E5E5E5" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
             </div>
           </div>
         </div>
       </div>
-      <svg
-        width="48" height="48"
-        style={{ position: 'absolute', top: '16px', right: '-38px', overflow: 'visible' }}
-      >
-        <line x1="0" y1="8" x2="38" y2="20" stroke="#C9C9C9" strokeWidth="1" />
-      </svg>
       <div style={{ position: 'absolute', top: '26px', right: '-54px' }}>
         <HuellaCommentPin size={36} />
       </div>
@@ -1999,13 +1995,13 @@ function HuellaCommentCard({ width }) {
 // arriba están la paleta y el contrast checker.
 function HuellaWhatsappCascade() {
   const shots = [
-    { src: huellaWhatsapp1, w: 496 },
-    { src: huellaWhatsapp2, w: 518 },
-    { src: huellaWhatsapp3, w: 556 }
+    { src: huellaWhatsapp1, w: 720 },
+    { src: huellaWhatsapp2, w: 752 },
+    { src: huellaWhatsapp3, w: 808 }
   ]
   const maxW = Math.max(...shots.map(s => s.w))
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '116%' }}>
       {shots.map((s, i) => (
         <img
           key={i}
@@ -5579,6 +5575,58 @@ export default function Home() {
   // scrollea ese texto; se lo pasamos a Motion como `viewport.root` en el
   // onViewportEnter de ese encabezado.
   const huellaLeftPanelRef = React.useRef(null)
+  const huellaPrototypeRef = React.useRef(null)
+  const [huellaPrototypeLoaded, setHuellaPrototypeLoaded] = React.useState(false)
+  const [activeHuellaSection, setActiveHuellaSection] = React.useState(0)
+  const huellaNavigationSections = [
+    { title: 'Antes de empezar', id: 'huella-section-before' },
+    { title: 'Primeras preguntas de alcance', id: 'huella-section-01' },
+    { title: 'Investigación y definición', id: 'huella-section-02' },
+    { title: 'Diseño y desarrollo: trabajo compartido', id: 'huella-section-03' },
+    { title: 'De las ideas a la experiencia', id: 'huella-section-04' },
+    { title: 'Hasta dónde llegó Huella', id: 'huella-section-05' }
+  ]
+  const scrollToHuellaSection = (section, index) => {
+    const panel = huellaLeftPanelRef.current
+    const target = document.getElementById(section.id)
+    if (!panel || !target) return
+
+    const targetTop = panel.scrollTop + target.getBoundingClientRect().top - panel.getBoundingClientRect().top - 24
+    panel.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' })
+    setActiveHuellaSection(index)
+  }
+  const updateActiveHuellaSection = (panel) => {
+    const activationLine = panel.getBoundingClientRect().top + 180
+    let activeIndex = 0
+    huellaNavigationSections.forEach((section, index) => {
+      const target = document.getElementById(section.id)
+      if (target && target.getBoundingClientRect().top <= activationLine) activeIndex = index
+    })
+    if (panel.scrollTop + panel.clientHeight >= panel.scrollHeight - 20) {
+      activeIndex = huellaNavigationSections.length - 1
+    }
+    setActiveHuellaSection((current) => current === activeIndex ? current : activeIndex)
+  }
+  React.useEffect(() => {
+    if (!showHuellaPanel) {
+      setHuellaPrototypeLoaded(false)
+      return
+    }
+
+    const target = huellaPrototypeRef.current
+    const root = huellaLeftPanelRef.current
+    if (!target || !root) return
+
+    const observer = new IntersectionObserver((entries) => {
+      if (entries.some((entry) => entry.isIntersecting)) {
+        setHuellaPrototypeLoaded(true)
+        observer.disconnect()
+      }
+    }, { root, threshold: 0.15 })
+
+    observer.observe(target)
+    return () => observer.disconnect()
+  }, [showHuellaPanel])
   const [huellaLogoAnimStarted, setHuellaLogoAnimStarted] = React.useState(false)
   const [huellaLogoFrame, setHuellaLogoFrame] = React.useState(0)
   const huellaLogoFrames = [huellaLogo1, huellaLogo2, huellaLogo3, huellaLogo4, huellaLogo5]
@@ -5977,6 +6025,16 @@ export default function Home() {
       setActiveLink('Intro')
     }
   }, [phase])
+
+  React.useEffect(() => {
+    const targetHash = `#${encodeURIComponent(activeLink)}`
+    if (window.location.hash === targetHash) return
+    window.history.replaceState(
+      window.history.state,
+      '',
+      `${window.location.pathname}${window.location.search}${targetHash}`
+    )
+  }, [activeLink])
 
   // Blackout reutilizable (mismo look del splash de entrada) para saltar
   // directo entre Intro y Proyectos por click de nav, sin el zoom
@@ -7459,7 +7517,7 @@ export default function Home() {
           position:'fixed', inset:0, zIndex:9999, display:'flex',
           opacity: huellaPanelClosing ? Math.max(0, 1 - Math.max(0, huellaPanelCloseProgress - 0.2) / 0.8) : 1
         }}>
-          <div ref={huellaLeftPanelRef} className="left-panel" style={{flex:'0 0 60vw', width:'60vw', height:'100vh', background:'#F1F1F1', position:'relative', display:'flex', flexDirection:'column', alignItems:'flex-start', padding:'0 60px 60px 20px', overflowY:'auto', overflowX:'hidden'}}>
+          <div ref={huellaLeftPanelRef} className="left-panel" onScroll={(event) => updateActiveHuellaSection(event.currentTarget)} style={{flex:'0 0 60vw', width:'60vw', height:'100vh', background:'#F1F1F1', position:'relative', display:'flex', flexDirection:'column', alignItems:'flex-start', padding:'0 60px 60px 20px', overflowY:'auto', overflowX:'hidden'}}>
             <p style={{
               fontFamily: "'Poppins', sans-serif",
               fontWeight: 700,
@@ -7477,7 +7535,7 @@ export default function Home() {
             <p style={{
               fontFamily: "'Plus Jakarta Sans', sans-serif",
               fontWeight: 500,
-              fontSize: '40px',
+              fontSize: '32px',
               color: 'rgba(29,27,32,0.88)',
               textAlign: 'left',
               lineHeight: 1.5,
@@ -7486,7 +7544,7 @@ export default function Home() {
               transform: huellaPanelClosing ? 'translateY(-14px)' : huellaPanelVisible ? 'translateY(0)' : 'translateY(-14px)',
               transition: 'opacity 0.4s ease 60ms, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) 60ms'
             }}>
-              Huella es la historia de cómo una idea de producto empieza a encontrarse con las condiciones reales para existir.
+              Retrospectiva del proceso de construcción: cómo una idea de producto fue tomando forma, encontrándose con decisiones, posibilidades y limitaciones reales.
             </p>
             <p style={{
               fontFamily: "'Plus Jakarta Sans', sans-serif",
@@ -7513,7 +7571,7 @@ export default function Home() {
               transform: huellaPanelClosing ? 'translateY(-14px)' : huellaPanelVisible ? 'translateY(0)' : 'translateY(-14px)',
               transition: 'opacity 0.4s ease 180ms, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) 180ms'
             }}>
-              No todo estaba resuelto cuando empezamos.
+              Había una idea, una intención y muchas posibilidades sobre la mesa.
             </p>
             <p style={{
               fontFamily: "'Plus Jakarta Sans', sans-serif",
@@ -7527,21 +7585,7 @@ export default function Home() {
               transform: huellaPanelClosing ? 'translateY(-14px)' : huellaPanelVisible ? 'translateY(0)' : 'translateY(-14px)',
               transition: 'opacity 0.4s ease 240ms, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) 240ms'
             }}>
-              Había una idea, una intención y muchas posibilidades sobre la mesa.
-            </p>
-            <p style={{
-              fontFamily: "'Plus Jakarta Sans', sans-serif",
-              fontWeight: 300,
-              fontSize: '20px',
-              color: '#1D1B20',
-              marginTop: '24px',
-              lineHeight: 1.6,
-              maxWidth: '100%',
-              opacity: huellaPanelClosing ? (1 - huellaPanelCloseProgress) : huellaPanelVisible ? 1 : 0,
-              transform: huellaPanelClosing ? 'translateY(-14px)' : huellaPanelVisible ? 'translateY(0)' : 'translateY(-14px)',
-              transition: 'opacity 0.4s ease 300ms, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) 300ms'
-            }}>
-              Huella buscaba facilitar el encuentro entre personas y animales perdidos o en adopción. Pero, a medida que empezamos a trabajar en el producto, aparecieron preguntas que no podíamos resolver simplemente diseñando una pantalla.
+              Huella buscaba facilitar el encuentro entre personas y animales perdidos o en adopción. Cuando me compartieron la propuesta, todavía había varias preguntas que no podíamos resolver simplemente diseñando una pantalla.
             </p>
             <p style={{
               fontFamily: "'Plus Jakarta Sans', sans-serif",
@@ -7586,13 +7630,14 @@ export default function Home() {
               Lo que sigue es un recorrido por algunas de esas conversaciones y decisiones. No necesariamente en el orden en que sucedieron, sino siguiendo las preguntas que fueron dando forma al proyecto.
             </p>
             <motion.p
+              id="huella-section-before"
               onViewportEnter={triggerHuellaLogoAnim}
               viewport={{ root: huellaLeftPanelRef, once: true, amount: 0.4 }}
               style={{
                 fontFamily: "'Plus Jakarta Sans', sans-serif",
                 fontWeight: 500,
                 fontSize: '28px',
-                color: '#8E8E93',
+                color: '#7A7A80',
                 marginTop: '40px',
                 lineHeight: 1.3,
                 opacity: huellaPanelClosing ? (1 - huellaPanelCloseProgress) : huellaPanelVisible ? 1 : 0,
@@ -7640,51 +7685,515 @@ export default function Home() {
                * libre que sobraba a la derecha (paleta y contraste quedan
                * más anchos, menos apretados), con un tope razonable
                * (HUELLA_SIDE_COL_MAX_W) para pantallas muy anchas. */}
-              <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'nowrap', gap: '18px', alignItems: 'flex-start' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, auto)', gap: '14px', flexShrink: 0 }}>
+              {/* 2026-11-11, a pedido de Ana: orden de pantallas = logo
+               * primero, luego Home, Nuevo reporte, Notificaciones.
+               * Dos columnas: Izquierda (grid 2x2 de mockups), Derecha (paleta de colores + contraste). */}
+              <div style={{ display: 'flex', flexDirection: 'row', gap: '32px', alignItems: 'flex-start', width: '100%' }}>
+                {/* Columna Izquierda: Grid de mockups de celular */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, auto)', gap: '14px', flexShrink: 0, justifyContent: 'flex-start' }}>
                   <HuellaLogoMockup frames={huellaLogoFrames} frameIndex={huellaLogoFrame} scale={HUELLA_PHONE_SCALE} />
-                  <HuellaPhoneMockup src={huellaScreenHome} scale={HUELLA_PHONE_SCALE} />
+                  <HuellaPhoneMockup src="/Home.png" scale={HUELLA_PHONE_SCALE} />
                   <HuellaPhoneMockup src={huellaScreenReporteFotos} scale={HUELLA_PHONE_SCALE} />
-                  <HuellaPhoneMockup src={huellaScreenNotificaciones} scale={HUELLA_PHONE_SCALE} />
+                  <HuellaPhoneMockup src="/Notificaciones.png" scale={HUELLA_PHONE_SCALE} />
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', flex: `1 1 ${HUELLA_SIDE_COL_MIN_W}px`, minWidth: `${HUELLA_SIDE_COL_MIN_W}px`, maxWidth: `${HUELLA_SIDE_COL_MAX_W}px`, marginTop: `${HUELLA_PHONE_BEZEL_TOP_PAD}px` }}>
-                  <HuellaColorPanel compact />
-                  <div style={{ display: 'flex', gap: '12px' }}>
-                    <img
-                      src={huellaContrasteAntes}
-                      alt="Captura real del WebAIM Contrast Checker: #62C4DB sobre #F1F1F1, ratio 1.78:1, Normal Text / Large Text / Graphical Objects todos en Fail."
-                      style={{ width: 'calc(50% - 6px)', height: 'auto', borderRadius: '8px', display: 'block', border: '1px solid rgba(0,0,0,0.08)' }}
-                    />
-                    <img
-                      src={huellaContrasteAhora}
-                      alt="Captura real del WebAIM Contrast Checker: #2B8095 sobre #F1F1F1, ratio 4.02:1, Large Text y Graphical Objects en Pass."
-                      style={{ width: 'calc(50% - 6px)', height: 'auto', borderRadius: '8px', display: 'block', border: '1px solid rgba(0,0,0,0.08)' }}
-                    />
+                {/* Columna Derecha: Paleta de colores + Contrast Checker */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', flex: 1, minWidth: `${HUELLA_SIDE_COL_MIN_W}px`, maxWidth: `${HUELLA_SIDE_COL_MAX_W}px`, alignItems: 'flex-start' }}>
+                  <div style={{
+                    width: '100%',
+                    overflow: 'hidden',
+                    transform: (huellaPanelClosing || !huellaPanelVisible) ? 'translateY(30px)' : 'translateY(0)',
+                    opacity: (huellaPanelClosing || !huellaPanelVisible) ? 0 : 1,
+                    transition: 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1) 200ms, opacity 0.5s ease 200ms'
+                  }}>
+                    <HuellaColorPanel compact />
+                  </div>
+                  <div style={{ width: '100%', marginTop: '42px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                      <img
+                        src="/contraste.png"
+                        alt="Captura del Contrast Checker de Huella."
+                        style={{ width: '100%', height: 'auto', borderRadius: '8px', display: 'block' }}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
 
-              {/* 2026-11-11, a pedido de Ana: segunda fila de dos columnas,
-               * misma estructura que la de arriba (pantallas | paleta+
-               * contraste) -- a la izquierda el comentario (un poco más
-               * chico ahora, para que el globito de anclaje no se meta en
-               * la columna de al lado), a la derecha, pegadito a donde
-               * arriba está el contrast checker, la cascada de capturas
-               * reales de WhatsApp. */}
-              <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'nowrap', gap: '18px', alignItems: 'flex-start' }}>
-                <div style={{ width: `${Math.round(380 * HUELLA_PHONE_SCALE * 2 + 14)}px`, flexShrink: 0 }}>
+              {/* Chats con comment (izquierda) | WhatsApp (derecha) */}
+              <div style={{ display: 'flex', gap: '18px', width: '100%', alignItems: 'flex-start', justifyContent: 'flex-start', marginTop: '2px' }}>
+                <div style={{ width: '480px', flexShrink: 0, transform: 'translateX(52px)' }}>
                   <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: '12px', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#8E8E93', margin: '0 0 10px' }}>
                     Sobre el formulario de reporte
                   </p>
                   <HuellaCommentCard width={340} />
                 </div>
-
-                <div style={{ flex: `1 1 ${HUELLA_SIDE_COL_MIN_W}px`, minWidth: `${HUELLA_SIDE_COL_MIN_W}px`, maxWidth: `${HUELLA_SIDE_COL_MAX_W}px` }}>
+                <div style={{ flex: 1, minWidth: `${HUELLA_SIDE_COL_MIN_W}px`, maxWidth: `${HUELLA_SIDE_COL_MAX_W}px`, transform: 'translate(-24px, -46px)' }}>
                   <HuellaWhatsappCascade />
                 </div>
               </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  <p id="huella-section-01" style={{
+                    fontFamily: "'Plus Jakarta Sans', sans-serif",
+                    fontWeight: 500,
+                    fontSize: '28px',
+                    color: '#8E8E93',
+                    marginTop: '40px',
+                    lineHeight: 1.3,
+                    opacity: huellaPanelClosing ? (1 - huellaPanelCloseProgress) : huellaPanelVisible ? 1 : 0,
+                    transform: huellaPanelClosing ? 'translateY(-14px)' : huellaPanelVisible ? 'translateY(0)' : 'translateY(-14px)',
+                    transition: 'opacity 0.4s ease 540ms, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) 540ms'
+                  }}>
+                    01. Primeras preguntas de alcance
+                  </p>
+
+                </div>
+
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '24px',
+                  width: '100%',
+                  color: '#1D1B20',
+                  opacity: huellaPanelClosing ? (1 - huellaPanelCloseProgress) : huellaPanelVisible ? 1 : 0,
+                  transform: huellaPanelClosing ? 'translateY(-14px)' : huellaPanelVisible ? 'translateY(0)' : 'translateY(-14px)',
+                  transition: 'opacity 0.4s ease 540ms, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) 540ms'
+                }}>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 300, fontSize: '20px', lineHeight: 1.6, margin: 0, maxWidth: '760px' }}>
+                    Cuando Kevin Maggio me compartió la idea de Huella, la propuesta todavía estaba en una etapa muy inicial. La intención era crear una aplicación que ayudara con el rescate y la adopción de mascotas.
+                  </p>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 300, fontSize: '20px', lineHeight: 1.6, margin: 0, maxWidth: '760px' }}>
+                    Mi primera reacción genuina fue preguntarme <span style={{ fontWeight: 500, fontSize: '20px', color: '#2B8095' }}>por qué esta aplicación tendría sentido si ya existen las redes sociales, las cuales están llenas de publicaciones para ayudar a solucionar esto.</span> O eso creía yo; la realidad distaba bastante de eso.
+                  </p>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 300, fontSize: '20px', lineHeight: 1.6, margin: 0, maxWidth: '760px' }}>
+                    Aunque todavía no tenía una respuesta clara, eso me llevó a la pregunta principal antes de empezar a diseñar: <span style={{ fontWeight: 500, fontSize: '20px', color: '#2B8095' }}>¿dónde estaba realmente la oportunidad de Huella?</span>
+                  </p>
+                  <p id="huella-section-02" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 500, fontSize: '28px', color: '#8E8E93', lineHeight: 1.4, margin: '24px 0 0', maxWidth: '760px' }}>
+                    02.&nbsp;&nbsp;Investigación y definición
+                  </p>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 300, fontSize: '20px', lineHeight: 1.6, margin: 0, maxWidth: '760px' }}>
+                    Para entender mejor las situaciones que Huella quería atender, realicé una investigación exploratoria que combinó encuestas, entrevistas y análisis de otras soluciones.
+                  </p>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 300, fontSize: '20px', lineHeight: 1.6, margin: 0, maxWidth: '760px' }}>
+                    La intención era dejar de pensar únicamente desde lo que imaginábamos que podía necesitar una persona y acercarnos a experiencias reales: <span style={{ fontWeight: 500, fontSize: '20px', color: '#2B8095' }}>qué sucedía cuando alguien encontraba un animal, cómo intentaba ayudarlo y qué dificultades aparecían durante ese proceso.</span>
+                  </p>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 500, fontSize: '20px', color: '#2B8095', lineHeight: 1.6, margin: 0, maxWidth: '760px' }}>
+                    La investigación incluyó:
+                  </p>
+                  <ul style={{ display: 'flex', flexDirection: 'column', gap: '12px', listStyle: 'none', padding: 0, margin: '16px 0', maxWidth: '760px' }}>
+                    {[
+                      'Seis entrevistas',
+                      'Una encuesta con 17 respuestas de distintas localidades de Argentina',
+                      'Un benchmark de productos relacionados con la búsqueda y recuperación de mascotas'
+                    ].map((item) => (
+                      <li key={item} style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+                        <img src="/check.svg" alt="" aria-hidden="true" style={{ width: '24px', height: '16px', objectFit: 'contain', flexShrink: 0, marginTop: '8px' }} />
+                        <span style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 300, fontSize: '20px', lineHeight: 1.6, color: '#1D1B20' }}>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 500, fontSize: '20px', color: '#7A7A80', lineHeight: 1.4, margin: '24px 0 0', maxWidth: '760px' }}>
+                    02.1. Hallazgos de investigación
+                  </p>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 300, fontSize: '20px', lineHeight: 1.6, margin: 0, maxWidth: '760px' }}>
+                    Una de las primeras cosas que apareció fue que encontrar un animal perdido o en situación de calle no era una experiencia excepcional para las personas consultadas.
+                  </p>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', width: '100%', maxWidth: '760px', margin: '76px auto' }}>
+                    {[
+                      '16 de 17 participantes habían encontrado alguna vez un perro o gato perdido o en situación de calle.',
+                      '16 de 17 consideraban que resolver esa situación era muy o algo difícil.',
+                      'Las 17 personas señalaron ayudar al animal como una de sus principales motivaciones.'
+                    ].map((finding, i) => (
+                      <motion.div
+                        key={finding}
+                        initial={{ opacity: 0, y: 24 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, amount: 0.4 }}
+                        transition={{ duration: 0.5, delay: i * 0.12, ease: 'easeOut' }}
+                        style={{
+                          position: 'relative',
+                          background: '#FFFFFF',
+                          borderRadius: '16px',
+                          boxShadow: '0 6px 20px rgba(29,27,32,0.12)',
+                          padding: '64px 24px',
+                          fontFamily: "'Plus Jakarta Sans', sans-serif",
+                          fontWeight: 300,
+                          fontSize: '20px',
+                          lineHeight: 1.6,
+                          color: '#1D1B20'
+                        }}
+                      >
+                        {finding.split(/(16|17)/g).map((part, partIndex) => (
+                          part === (i < 2 ? '16' : '17')
+                            ? <span key={partIndex} style={{ fontWeight: 500, fontSize: '20px', color: '#2B8095' }}>{part}</span>
+                            : part
+                        ))}
+                        <img src="/luz.png" alt="" aria-hidden="true" style={{ position: 'absolute', top: '-12px', right: '-12px', width: '56px', height: '56px', objectFit: 'contain', pointerEvents: 'none' }} />
+                      </motion.div>
+                    ))}
+                  </div>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 300, fontSize: '20px', lineHeight: 1.6, margin: 0, maxWidth: '760px' }}>
+                    También aparecieron necesidades bastante concretas alrededor de la información. Las personas no solo querían poder identificar al animal mediante una fotografía, sino conocer la zona donde había sido encontrado y entender qué estaba sucediendo con el caso.
+                  </p>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '100%', maxWidth: '760px', margin: '16px auto 0' }}>
+                    {[
+                      { text: 'La descripción fue mencionada por 14 participantes.', image: '/descripcion.png', alt: 'Icono de descripción' },
+                      { text: 'La fotografía fue mencionada por 17 participantes.', image: '/fotografia.png', alt: 'Icono de fotografía' },
+                      { text: 'La ubicación fue mencionada por 15 participantes.', image: '/ubicacion.png', alt: 'Icono de ubicación' },
+                      { text: '10 personas consideraron imprescindible conocer el estado del reporte.', image: '/estado.png', alt: 'Icono del estado del reporte' }
+                    ].map((item, i) => (
+                      <motion.div
+                        key={item.image}
+                        initial={{ opacity: 0, y: 24 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, amount: 0.4 }}
+                        transition={{ duration: 0.5, delay: i * 0.12, ease: 'easeOut' }}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          gap: '24px',
+                          width: '100%',
+                          minHeight: '112px',
+                          boxSizing: 'border-box',
+                          background: '#FFFFFF',
+                          borderRadius: '16px',
+                          boxShadow: '0 6px 20px rgba(29,27,32,0.12)',
+                          padding: '20px 24px'
+                        }}
+                      >
+                        <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 300, fontSize: '20px', lineHeight: 1.5, color: '#1D1B20', margin: 0, flex: 1 }}>
+                          {item.text}
+                        </p>
+                        <img src={item.image} alt={item.alt} style={{ width: '72px', height: '72px', objectFit: 'contain', flexShrink: 0 }} />
+                      </motion.div>
+                    ))}
+                  </div>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 500, fontSize: '20px', color: '#2B8095', lineHeight: 1.6, margin: '32px 0 0', maxWidth: '760px' }}>
+                    Más que una necesidad de publicar por publicar, empezaba a aparecer la importancia de reunir información útil y fácil de consultar.
+                  </p>
+                  <div style={{ width: '100%', marginTop: '24px', display: 'flex', alignSelf: 'flex-start' }}>
+                    <VerProductoBtn
+                      texto="Investigación de usuarios"
+                      href="https://app.notion.com/p/Huella-Investigaci-n-de-usuarios-405f6a9b19048011a4f7ecca1b6b1a90?source=copy_link"
+                      width="210px"
+                      hoverWidth="230px"
+                      containerJustify="flex-start"
+                    />
+                  </div>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 500, fontSize: '20px', color: '#7A7A80', lineHeight: 1.4, margin: '24px 0 0', maxWidth: '760px' }}>
+                    02.2. La oportunidad de Huella
+                  </p>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 300, fontSize: '20px', lineHeight: 1.6, margin: 0, maxWidth: '760px' }}>
+                    Volví a esa pregunta que me había hecho al principio: <span style={{ fontWeight: 500, color: '#2B8095' }}>¿por qué crear una aplicación si las redes sociales ya permiten compartir este tipo de situaciones?</span>
+                  </p>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 500, fontSize: '20px', color: '#2B8095', lineHeight: 1.6, margin: 0, maxWidth: '760px' }}>
+                    La investigación me ayudó a mirar esa pregunta desde otro lugar.
+                  </p>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 300, fontSize: '20px', lineHeight: 1.6, margin: 0, maxWidth: '760px' }}>
+                    Quizás la oportunidad no estaba en conseguir llegar a todo el mundo, sino en ofrecer un espacio especializado donde la información tuviera una estructura y un propósito más claros.
+                  </p>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 300, fontSize: '20px', lineHeight: 1.6, margin: 0, maxWidth: '760px' }}>
+                    Una publicación en una red social puede perderse entre muchos otros contenidos. En cambio, un aviso en el tablero de una veterinaria puede llegar a menos personas, pero a personas que probablemente tengan un interés más cercano en esa situación que un aviso en una plaza central que está lleno de personas.
+                  </p>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 300, fontSize: '20px', lineHeight: 1.6, margin: 0, maxWidth: '760px' }}>
+                    Esa fue una de las ideas que empezó a orientar la propuesta: <span style={{ fontWeight: 500, fontSize: '20px', color: '#2B8095' }}>no competir necesariamente por masividad, sino facilitar que quienes quieren ayudar puedan encontrar información relevante y entender qué está pasando.</span>
+                  </p>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 500, fontSize: '20px', color: '#7A7A80', lineHeight: 1.4, margin: '24px 0 0', maxWidth: '760px' }}>
+                    02.3. Ajuste de la propuesta y alcance
+                  </p>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 300, fontSize: '20px', lineHeight: 1.6, margin: 0, maxWidth: '760px' }}>
+                    Los hallazgos nos dieron una dirección, pero también abrieron nuevas preguntas. Ya no se trataba solamente de pensar cómo reunir publicaciones en un mismo lugar, <span style={{ fontWeight: 500, color: '#2B8095' }}>sino de explorar qué podía ofrecer Huella para que esa información fuera útil, confiable y permitiera seguir el desarrollo de cada situación.</span>
+                  </p>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 300, fontSize: '20px', lineHeight: 1.6, margin: 0, maxWidth: '760px' }}>
+                    La propuesta inicial contemplaba distintos escenarios relacionados con el rescate y la adopción animal. Sin embargo, cada uno implicaba necesidades, actores y responsabilidades diferentes. <span style={{ fontWeight: 500, color: '#2B8095' }}>Intentar cubrirlos todos desde el comienzo podía hacer que Huella tuviera un alcance difícil de definir y de sostener.</span>
+                  </p>
+                  <div style={{ position: 'relative', alignSelf: 'center', width: '100%', maxWidth: '760px', marginTop: '16px', marginBottom: '24px' }}>
+                    <img
+                      src="/map.png"
+                      alt="Mapa de la estructura de Huella"
+                      style={{ width: '100%', height: 'auto', display: 'block' }}
+                    />
+                    <span style={{ position: 'absolute', left: '8px', bottom: '8px', fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: '12px', fontWeight: 400, lineHeight: 1.2, color: '#56555A', background: 'rgba(255,255,255,0.85)', padding: '4px 8px', borderRadius: '4px' }}>
+                      Mapa de sitio anterior
+                    </span>
+                  </div>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 300, fontSize: '20px', lineHeight: 1.6, margin: '24px 0 0', maxWidth: '760px' }}>
+                    Había más posibilidades de las que podíamos abarcar.
+                  </p>
+                  <div style={{ width: '100%', maxWidth: '760px', margin: '24px auto 24px', background: '#FFFFFF', borderRadius: '8px', boxShadow: '0 6px 20px rgba(29,27,32,0.12)', padding: '24px', boxSizing: 'border-box' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.2fr) minmax(0, 1fr)', gap: '24px', paddingBottom: '16px', borderBottom: '1px solid rgba(29,27,32,0.16)' }}>
+                      <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 500, fontSize: '20px', lineHeight: 1.4, color: '#1D1B20', margin: 0 }}>
+                        Propuesta inicial
+                      </p>
+                      <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 500, fontSize: '20px', lineHeight: 1.4, color: '#1D1B20', margin: 0 }}>
+                        Decisión de alcance
+                      </p>
+                    </div>
+                    <div>
+                      {[
+                        { item: 'Reportes de mascotas perdidas', decision: 'Se mantuvo.' },
+                        { item: 'Reportes de animales encontrados', decision: 'Se mantuvo.' },
+                        { item: 'Publicaciones para adopción', decision: 'Se mantuvo.' },
+                        { item: 'Conexión y colaboración directa con fundaciones', decision: 'Quedó fuera de la primera iteración.' },
+                        { item: 'Gestión de hogares temporales', decision: 'Quedó fuera de la primera iteración.' },
+                        { item: 'Atención de emergencias y rescate especializado', decision: 'Quedó fuera.' },
+                        { item: 'Incorporación de otras especies, especialmente fauna silvestre', decision: 'Se limitó el producto a perros y gatos.' }
+                      ].map(({ item, decision }, i) => (
+                        <div key={item} style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.2fr) minmax(0, 1fr)', gap: '24px', padding: '16px 0', borderBottom: '1px solid rgba(29,27,32,0.1)' }}>
+                          <span style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 300, fontSize: '16px', lineHeight: 1.5, color: '#1D1B20' }}>{item}</span>
+                          <span style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 300, fontSize: '16px', lineHeight: 1.5, color: '#56555A' }}>
+                            <span>
+                              {decision}
+                              {(i < 3 || i === 6) && <img src="/check.svg" alt="" aria-hidden="true" style={{ width: '18px', height: '18px', objectFit: 'contain', verticalAlign: 'middle', marginLeft: '8px' }} />}
+                              {i >= 3 && i < 6 && <img src="/equis.svg" alt="" aria-hidden="true" style={{ width: '16px', height: '16px', objectFit: 'contain', verticalAlign: 'middle', marginLeft: '8px' }} />}
+                            </span>
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 300, fontSize: '20px', lineHeight: 1.6, margin: 0, maxWidth: '760px' }}>
+                    No eran posibilidades que descartáramos por falta de interés. Algunas requerían coordinación con organizaciones externas, otras suponían gestionar condiciones de cuidado y seguimiento, y algunas implicaban conocimientos, protocolos y responsabilidades que excedían lo que podíamos asumir.
+                  </p>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 300, fontSize: '20px', lineHeight: 1.6, margin: 0, maxWidth: '760px' }}>
+                    También estaban las condiciones reales del proyecto: el tiempo disponible, los recursos y la capacidad técnica y operativa del equipo.
+                  </p>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 500, fontSize: '20px', color: '#2B8095', lineHeight: 1.6, margin: 0, maxWidth: '760px' }}>
+                    Reducir el alcance no significaba abandonar el propósito inicial, sino encontrar una forma de llevarlo a la práctica.
+                  </p>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 300, fontSize: '20px', lineHeight: 1.6, margin: 0, maxWidth: '760px' }}>
+                    Así, la primera iteración se concentró en tres situaciones: <span style={{ fontWeight: 500, color: '#2B8095' }}>mascotas perdidas, animales encontrados y publicaciones de adopción.</span> Una propuesta más acotada, pero con una base sobre la que podíamos empezar a construir.
+                  </p>
+                  <p id="huella-section-03" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 500, fontSize: '28px', color: '#8E8E93', lineHeight: 1.4, margin: '24px 0 0', maxWidth: '760px' }}>
+                    03. Diseño y desarrollo: trabajo compartido
+                  </p>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 300, fontSize: '20px', lineHeight: 1.6, margin: 0, maxWidth: '760px' }}>
+                    Una vez que empezamos a llevar la propuesta a la interfaz, el trabajo con desarrollo no consistió en diseñar todas las pantallas y entregarlas al final.
+                  </p>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 300, fontSize: '20px', lineHeight: 1.6, margin: 0, maxWidth: '760px' }}>
+                    Fuimos avanzando de manera progresiva. Compartíamos pantallas, explicábamos qué buscábamos resolver con cada decisión y conversábamos sobre cómo podía llevarse a cabo.
+                  </p>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 300, fontSize: '20px', lineHeight: 1.6, margin: 0, maxWidth: '760px' }}>
+                    Kevin funcionaba como interlocutor entre ambos grupos: recibía preguntas del equipo de desarrollo, las llevaba al equipo de diseño y nos ayudaba a mantener esa comunicación.
+                  </p>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 300, fontSize: '20px', lineHeight: 1.6, margin: 0, maxWidth: '760px' }}>
+                    Esto hizo que varias decisiones se discutieran mientras todavía estaban en desarrollo: algunas soluciones se mantenían, otras necesitaban ajustes y, en ciertos casos, teníamos que replantear cómo resolver una misma necesidad. <strong style={{ fontWeight: 500, color: '#2B8095' }}>Estas conversaciones nos permitían anticipar condiciones técnicas y ajustar las propuestas antes de avanzar demasiado en soluciones que podían resultar difíciles de implementar.</strong>
+                  </p>
+                  <motion.img
+                    src="/llamadav-optimized.jpg"
+                    alt="Videollamada de coordinación entre los equipos de diseño y desarrollo"
+                    loading="eager"
+                    decoding="async"
+                    fetchPriority="high"
+                    initial={{ opacity: 0, y: 28, scale: 0.97 }}
+                    whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                    viewport={{ root: huellaLeftPanelRef, once: true, amount: 0.3 }}
+                    transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+                    style={{ width: '100%', maxWidth: '760px', height: 'auto', display: 'block', alignSelf: 'center', marginTop: '16px', borderRadius: '8px' }}
+                  />
+                  <p id="huella-section-04" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 500, fontSize: '28px', color: '#8E8E93', lineHeight: 1.4, margin: '24px 0 0', maxWidth: '760px' }}>
+                    04. De las ideas a la experiencia
+                  </p>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 300, fontSize: '20px', lineHeight: 1.6, margin: 0, maxWidth: '760px' }}>
+                    A medida que la propuesta fue tomando forma, empezamos a llevar esas decisiones a la experiencia. <span style={{ fontWeight: 500, color: '#2B8095' }}>Algunas necesidades tenían una respuesta más directa; otras nos llevaron a explorar distintas alternativas antes de encontrar una manera de resolverlas.</span>
+                  </p>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 300, fontSize: '20px', lineHeight: 1.6, margin: 0, maxWidth: '760px' }}>
+                    No todas las ideas podían materializarse tal como las habíamos imaginado. Entre lo que queríamos ofrecer y lo que podíamos construir, algunas soluciones cambiaron, otras se simplificaron y algunas quedaron para más adelante.
+                  </p>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 500, fontSize: '20px', color: '#7A7A80', lineHeight: 1.6, margin: '24px 0 0', maxWidth: '760px' }}>
+                    04.1. De la necesidad a la solución
+                  </p>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 300, fontSize: '20px', lineHeight: 1.6, margin: 0, maxWidth: '760px' }}>
+                    A partir de las necesidades identificadas, empezamos a explorar cómo podíamos traducirlas en funcionalidades concretas sin sumar complejidad innecesaria a la experiencia.
+                  </p>
+                  <div style={{ width: '100%', maxWidth: '960px', margin: '24px auto 0', transform: 'translateX(20px)', background: '#FFFFFF', borderRadius: '8px', boxShadow: '0 6px 20px rgba(29,27,32,0.12)', padding: '24px', boxSizing: 'border-box' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.2fr) 28px minmax(0, 0.8fr) 28px minmax(0, 1.2fr)', gap: '12px', paddingBottom: '12px', borderBottom: '1px solid rgba(29,27,32,0.16)' }}>
+                      <span style={{ gridColumn: '1', fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 500, fontSize: '16px', lineHeight: 1.5, color: '#1D1B20' }}>Necesidad</span>
+                      <span style={{ gridColumn: '3', fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 500, fontSize: '16px', lineHeight: 1.5, color: '#1D1B20' }}>Solución contemplada</span>
+                      <span style={{ gridColumn: '5', fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 500, fontSize: '16px', lineHeight: 1.5, color: '#1D1B20' }}>Adaptación</span>
+                    </div>
+                    <div>
+                      {[
+                        ['Facilitar la comunicación entre personas interesadas en un reporte', 'Chat privado', 'Comentarios dentro de las publicaciones.'],
+                        ['Generar confianza sobre quién publicaba', 'Validación de usuarios', 'Verificación mediante OTP y señal de usuario verificado.'],
+                        ['Consultar rápidamente qué sucedía con un caso', 'Información de seguimiento', 'Sistema visual de estados: Emergencia, Activo y Resuelto.'],
+                        ['Facilitar el acceso a la plataforma', 'Flujo de registro', 'Revisión y simplificación de los pasos, conservando la validación necesaria.']
+                      ].map((row, i) => (
+                        <div key={row[0]} style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.2fr) 28px minmax(0, 0.8fr) 28px minmax(0, 1.2fr)', gap: '12px', alignItems: 'center', padding: '16px 0', borderBottom: i < 3 ? '1px solid rgba(29,27,32,0.1)' : 'none' }}>
+                          <span style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 300, fontSize: '16px', lineHeight: 1.6, color: '#1D1B20' }}>{row[0]}</span>
+                          <img src="/flecha.svg" alt="" aria-hidden="true" style={{ width: '28px', height: '20px', objectFit: 'contain' }} />
+                          <span style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 300, fontSize: '16px', lineHeight: 1.6, color: '#1D1B20' }}>{row[1]}</span>
+                          <img src="/flecha.svg" alt="" aria-hidden="true" style={{ width: '28px', height: '20px', objectFit: 'contain' }} />
+                          <span style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 300, fontSize: '16px', lineHeight: 1.6, color: '#1D1B20' }}>{row[2]}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 300, fontSize: '20px', lineHeight: 1.6, margin: '24px 0 0', maxWidth: '760px' }}>
+                    Algunas de estas decisiones surgieron de las conversaciones con desarrollo; otras, de revisar cómo podía funcionar la experiencia sin convertir cada necesidad en un proceso demasiado complejo.
+                  </p>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 500, fontSize: '20px', color: '#2B8095', lineHeight: 1.6, margin: 0, maxWidth: '760px' }}>
+                    La intención no siempre era conservar la primera solución que imaginábamos, sino encontrar una forma de mantener lo que buscábamos conseguir.
+                  </p>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 500, fontSize: '20px', color: '#7A7A80', lineHeight: 1.6, margin: '24px 0 0', maxWidth: '760px' }}>
+                    04.2. Dar contexto a cada reporte
+                  </p>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 300, fontSize: '20px', lineHeight: 1.6, margin: 0, maxWidth: '760px' }}>
+                    Una de las necesidades que quisimos llevar directamente a la interfaz fue poder reconocer rápidamente en qué situación se encontraba cada reporte.
+                  </p>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 300, fontSize: '20px', lineHeight: 1.6, margin: 0, maxWidth: '760px' }}>
+                    A partir de eso surgió un sistema visual de estados, inspirado en un semáforo:
+                  </p>
+                  <div style={{ width: '100%', maxWidth: '760px', display: 'flex', gap: '16px', alignSelf: 'center', marginTop: '32px', transform: 'translateX(20px)' }}>
+                    {[
+                      { src: '/emergencia.svg', alt: 'Emergencia' },
+                      { src: '/activo.svg', alt: 'Activo' },
+                      { src: '/resuelto.svg', alt: 'Resuelto' }
+                    ].map(({ src, alt }, i) => (
+                      <motion.div
+                        key={src}
+                        initial={{ opacity: 0, y: 30, scale: 0.97 }}
+                        whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                        viewport={{ root: huellaLeftPanelRef, once: true, amount: 0.25 }}
+                        transition={{ duration: 0.7, delay: i * 0.14, ease: [0.22, 1, 0.36, 1] }}
+                        style={{ flex: '1 1 0', maxWidth: '240px', minWidth: 0, borderRadius: '9% / 8%', overflow: 'hidden', boxShadow: '0 8px 20px rgba(29,27,32,0.2)' }}
+                      >
+                        <img src={src} alt={alt} loading="lazy" decoding="async" style={{ width: '100%', height: 'auto', display: 'block' }} />
+                      </motion.div>
+                    ))}
+                  </div>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 300, fontSize: '20px', lineHeight: 1.6, margin: '24px 0 0', maxWidth: '760px' }}>
+                    La intención era que una persona pudiera reconocer el estado de un caso sin tener que leer toda su descripción. No era solamente una decisión visual: buscábamos que la interfaz ayudara a organizar la información y a orientar la atención.
+                  </p>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 500, fontSize: '20px', color: '#2B8095', lineHeight: 1.6, margin: 0, maxWidth: '760px' }}>
+                    En este punto, era importante diferenciar la identificación de situaciones prioritarias de ofrecer un servicio de atención veterinaria o gestión de emergencias. Esto último no formaba parte del alcance que podíamos asumir.
+                  </p>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 300, fontSize: '20px', lineHeight: 1.6, margin: 0, maxWidth: '760px' }}>
+                    Los tonos también se fueron revisando durante el proceso para mantener coherencia con la identidad de Huella y mejorar su legibilidad.
+                  </p>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 500, fontSize: '20px', color: '#7A7A80', lineHeight: 1.6, margin: '24px 0 0', maxWidth: '760px' }}>
+                    04.3. Una identidad que también se construía
+                  </p>
+                  <div style={{ width: '100%', maxWidth: '960px', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '40px', alignSelf: 'flex-start' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', flex: '1 1 0', maxWidth: '700px', minWidth: 0 }}>
+                      <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 300, fontSize: '20px', lineHeight: 1.6, margin: 0 }}>
+                        La identidad visual fue tomando forma mientras empezábamos a aplicarla en la interfaz.
+                      </p>
+                      <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 300, fontSize: '20px', lineHeight: 1.6, margin: 0 }}>
+                        Nam desarrolló el logo y la paleta cromática. Junto con Alejandra, exploramos la tipografía: comenzamos con Poppins y posteriormente incorporamos Manrope para darle mayor variedad a la interfaz.
+                      </p>
+                      <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 300, fontSize: '20px', lineHeight: 1.6, margin: 0 }}>
+                        Al llevar los colores a los componentes, identificamos que algunas combinaciones necesitaban ajustes para mejorar su legibilidad y accesibilidad. Revisamos tonos específicos sin perder la esencia cromática que buscábamos para Huella.
+                      </p>
+                      <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 300, fontSize: '20px', lineHeight: 1.6, margin: 0 }}>
+                        También trabajamos sobre los colores del sistema de estados, revisando algunas sugerencias iniciales para que funcionaran mejor dentro de la interfaz.
+                      </p>
+                      <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 500, fontSize: '20px', color: '#2B8095', lineHeight: 1.6, margin: 0 }}>
+                        Más que definir una identidad y aplicarla sin cambios, fue un proceso de adaptación entre lo visual y las necesidades concretas del producto.
+                      </p>
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', flexShrink: 0, paddingTop: '4px' }}>
+                      {[
+                        { src: '/uno.svg', alt: 'Muestra de color uno' },
+                        { src: '/dos.svg', alt: 'Muestra de color dos' },
+                        { src: '/tres.svg', alt: 'Muestra de color tres' },
+                        { src: '/cuatro.svg', alt: 'Muestra de color cuatro' }
+                      ].map(({ src, alt }, i) => (
+                        <motion.img
+                          key={src}
+                          src={src}
+                          alt={alt}
+                          loading="lazy"
+                          decoding="async"
+                          initial={{ opacity: 0.2, filter: 'blur(6px)', scale: 0.96 }}
+                          whileInView={{
+                            opacity: 1,
+                            filter: 'blur(0px)',
+                            scale: i === 0 ? [0.96, 1, 1, 0.72] : 1
+                          }}
+                          viewport={{ root: huellaLeftPanelRef, once: true, amount: 0.2 }}
+                          transition={i === 0
+                            ? {
+                                opacity: { duration: 0.75, ease: [0.22, 1, 0.36, 1] },
+                                filter: { duration: 0.75, ease: [0.22, 1, 0.36, 1] },
+                                scale: { duration: 2.1, times: [0, 0.357, 0.65, 1], ease: [0.22, 1, 0.36, 1] }
+                              }
+                            : { duration: 0.75, delay: i * 0.2, ease: [0.22, 1, 0.36, 1] }}
+                          style={{ width: '100px', height: '100px', display: 'block', marginBottom: i === 0 ? '24px' : 0 }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                  <div style={{ width: '100%', marginTop: '24px', display: 'flex', alignSelf: 'flex-start' }}>
+                    <VerProductoBtn
+                      texto="Design System"
+                      href="https://www.figma.com/design/KphzvE2hPhFfBZrAZkx2k2/Huella?node-id=1826-1180&t=DB69khhEi4VNx9Zl-1"
+                      width="160px"
+                      hoverWidth="180px"
+                      containerJustify="flex-start"
+                    />
+                  </div>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 500, fontSize: '20px', color: '#7A7A80', lineHeight: 1.6, margin: '24px 0 0', maxWidth: '760px' }}>
+                    04.4. De la estructura a los flujos
+                  </p>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 300, fontSize: '20px', lineHeight: 1.6, margin: 0, maxWidth: '760px' }}>
+                    Con el alcance más definido, empezamos a darle forma a las principales experiencias de Huella. La plataforma debía responder a tres situaciones:
+                  </p>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '16px', width: '100%', maxWidth: '760px', alignSelf: 'center', margin: '32px auto' }}>
+                    {[
+                      { number: '01', situation: 'Perdí a mi mascota', action: 'Recuperar' },
+                      { number: '02', situation: 'Encontré un animal', action: 'Reportar' },
+                      { number: '03', situation: 'Doy en adopción', action: 'Encontrar', suffix: ' un hogar' }
+                    ].map(({ number, situation, action, suffix }) => (
+                      <div key={number} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', gap: '8px', minWidth: 0, minHeight: '176px', boxSizing: 'border-box', padding: '24px 16px', background: '#FFFFFF', borderRadius: '16px', boxShadow: '0 8px 24px rgba(29,27,32,0.12)', textAlign: 'left', fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: '20px', lineHeight: 1.35, color: '#1D1B20' }}>
+                        <span style={{ alignSelf: 'flex-start', fontWeight: 600, fontSize: '24px', color: '#2B8095' }}>{number}</span>
+                        <span style={{ fontWeight: 400 }}>{situation}</span>
+                        <span style={{ fontWeight: 400, color: '#2B8095' }}>
+                          {action}{suffix}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 300, fontSize: '20px', lineHeight: 1.6, margin: 0, maxWidth: '760px' }}>
+                    Cada una implicaba necesidades diferentes, pero compartían una misma base: <span style={{ fontWeight: 500, color: '#2B8095' }}>facilitar la publicación y consulta de información, ayudar a identificar cada animal y permitir que las personas entendieran qué estaba sucediendo con el reporte.</span>
+                  </p>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 300, fontSize: '20px', lineHeight: 1.6, margin: 0, maxWidth: '760px' }}>
+                    A partir de esa estructura, fuimos trabajando en las pantallas, los recorridos y los componentes que daban forma a esas experiencias.
+                  </p>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 300, fontSize: '20px', lineHeight: 1.6, margin: 0, maxWidth: '760px' }}>
+                    Lo que comenzó como una serie de necesidades y decisiones fue tomando forma en una experiencia que ya podíamos recorrer, revisar y discutir.
+                  </p>
+                  <p id="huella-section-05" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 500, fontSize: '28px', color: '#8E8E93', lineHeight: 1.4, margin: '24px 0 0', maxWidth: '760px' }}>
+                    05. Hasta dónde llegó Huella
+                  </p>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 500, fontSize: '20px', color: '#7A7A80', lineHeight: 1.6, margin: '24px 0 0', maxWidth: '760px' }}>
+                    05.1. Lo que tomó forma
+                  </p>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-start', gap: '24px', width: '100%', maxWidth: '960px', marginTop: '16px' }}>
+                    <p style={{ flex: '1 1 260px', maxWidth: '320px', fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 300, fontSize: '20px', lineHeight: 1.6, margin: 0 }}>
+                     <p style={{ flex: '1 1 260px', maxWidth: '320px', fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 300, fontSize: '20px', lineHeight: 1.6, margin: '0 0 0 24px', transform: 'translateY(-16px)' }}>
+                       Huella llegó a convertirse en una propuesta definida, con sus principales recorridos, decisiones de diseño y una experiencia que ya podíamos recorrer. Lo que comenzó como una idea fue tomando forma hasta convertirse en algo concreto.
+                     </p>
+
+                      Huella llegó a convertirse en una propuesta definida, con sus principales recorridos, decisiones de diseño y una experiencia que ya podíamos recorrer. Lo que comenzó como una idea fue tomando forma hasta convertirse en algo concreto.
+                    </p>
+                    <div ref={huellaPrototypeRef} style={{ flex: '0 0 320px', width: '320px', height: '690px', display: 'flex', justifyContent: 'center', overflow: 'hidden', borderRadius: '32px', border: '1px solid rgba(0, 0, 0, 0.08)', background: 'transparent', padding: 0, boxSizing: 'border-box' }}>
+                      <iframe
+                        title="Prototipo de Huella en Figma"
+                        width="320"
+                        height="690"
+                        src={huellaPrototypeLoaded ? "https://embed.figma.com/proto/KphzvE2hPhFfBZrAZkx2k2/Huella?node-id=1674-1179&viewport=322%2C186%2C0.05&scaling=contain&content-scaling=fixed&starting-point-node-id=1674%3A1179&page-id=11%3A2&embed-host=share&hide-ui=1&hotspot-hints=0" : undefined}
+                        allowFullScreen
+                        style={{ border: 'none', transform: 'scale(1.28)', transformOrigin: 'center center' }}
+                      />
+                    </div>
+                  </div>
+                </div>
             </div>
+          </div>
           </div>
           <div style={{flex:'0 0 40vw', width:'40vw', background:'#56555A', position:'relative'}}>
             <div style={{position:'relative', top:'0', left:'20px', right:'20px'}}>
@@ -7705,6 +8214,49 @@ export default function Home() {
               }}>
                 Huella
               </p>
+            </div>
+            <div style={{
+              position: 'absolute',
+              top: 'calc(50% + 24px)',
+              left: '20px',
+              transform: 'translateY(-50%)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '8px'
+            }}>
+              {huellaNavigationSections.map((section, i) => {
+                const isActive = activeHuellaSection === i
+                return (
+                <button
+                  key={section.id}
+                  type="button"
+                  aria-current={isActive ? 'location' : undefined}
+                  onClick={() => scrollToHuellaSection(section, i)}
+                  style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '6px 0', width: '100%', border: 0, background: 'transparent', cursor: 'pointer', textAlign: 'left' }}
+                >
+                  <div style={{ overflow: 'hidden' }}>
+                    <div style={{
+                      width: isActive ? '2px' : '1px',
+                      height: '20px',
+                      background: isActive ? '#F1F1F1' : 'rgba(241,241,241,0.4)',
+                      transform: (huellaPanelClosing || !huellaPanelVisible) ? 'translateY(-100%)' : 'translateY(0)',
+                      transition: 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
+                    }} />
+                  </div>
+                  <div style={{ overflow: 'hidden' }}>
+                    <p style={{
+                      margin: 0,
+                      fontFamily: "'Plus Jakarta Sans', sans-serif",
+                      fontSize: '14px',
+                      letterSpacing: '0.05em',
+                      fontWeight: isActive ? 700 : 300,
+                      color: isActive ? '#F1F1F1' : 'rgba(241,241,241,0.72)',
+                      transform: (huellaPanelClosing || !huellaPanelVisible) ? 'translateY(-100%)' : 'translateY(0)',
+                      transition: `transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) ${i * 60}ms`
+                    }}>{section.title}</p>
+                  </div>
+                </button>
+              )})}
             </div>
             <div style={{
               position:'absolute',
@@ -7780,7 +8332,12 @@ export default function Home() {
               transform: huellaPanelClosing ? 'translateY(20px)' : huellaPanelVisible ? 'translateY(0)' : 'translateY(20px)',
               transition: 'opacity 0.4s ease, transform 0.4s ease'
             }}>
-              <VerProductoBtn texto="Ver prototipo" width="160px" hoverWidth="180px" />
+              <VerProductoBtn
+                texto="Ver prototipo"
+                href="https://www.figma.com/proto/KphzvE2hPhFfBZrAZkx2k2/Huella?node-id=11-2&p=f&viewport=46%2C331%2C0.25&t=DB69khhEi4VNx9Zl-0&scaling=contain&content-scaling=fixed&starting-point-node-id=1674%3A1179"
+                width="160px"
+                hoverWidth="180px"
+              />
             </div>
           </div>
         </div>
@@ -8291,3 +8848,6 @@ export default function Home() {
     </div>
   )
 }
+
+
+
