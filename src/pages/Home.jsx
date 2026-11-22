@@ -3636,10 +3636,10 @@ function ProjectTransition({ color, onClose, projectName, projectColor, onViewBe
                           }}>
                           <img src={cardTheavelingMini} style={{width:'100%', height:'320px', objectFit:'cover', objectPosition:'top', display:'block'}}/>
                           <div style={{padding:'24px', background:'#F5F2EE', borderRadius:'0 0 20px 20px'}}>
-                            <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontSize:'13px', fontWeight:500, color:'rgba(26,26,26,0.65)', margin:0}}>
+                            <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontSize:'13px', fontWeight:500, color:'rgba(26,26,26,0.65)', lineHeight:'20px', minHeight:'60px', margin:0}}>
                               {['Investigación UX', 'Diseño de Interfaz', 'Prototipado', 'Testing'].join(' ✳ ')}
                             </p>
-                            <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight: theavelingMiniCardHovered ? 800 : 700, fontSize:'24px', color:'#1A1A1A', marginTop:'14px', marginBottom:0, transition:'font-weight 0.2s ease'}}>Theaveling</p>
+                            <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight: theavelingMiniCardHovered ? 800 : 700, fontSize:'24px', color:'#1A1A1A', marginTop:'0', marginBottom:0, transition:'font-weight 0.2s ease'}}>Theaveling</p>
                             <div onClick={onViewTheaveling} style={{display:'flex', alignItems:'center', gap:'8px', marginTop:'12px', cursor:'pointer'}}>
                               <span style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontSize:'14px', lineHeight:1, fontWeight: theavelingMiniCardHovered ? 700 : 400, color:'rgba(26,26,26,0.6)', transition:'font-weight 0.2s ease'}}>Ver caso de estudio</span>
                               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{display:'block', flexShrink:0}}>
@@ -3658,10 +3658,10 @@ function ProjectTransition({ color, onClose, projectName, projectColor, onViewBe
                           }}>
                           <img src="/huella%20card.png" style={{width:'100%', height:'320px', objectFit:'cover', objectPosition:'top', display:'block'}}/>
                           <div style={{padding:'24px', background:'#F5F2EE', borderRadius:'0 0 20px 20px'}}>
-                            <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontSize:'13px', fontWeight:500, color:'rgba(26,26,26,0.65)', margin:0}}>
+                            <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontSize:'13px', fontWeight:500, color:'rgba(26,26,26,0.65)', lineHeight:'20px', minHeight:'60px', margin:0}}>
                               {['Investigación UX', 'Estrategia de Producto', 'Diseño de Interfaz', 'Colaboración con desarrollo'].join(' ✳ ')}
                             </p>
-                            <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight: huellaMiniCardHovered ? 800 : 700, fontSize:'24px', color:'#1A1A1A', marginTop:'14px', marginBottom:0, transition:'font-weight 0.2s ease'}}>Huella</p>
+                            <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight: huellaMiniCardHovered ? 800 : 700, fontSize:'24px', color:'#1A1A1A', marginTop:'0', marginBottom:0, transition:'font-weight 0.2s ease'}}>Huella</p>
                             <div onClick={() => runCloseAnimation(onViewHuella)} style={{display:'flex', alignItems:'center', gap:'8px', marginTop:'12px', cursor:'pointer'}}>
                               <span style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontSize:'14px', lineHeight:1, fontWeight: huellaMiniCardHovered ? 700 : 400, color:'rgba(26,26,26,0.6)', transition:'font-weight 0.2s ease'}}>Ver bitácora</span>
                               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{display:'block', flexShrink:0}}>
@@ -5224,10 +5224,10 @@ function ProjectTransition({ color, onClose, projectName, projectColor, onViewBe
                       }}>
                       <img src={cardBeaconMini} style={{width:'100%', height:'320px', objectFit:'cover', objectPosition:'top', display:'block'}}/>
                       <div style={{padding:'24px', background:'#F5F2EE', borderRadius:'0 0 20px 20px'}}>
-                        <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontSize:'13px', fontWeight:500, color:'rgba(26,26,26,0.65)', margin:0}}>
-                          {['Channel Sales', 'B2B', 'Pipeline', 'Partners', 'Visibilidad'].join(' ✳ ')}
+                        <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontSize:'13px', fontWeight:500, color:'rgba(26,26,26,0.65)', lineHeight:'20px', minHeight:'60px', margin:0}}>
+                          {['Investigación UX', 'Estrategia de Producto', 'Producto SaaS', 'Desarrollo con IA aplicada'].join(' ✳ ')}
                         </p>
-                        <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight: beaconMiniCardHovered ? 800 : 700, fontSize:'24px', color:'#1A1A1A', marginTop:'14px', marginBottom:0, transition:'font-weight 0.2s ease'}}>Beacon</p>
+                        <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight: beaconMiniCardHovered ? 800 : 700, fontSize:'24px', color:'#1A1A1A', marginTop:'0', marginBottom:0, transition:'font-weight 0.2s ease'}}>Beacon</p>
                         <div onClick={onViewBeacon} style={{display:'flex', alignItems:'center', gap:'8px', marginTop:'12px', cursor:'pointer'}}>
                           <span style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontSize:'14px', lineHeight:1, fontWeight: beaconMiniCardHovered ? 700 : 400, color:'rgba(26,26,26,0.6)', transition:'font-weight 0.2s ease'}}>Ver caso de estudio</span>
                           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{display:'block', flexShrink:0}}>
@@ -5246,10 +5246,10 @@ function ProjectTransition({ color, onClose, projectName, projectColor, onViewBe
                       }}>
                       <img src="/huella%20card.png" style={{width:'100%', height:'320px', objectFit:'cover', objectPosition:'top', display:'block'}}/>
                       <div style={{padding:'24px', background:'#F5F2EE', borderRadius:'0 0 20px 20px'}}>
-                        <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontSize:'13px', fontWeight:500, color:'rgba(26,26,26,0.65)', margin:0}}>
+                        <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontSize:'13px', fontWeight:500, color:'rgba(26,26,26,0.65)', lineHeight:'20px', minHeight:'60px', margin:0}}>
                           {['Investigación UX', 'Estrategia de Producto', 'Diseño de Interfaz', 'Colaboración con desarrollo'].join(' ✳ ')}
                         </p>
-                        <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight: huellaMiniCardHovered ? 800 : 700, fontSize:'24px', color:'#1A1A1A', marginTop:'14px', marginBottom:0, transition:'font-weight 0.2s ease'}}>Huella</p>
+                        <p style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight: huellaMiniCardHovered ? 800 : 700, fontSize:'24px', color:'#1A1A1A', marginTop:'0', marginBottom:0, transition:'font-weight 0.2s ease'}}>Huella</p>
                         <div onClick={() => runCloseAnimation(onViewHuella)} style={{display:'flex', alignItems:'center', gap:'8px', marginTop:'12px', cursor:'pointer'}}>
                           <span style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontSize:'14px', lineHeight:1, fontWeight: huellaMiniCardHovered ? 700 : 400, color:'rgba(26,26,26,0.6)', transition:'font-weight 0.2s ease'}}>Ver bitácora</span>
                           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{display:'block', flexShrink:0}}>
@@ -5597,13 +5597,6 @@ export default function Home() {
   // la derecha, descripción a la izquierda) pero sin el scroll de
   // secciones.
   const [showHuellaPanel, setShowHuellaPanel] = React.useState(false)
-  // 2026-11-06, a pedido de Ana: mismo patrón de entrada escalonada que usa
-  // ProjectTransition para el nombre/tags/estado (translateY + opacity,
-  // arrancando en false y pasando a true un instante después de montar para
-  // que el navegador alcance a pintar el estado inicial "oculto" antes de
-  // animar hacia el estado visible -- si se pone en true en el mismo
-  // render que abre el panel, no hay transición, aparece todo de golpe).
-  const [huellaPanelVisible, setHuellaPanelVisible] = React.useState(false)
   // 2026-11-22, a pedido de Ana: el contenido del panel derecho (título
   // "Huella", nav de secciones, tags, estado, botón de cerrar) aparece recién
   // al TERMINAR el wipe de entrada, igual que en ProjectTransition (ver
@@ -5613,18 +5606,7 @@ export default function Home() {
   // el ancho del panel durante toda la animación.
   const [huellaRightVisible, setHuellaRightVisible] = React.useState(false)
   React.useEffect(() => {
-    if (showHuellaPanel) {
-      // setTimeout en vez de doble requestAnimationFrame: rAF se pausa en
-      // pestañas en segundo plano (verificado probando con la pestaña del
-      // navegador in-app, que corre oculta) y ahí nunca se disparaba, así
-      // que la animación de entrada se quedaba trabada en su estado
-      // inicial (opacity:0) para siempre.
-      const id = setTimeout(() => setHuellaPanelVisible(true), 20)
-      return () => clearTimeout(id)
-    } else {
-      setHuellaPanelVisible(false)
-      setHuellaRightVisible(false)
-    }
+    if (!showHuellaPanel) setHuellaRightVisible(false)
   }, [showHuellaPanel])
   // 2026-11-06, a pedido de Ana: mismo efecto de cierre que Beacon/
   // Theaveling en ProjectTransition (ver closing/closeProgress ahí) -- el
@@ -5746,8 +5728,30 @@ export default function Home() {
     const panel = huellaLeftPanelRef.current
     if (!panel) return
 
-    const duration = 1400
+    // 2026-11-22, a pedido de Ana: la misma animación de entrada que
+    // Beacon/Theaveling, pero más lenta (2400ms en vez de 1400ms) para que se
+    // aprecie mejor el recorrido: tanto el panel desplazándose hacia la derecha
+    // (wipe) como el scroll del contenido subiendo hasta el tope.
+    const duration = 2400
     let cancelled = false
+
+    // 2026-11-22, a pedido de Ana: la entrada dura 2400ms y, durante todo ese
+    // tiempo, el rAF reescribía panel.scrollTop cuadro a cuadro para subir
+    // desde el ancla hasta el tope. Eso es lo que "interfería": si la persona
+    // empezaba a deslizar el panel mientras la animación todavía corría, cada
+    // frame de la animación PISABA la posición que acababa de dejar el scroll
+    // del usuario -- se sentía como si el deslizamiento se congelara un
+    // segundo (hasta que la entrada terminaba) y recién ahí siguiera. Ahora,
+    // apenas se detecta un gesto real de scroll (wheel, touch o teclado) en
+    // el panel, la animación suelta el control del scroll para siempre: deja
+    // de escribir scrollTop (el wipe de los paneles sigue igual) y el gesto
+    // manda. Sin esto, cualquier scroll dentro de esos 2.4s quedaba anulado.
+    let userTookScroll = false
+    const releaseScrollToUser = () => { userTookScroll = true }
+    panel.addEventListener('wheel', releaseScrollToUser, { passive: true })
+    panel.addEventListener('touchstart', releaseScrollToUser, { passive: true })
+    panel.addEventListener('touchmove', releaseScrollToUser, { passive: true })
+    panel.addEventListener('keydown', releaseScrollToUser)
 
     const getStart = () => {
       const anchor = huellaImageRef.current
@@ -5773,7 +5777,9 @@ export default function Home() {
         if (huellaLeftPanelRef.current) {
           huellaLeftPanelRef.current.style.opacity = eased > 0.1 ? '1' : '0'
           huellaLeftPanelRef.current.style.clipPath = `inset(0 ${Math.max(0, 100 - eased * 100)}% 0 0)`
-          huellaLeftPanelRef.current.scrollTop = imagePos * (1 - eased)
+          // Solo la animación maneja el scroll mientras la persona no haya
+          // tomado el control (ver userTookScroll arriba).
+          if (!userTookScroll) huellaLeftPanelRef.current.scrollTop = imagePos * (1 - eased)
         }
         if (huellaRightPanelRef.current) {
           huellaRightPanelRef.current.style.width = `${Math.max(0, 100 - eased * 60)}vw`
@@ -5803,7 +5809,13 @@ export default function Home() {
     const fontsTimeout = new Promise((resolve) => setTimeout(resolve, 350))
     Promise.race([fontsReady, fontsTimeout]).then(waitTwoFrames)
 
-    return () => { cancelled = true }
+    return () => {
+      cancelled = true
+      panel.removeEventListener('wheel', releaseScrollToUser)
+      panel.removeEventListener('touchstart', releaseScrollToUser)
+      panel.removeEventListener('touchmove', releaseScrollToUser)
+      panel.removeEventListener('keydown', releaseScrollToUser)
+    }
   }, [showHuellaPanel])
   const [huellaLogoAnimStarted, setHuellaLogoAnimStarted] = React.useState(false)
   const [huellaLogoFrame, setHuellaLogoFrame] = React.useState(0)
@@ -7692,8 +7704,7 @@ export default function Home() {
 
       {showHuellaPanel && (
         <div style={{
-          position:'fixed', inset:0, zIndex:9999, display:'flex',
-          opacity: huellaPanelClosing ? Math.max(0, 1 - Math.max(0, huellaPanelCloseProgress - 0.2) / 0.8) : 1
+          position:'fixed', inset:0, zIndex:9999, display:'flex'
         }}>
           {/* 2026-11-22, a pedido de Ana: panel de color que respalda el wipe
               de entrada -- mismo patrón que colorPanelRef en ProjectTransition.
@@ -7702,22 +7713,25 @@ export default function Home() {
               fondo del panel y no la página de atrás. Su ancho lo anima el rAF
               de entrada por ref (ver el useLayoutEffect más arriba). */}
           <div ref={huellaColorPanelRef} style={{
-            position:'fixed', top:0, left:0, width:'0vw', height:'100vh',
+            position:'fixed', top:0, left:0,
+            width: huellaPanelClosing ? `${(1 - huellaPanelCloseProgress) * 60}vw` : '0vw',
+            height:'100vh',
             background:'#F1F1F1', zIndex:9999, transition:'none', overflow:'hidden'
           }}/>
           {/* 2026-11-22, a pedido de Ana: mismo wipe de entrada que
               ProjectTransition (ver su contentRef). El clip-path y la opacidad
               los escribe el rAF de entrada por ref; el valor estático de acá
               (closing=false) no cambia entre renders, así que React no pisa lo
-              que dejó la animación. Al cerrar sí hay un valor nuevo: el panel
-              queda revelado del todo (inset(0 0% 0 0)) mientras el overlay se
-              desvanece. */}
+              que dejó la animación. Al cerrar, el clip-path vuelve a cerrarse
+              (inset(0 0%→100% 0 0)): el borde derecho del recorte se corre a la
+              izquierda y el contenido se devuelve por donde entró, con su texto
+              estático -- igual que contentRef en ProjectTransition. */}
           <div ref={huellaLeftPanelRef} className="left-panel" onScroll={(event) => updateActiveHuellaSection(event.currentTarget)} style={{
             flex:'0 0 60vw', width:'60vw', height:'100vh', background:'#F1F1F1', position:'relative', zIndex:10000,
             display:'flex', flexDirection:'column', alignItems:'flex-start', padding:'0 60px 60px 20px',
             overflowY:'auto', overflowX:'hidden',
             opacity: huellaPanelClosing ? 1 : 0,
-            clipPath: huellaPanelClosing ? 'inset(0 0% 0 0)' : 'inset(0 100% 0 0)',
+            clipPath: huellaPanelClosing ? `inset(0 ${huellaPanelCloseProgress * 100}% 0 0)` : 'inset(0 100% 0 0)',
             transition:'none'
           }}>
             <p style={{
@@ -7728,8 +7742,8 @@ export default function Home() {
               marginTop: '14px',
               lineHeight: 1,
               paddingLeft: '0',
-              opacity: huellaPanelClosing ? (1 - huellaPanelCloseProgress) : huellaPanelVisible ? 1 : 0,
-              transform: huellaPanelClosing ? 'translateY(-14px)' : huellaPanelVisible ? 'translateY(0)' : 'translateY(-14px)',
+              opacity: 1,
+              transform: 'translateY(0)',
               transition: 'opacity 0.4s ease, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
             }}>
               Bitácora huella
@@ -7742,8 +7756,8 @@ export default function Home() {
               textAlign: 'left',
               lineHeight: 1.5,
               marginTop: '16px',
-              opacity: huellaPanelClosing ? (1 - huellaPanelCloseProgress) : huellaPanelVisible ? 1 : 0,
-              transform: huellaPanelClosing ? 'translateY(-14px)' : huellaPanelVisible ? 'translateY(0)' : 'translateY(-14px)',
+              opacity: 1,
+              transform: 'translateY(0)',
               transition: 'opacity 0.4s ease 60ms, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) 60ms'
             }}>
               Retrospectiva del proceso de construcción: cómo una idea de producto fue tomando forma, encontrándose con decisiones, posibilidades y limitaciones reales.
@@ -7755,8 +7769,8 @@ export default function Home() {
               color: '#8E8E93',
               marginTop: '40px',
               lineHeight: 1.3,
-              opacity: huellaPanelClosing ? (1 - huellaPanelCloseProgress) : huellaPanelVisible ? 1 : 0,
-              transform: huellaPanelClosing ? 'translateY(-14px)' : huellaPanelVisible ? 'translateY(0)' : 'translateY(-14px)',
+              opacity: 1,
+              transform: 'translateY(0)',
               transition: 'opacity 0.4s ease 120ms, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) 120ms'
             }}>
               00. Antes de empezar
@@ -7769,8 +7783,8 @@ export default function Home() {
               marginTop: '20px',
               lineHeight: 1.6,
               maxWidth: '100%',
-              opacity: huellaPanelClosing ? (1 - huellaPanelCloseProgress) : huellaPanelVisible ? 1 : 0,
-              transform: huellaPanelClosing ? 'translateY(-14px)' : huellaPanelVisible ? 'translateY(0)' : 'translateY(-14px)',
+              opacity: 1,
+              transform: 'translateY(0)',
               transition: 'opacity 0.4s ease 180ms, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) 180ms'
             }}>
               Había una idea, una intención y muchas posibilidades sobre la mesa.
@@ -7783,8 +7797,8 @@ export default function Home() {
               marginTop: '24px',
               lineHeight: 1.6,
               maxWidth: '100%',
-              opacity: huellaPanelClosing ? (1 - huellaPanelCloseProgress) : huellaPanelVisible ? 1 : 0,
-              transform: huellaPanelClosing ? 'translateY(-14px)' : huellaPanelVisible ? 'translateY(0)' : 'translateY(-14px)',
+              opacity: 1,
+              transform: 'translateY(0)',
               transition: 'opacity 0.4s ease 240ms, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) 240ms'
             }}>
               Huella buscaba facilitar el encuentro entre personas y animales perdidos o en adopción. Cuando me compartieron la propuesta, todavía había varias preguntas que no podíamos resolver simplemente diseñando una pantalla.
@@ -7797,8 +7811,8 @@ export default function Home() {
               marginTop: '24px',
               lineHeight: 1.6,
               maxWidth: '100%',
-              opacity: huellaPanelClosing ? (1 - huellaPanelCloseProgress) : huellaPanelVisible ? 1 : 0,
-              transform: huellaPanelClosing ? 'translateY(-14px)' : huellaPanelVisible ? 'translateY(0)' : 'translateY(-14px)',
+              opacity: 1,
+              transform: 'translateY(0)',
               transition: 'opacity 0.4s ease 360ms, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) 360ms'
             }}>
               Algunas ideas necesitaban cambiar, otras tenían que aterrizarse y varias decisiones nos llevaron a conversar más de una vez sobre lo que realmente queríamos construir.
@@ -7811,8 +7825,8 @@ export default function Home() {
               marginTop: '24px',
               lineHeight: 1.6,
               maxWidth: '100%',
-              opacity: huellaPanelClosing ? (1 - huellaPanelCloseProgress) : huellaPanelVisible ? 1 : 0,
-              transform: huellaPanelClosing ? 'translateY(-14px)' : huellaPanelVisible ? 'translateY(0)' : 'translateY(-14px)',
+              opacity: 1,
+              transform: 'translateY(0)',
               transition: 'opacity 0.4s ease 420ms, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) 420ms'
             }}>
               Trabajé en este proyecto desde la investigación, la definición de la experiencia y el diseño de interfaz, en colaboración con otras personas de diseño y desarrollo.
@@ -7825,8 +7839,8 @@ export default function Home() {
               marginTop: '24px',
               lineHeight: 1.6,
               maxWidth: '100%',
-              opacity: huellaPanelClosing ? (1 - huellaPanelCloseProgress) : huellaPanelVisible ? 1 : 0,
-              transform: huellaPanelClosing ? 'translateY(-14px)' : huellaPanelVisible ? 'translateY(0)' : 'translateY(-14px)',
+              opacity: 1,
+              transform: 'translateY(0)',
               transition: 'opacity 0.4s ease 480ms, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) 480ms'
             }}>
               Lo que sigue es un recorrido por algunas de esas conversaciones y decisiones. No necesariamente en el orden en que sucedieron, sino siguiendo las preguntas que fueron dando forma al proyecto.
@@ -7842,8 +7856,8 @@ export default function Home() {
                 color: '#7A7A80',
                 marginTop: '40px',
                 lineHeight: 1.3,
-                opacity: huellaPanelClosing ? (1 - huellaPanelCloseProgress) : huellaPanelVisible ? 1 : 0,
-                transform: huellaPanelClosing ? 'translateY(-14px)' : huellaPanelVisible ? 'translateY(0)' : 'translateY(-14px)',
+                opacity: 1,
+                transform: 'translateY(0)',
                 transition: 'opacity 0.4s ease 540ms, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) 540ms'
               }}>
               00.1. Huella, en imágenes
@@ -7856,8 +7870,8 @@ export default function Home() {
               marginTop: '20px',
               lineHeight: 1.6,
               maxWidth: '100%',
-              opacity: huellaPanelClosing ? (1 - huellaPanelCloseProgress) : huellaPanelVisible ? 1 : 0,
-              transform: huellaPanelClosing ? 'translateY(-14px)' : huellaPanelVisible ? 'translateY(0)' : 'translateY(-14px)',
+              opacity: 1,
+              transform: 'translateY(0)',
               transition: 'opacity 0.4s ease 600ms, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) 600ms'
             }}>
               Una pequeña postal del proyecto: producto, identidad y proceso.
@@ -7876,8 +7890,8 @@ export default function Home() {
               display: 'flex',
               flexDirection: 'column',
               gap: '32px',
-              opacity: huellaPanelClosing ? (1 - huellaPanelCloseProgress) : huellaPanelVisible ? 1 : 0,
-              transform: huellaPanelClosing ? 'translateY(-14px)' : huellaPanelVisible ? 'translateY(0)' : 'translateY(-14px)',
+              opacity: 1,
+              transform: 'translateY(0)',
               transition: 'opacity 0.4s ease 660ms, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) 660ms'
             }}>
               {/* 2026-11-11, a pedido de Ana: orden de pantallas = logo
@@ -7904,8 +7918,8 @@ export default function Home() {
                   <div style={{
                     width: '100%',
                     overflow: 'hidden',
-                    transform: (huellaPanelClosing || !huellaPanelVisible) ? 'translateY(30px)' : 'translateY(0)',
-                    opacity: (huellaPanelClosing || !huellaPanelVisible) ? 0 : 1,
+                    transform: 'translateY(0)',
+                    opacity: 1,
                     transition: 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1) 200ms, opacity 0.5s ease 200ms'
                   }}>
                     <HuellaColorPanel compact />
@@ -7951,8 +7965,8 @@ export default function Home() {
                     color: '#8E8E93',
                     marginTop: '40px',
                     lineHeight: 1.3,
-                    opacity: huellaPanelClosing ? (1 - huellaPanelCloseProgress) : huellaPanelVisible ? 1 : 0,
-                    transform: huellaPanelClosing ? 'translateY(-14px)' : huellaPanelVisible ? 'translateY(0)' : 'translateY(-14px)',
+                    opacity: 1,
+                    transform: 'translateY(0)',
                     transition: 'opacity 0.4s ease 540ms, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) 540ms'
                   }}>
                     01. Primeras preguntas de alcance
@@ -7966,8 +7980,8 @@ export default function Home() {
                   gap: '24px',
                   width: '100%',
                   color: '#1D1B20',
-                  opacity: huellaPanelClosing ? (1 - huellaPanelCloseProgress) : huellaPanelVisible ? 1 : 0,
-                  transform: huellaPanelClosing ? 'translateY(-14px)' : huellaPanelVisible ? 'translateY(0)' : 'translateY(-14px)',
+                  opacity: 1,
+                  transform: 'translateY(0)',
                   transition: 'opacity 0.4s ease 540ms, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) 540ms'
                 }}>
                   <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 300, fontSize: '20px', lineHeight: 1.6, margin: 0, maxWidth: '760px' }}>
@@ -8389,7 +8403,7 @@ export default function Home() {
                     <p style={{ maxWidth: '760px', fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 500, fontSize: '20px', color: '#2B8095', lineHeight: 1.6, margin: 0 }}>
                       Así es como las decisiones fueron tomando forma en la experiencia.
                     </p>
-                    <div ref={huellaPrototypeRef} style={{ alignSelf: 'center', width: '320px', height: '690px', display: 'flex', justifyContent: 'center', overflow: 'hidden', borderRadius: '32px', border: '1px solid rgba(0, 0, 0, 0.08)', background: 'transparent', padding: 0, boxSizing: 'border-box' }}>
+                    <div ref={huellaPrototypeRef} style={{ alignSelf: 'center', width: '320px', height: '690px', display: 'flex', justifyContent: 'center', overflow: 'hidden', borderRadius: '32px', border: '1px solid rgba(0, 0, 0, 0.08)', background: 'transparent', padding: 0, boxSizing: 'border-box', margin: '64px 0' }}>
                       <iframe
                         title="Prototipo de Huella en Figma"
                         width="320"
@@ -8429,7 +8443,7 @@ export default function Home() {
                         containerJustify="flex-start"
                       />
                     </div>
-                    <div style={{ width: '100%', marginTop: '120px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
+                    <div style={{ width: '100%', marginTop: '72px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
                       <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 300, fontSize: '32px', color: '#1D1B20', lineHeight: 1.3, margin: 0, textAlign: 'center' }}>
                         Hay más por acá.
                       </p>
@@ -8445,10 +8459,10 @@ export default function Home() {
                           style={{ flex: 1, display: 'flex', flexDirection: 'column', borderRadius: '20px', overflow: 'hidden', background: '#F5F2EE', boxShadow: '0 8px 24px rgba(29,27,32,0.12)', transform: huellaBeaconMiniHovered ? 'translateY(-6px)' : 'translateY(0)', transition: 'transform 0.3s ease' }}>
                           <img src={cardBeaconMini} alt="Beacon" style={{ width: '100%', height: '320px', objectFit: 'cover', objectPosition: 'top', display: 'block' }}/>
                           <div style={{ padding: '24px' }}>
-                            <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: '13px', fontWeight: 500, color: 'rgba(26,26,26,0.65)', margin: 0 }}>
-                              {['Channel Sales', 'B2B', 'Pipeline', 'Partners', 'Visibilidad'].join(' ✳ ')}
+                            <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: '13px', fontWeight: 500, color: 'rgba(26,26,26,0.65)', lineHeight: '20px', minHeight: '60px', margin: 0 }}>
+                              {['Investigación UX', 'Estrategia de Producto', 'Producto SaaS', 'Desarrollo con IA aplicada'].join(' ✳ ')}
                             </p>
-                            <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: huellaBeaconMiniHovered ? 800 : 700, fontSize: '24px', color: '#1A1A1A', marginTop: '14px', marginBottom: 0, transition: 'font-weight 0.2s ease' }}>Beacon</p>
+                            <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: huellaBeaconMiniHovered ? 800 : 700, fontSize: '24px', color: '#1A1A1A', marginTop: '0', marginBottom: 0, transition: 'font-weight 0.2s ease' }}>Beacon</p>
                             <div onClick={() => { closeHuellaPanel(); setProjectTransition('beacon') }} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '12px', cursor: 'pointer' }}>
                               <span style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: '14px', lineHeight: 1, fontWeight: huellaBeaconMiniHovered ? 700 : 400, color: 'rgba(26,26,26,0.6)', transition: 'font-weight 0.2s ease' }}>Ver caso de estudio</span>
                               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ display: 'block', flexShrink: 0 }}>
@@ -8463,10 +8477,10 @@ export default function Home() {
                           style={{ flex: 1, display: 'flex', flexDirection: 'column', borderRadius: '20px', overflow: 'hidden', background: '#F5F2EE', boxShadow: '0 8px 24px rgba(29,27,32,0.12)', transform: huellaTheavelingMiniHovered ? 'translateY(-6px)' : 'translateY(0)', transition: 'transform 0.3s ease' }}>
                           <img src={cardTheavelingMini} alt="Theaveling" style={{ width: '100%', height: '320px', objectFit: 'cover', objectPosition: 'top', display: 'block' }}/>
                           <div style={{ padding: '24px' }}>
-                            <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: '13px', fontWeight: 500, color: 'rgba(26,26,26,0.65)', margin: 0 }}>
+                            <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: '13px', fontWeight: 500, color: 'rgba(26,26,26,0.65)', lineHeight: '20px', minHeight: '60px', margin: 0 }}>
                               {['Investigación UX', 'Diseño de Interfaz', 'Prototipado', 'Testing'].join(' ✳ ')}
                             </p>
-                            <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: huellaTheavelingMiniHovered ? 800 : 700, fontSize: '24px', color: '#1A1A1A', marginTop: '14px', marginBottom: 0, transition: 'font-weight 0.2s ease' }}>Theaveling</p>
+                            <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: huellaTheavelingMiniHovered ? 800 : 700, fontSize: '24px', color: '#1A1A1A', marginTop: '0', marginBottom: 0, transition: 'font-weight 0.2s ease' }}>Theaveling</p>
                             <div onClick={() => { closeHuellaPanel(); setProjectTransition('theaveling') }} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '12px', cursor: 'pointer' }}>
                               <span style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: '14px', lineHeight: 1, fontWeight: huellaTheavelingMiniHovered ? 700 : 400, color: 'rgba(26,26,26,0.6)', transition: 'font-weight 0.2s ease' }}>Ver caso de estudio</span>
                               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ display: 'block', flexShrink: 0 }}>
@@ -8492,8 +8506,15 @@ export default function Home() {
           <div ref={huellaRightPanelRef} style={{
             position:'fixed', top:0, right:0,
             width: huellaPanelClosing ? '40vw' : '100vw',
-            height:'100vh', background:'#56555A', zIndex:9999,
-            transition:'none', visibility:'hidden'
+            height:'100vh',
+            // 2026-11-22, a pedido de Ana: al cerrar, igual que rightPanelRef
+            // en ProjectTransition -- el ancho se queda fijo en 40vw (ya no se
+            // anima) y es el FONDO el que se desvanece (alfa 1→0) con un
+            // retraso del 20%, para que el texto le lleve ventaja al fondo.
+            background: huellaPanelClosing
+              ? `rgba(86,85,90, ${Math.max(0, 1 - Math.max(0, huellaPanelCloseProgress - 0.2) / 0.8)})`
+              : '#56555A',
+            zIndex:9999, transition:'none', visibility:'hidden'
           }}>
             <div style={{position:'relative', top:'0', left:'20px', right:'20px'}}>
               <p style={{
