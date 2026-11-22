@@ -1,6 +1,6 @@
 import React from 'react'
 import { createPortal } from 'react-dom'
-import { motion, useScroll, useTransform, animate as motionAnimate } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import { ArrowDown, Building2, Phone, Handshake, User, Settings2, Inbox, Filter, Compass, Ticket, Sparkle } from 'lucide-react'
 import anaPhoto from '../assets/ana.png'
 import camilaPhoto from '../assets/camila.png'
@@ -1994,10 +1994,18 @@ function HuellaCommentCard({ width }) {
 // en su captura). Van al lado del comentario, en la misma columna donde
 // arriba están la paleta y el contrast checker.
 function HuellaWhatsappCascade() {
+  // 2026-11-22, a pedido de Ana: `ar` (relación de aspecto real de cada PNG,
+  // medida sobre el archivo) se usa como aspect-ratio para que estas
+  // imágenes RESERVEN su alto antes de cargar. Están arriba del ancla
+  // "01. Primeras preguntas de alcance", y sin alto reservado la entrada
+  // medía ese ancla más arriba de lo real (el scroll de apertura arrancaba
+  // "muy arriba"). Con el espacio ya reservado la medición es exacta aunque
+  // las imágenes todavía no hayan cargado. Los `w` de arriba (720/752/808)
+  // solo definen el ancho relativo entre las tres capturas.
   const shots = [
-    { src: huellaWhatsapp1, w: 720 },
-    { src: huellaWhatsapp2, w: 752 },
-    { src: huellaWhatsapp3, w: 808 }
+    { src: huellaWhatsapp1, w: 720, ar: '496 / 122' },
+    { src: huellaWhatsapp2, w: 752, ar: '518 / 76' },
+    { src: huellaWhatsapp3, w: 808, ar: '556 / 117' }
   ]
   const maxW = Math.max(...shots.map(s => s.w))
   return (
@@ -2009,6 +2017,7 @@ function HuellaWhatsappCascade() {
           alt="Captura real de WhatsApp: conversación con Kevin sobre el flujo de recuperación de contraseña por código."
           style={{
             width: `${(s.w / maxW) * 100}%`,
+            aspectRatio: s.ar,
             borderRadius: '10px',
             display: 'block',
             boxShadow: '0 10px 24px rgba(0,0,0,0.18)'
@@ -5595,6 +5604,14 @@ export default function Home() {
   // animar hacia el estado visible -- si se pone en true en el mismo
   // render que abre el panel, no hay transición, aparece todo de golpe).
   const [huellaPanelVisible, setHuellaPanelVisible] = React.useState(false)
+  // 2026-11-22, a pedido de Ana: el contenido del panel derecho (título
+  // "Huella", nav de secciones, tags, estado, botón de cerrar) aparece recién
+  // al TERMINAR el wipe de entrada, igual que en ProjectTransition (ver
+  // showRightContent). Si apareciera al montar, mientras el panel derecho
+  // todavía mide 100vw (anclado a la derecha) su contenido quedaría pegado al
+  // borde izquierdo de la pantalla y se iría deslizando hacia la derecha con
+  // el ancho del panel durante toda la animación.
+  const [huellaRightVisible, setHuellaRightVisible] = React.useState(false)
   React.useEffect(() => {
     if (showHuellaPanel) {
       // setTimeout en vez de doble requestAnimationFrame: rAF se pausa en
@@ -5606,6 +5623,7 @@ export default function Home() {
       return () => clearTimeout(id)
     } else {
       setHuellaPanelVisible(false)
+      setHuellaRightVisible(false)
     }
   }, [showHuellaPanel])
   // 2026-11-06, a pedido de Ana: mismo efecto de cierre que Beacon/
@@ -5642,6 +5660,11 @@ export default function Home() {
   // scrollea ese texto; se lo pasamos a Motion como `viewport.root` en el
   // onViewportEnter de ese encabezado.
   const huellaLeftPanelRef = React.useRef(null)
+  // 2026-11-22, a pedido de Ana: los mismos refs que usa ProjectTransition
+  // para su entrada -- el panel de color que hace de respaldo del wipe y el
+  // panel derecho que se encoge (ver la animación de entrada más abajo).
+  const huellaColorPanelRef = React.useRef(null)
+  const huellaRightPanelRef = React.useRef(null)
   const huellaPrototypeRef = React.useRef(null)
   // 2026-11-21: sección que sirve de "ancla" para la animación de entrada,
   // igual que imageRef en ProjectTransition (Beacon/Theaveling): el scroll de
@@ -5703,45 +5726,84 @@ export default function Home() {
     observer.observe(target)
     return () => observer.disconnect()
   }, [showHuellaPanel])
-  // 2026-11-21, a pedido de Ana: mismo efecto de entrada que Beacon/
-  // Theaveling (ver la animación en ProjectTransition, más arriba). Al abrir
-  // la bitácora, el panel izquierdo arranca scrolleado en la sección "01.
-  // Primeras preguntas de alcance" y sube hasta el tope con easing outCubic
-  // (1400ms), a la vez que el contenido termina de acomodarse (los textos
-  // entran con su stagger). No se espera a las fuentes: el scroll arranca en
-  // cuanto el panel se monta, para que la subida y la entrada del panel
-  // ocurran juntas. La posición inicial es el offsetTop de esa sección (la
-  // misma lógica que ProjectTransition con su imageRef). El scrollTop se
-  // anima con `motion` (motionAnimate) escribiéndolo por ref, sin setState.
+  // 2026-11-22, a pedido de Ana: "copia bien cómo entra el panel izquierdo en
+  // Beacon y Theaveling al abrir los casos y hazlo en Huella". La entrada de
+  // ProjectTransition (ver su useEffect, más arriba) es un wipe: el panel de
+  // color crece de 0vw a 60vw desde la izquierda, el contenido se revela con
+  // clip-path (inset(0 100%→0% 0 0)), el panel derecho se encoge de 100vw a
+  // 40vw, y el scroll del contenido baja desde el ancla hasta el tope -- todo
+  // con el mismo easing outCubic y la misma duración (1400ms). Acá se replica
+  // tal cual, con los mismos tres refs y escribiendo todo por ref cuadro a
+  // cuadro (sin setState, para no re-renderizar este componente gigante).
+  // Igual que en ProjectTransition se espera a document.fonts.ready (con tope
+  // de 350ms, por si una fuente externa se demora) + doble
+  // requestAnimationFrame antes de medir el ancla, así la primera apertura se
+  // comporta igual que la segunda. La posición inicial del scroll es el
+  // offsetTop de la sección "01. Primeras preguntas de alcance"
+  // (huellaImageRef), la misma lógica que allí con imageRef.
   React.useLayoutEffect(() => {
     if (!showHuellaPanel) return
     const panel = huellaLeftPanelRef.current
     if (!panel) return
+
+    const duration = 1400
+    let cancelled = false
 
     const getStart = () => {
       const anchor = huellaImageRef.current
       return anchor ? anchor.offsetTop : Math.max(0, panel.scrollHeight - panel.clientHeight)
     }
 
-    // Arrancar en el ancla ya mismo (en el layout effect, antes de que el
-    // navegador pinte) para que no se vea el tope ni por un frame.
+    // Arrancar ya en el ancla (en el layout effect, antes de que el navegador
+    // pinte) para que no se vea el tope ni por un frame.
     panel.scrollTop = getStart()
 
-    let controls = null
-    const rafId = requestAnimationFrame(() => {
-      const from = getStart()
-      panel.scrollTop = from
-      controls = motionAnimate(from, 0, {
-        duration: 1.4,
-        ease: (t) => 1 - Math.pow(1 - t, 3),
-        onUpdate: (v) => { panel.scrollTop = v }
-      })
-    })
+    const start = () => {
+      if (cancelled) return
+      const imagePos = getStart()
+      const startTime = performance.now()
 
-    return () => {
-      cancelAnimationFrame(rafId)
-      if (controls) controls.stop()
+      const animate = (currentTime) => {
+        const t = Math.min(1, (currentTime - startTime) / duration)
+        const eased = 1 - Math.pow(1 - t, 3)
+
+        if (huellaColorPanelRef.current) {
+          huellaColorPanelRef.current.style.width = `${eased * 60}vw`
+        }
+        if (huellaLeftPanelRef.current) {
+          huellaLeftPanelRef.current.style.opacity = eased > 0.1 ? '1' : '0'
+          huellaLeftPanelRef.current.style.clipPath = `inset(0 ${Math.max(0, 100 - eased * 100)}% 0 0)`
+          huellaLeftPanelRef.current.scrollTop = imagePos * (1 - eased)
+        }
+        if (huellaRightPanelRef.current) {
+          huellaRightPanelRef.current.style.width = `${Math.max(0, 100 - eased * 60)}vw`
+          huellaRightPanelRef.current.style.visibility = eased > 0.05 ? 'visible' : 'hidden'
+        }
+
+        if (t < 1) {
+          requestAnimationFrame(animate)
+        } else {
+          // Terminó el wipe: recién acá aparece el contenido del panel derecho
+          // (un solo setState al final, no uno por frame -- ver el comentario
+          // de huellaRightVisible).
+          setHuellaRightVisible(true)
+        }
+      }
+      requestAnimationFrame(animate)
     }
+
+    const waitTwoFrames = () => {
+      requestAnimationFrame(() => requestAnimationFrame(() => { if (!cancelled) start() }))
+    }
+
+    let fontsReady = Promise.resolve()
+    if (typeof document !== 'undefined' && document.fonts && document.fonts.ready) {
+      fontsReady = document.fonts.ready.catch(() => {})
+    }
+    const fontsTimeout = new Promise((resolve) => setTimeout(resolve, 350))
+    Promise.race([fontsReady, fontsTimeout]).then(waitTwoFrames)
+
+    return () => { cancelled = true }
   }, [showHuellaPanel])
   const [huellaLogoAnimStarted, setHuellaLogoAnimStarted] = React.useState(false)
   const [huellaLogoFrame, setHuellaLogoFrame] = React.useState(0)
@@ -7633,7 +7695,31 @@ export default function Home() {
           position:'fixed', inset:0, zIndex:9999, display:'flex',
           opacity: huellaPanelClosing ? Math.max(0, 1 - Math.max(0, huellaPanelCloseProgress - 0.2) / 0.8) : 1
         }}>
-          <div ref={huellaLeftPanelRef} className="left-panel" onScroll={(event) => updateActiveHuellaSection(event.currentTarget)} style={{flex:'0 0 60vw', width:'60vw', height:'100vh', background:'#F1F1F1', position:'relative', display:'flex', flexDirection:'column', alignItems:'flex-start', padding:'0 60px 60px 20px', overflowY:'auto', overflowX:'hidden'}}>
+          {/* 2026-11-22, a pedido de Ana: panel de color que respalda el wipe
+              de entrada -- mismo patrón que colorPanelRef en ProjectTransition.
+              Crece de 0vw a 60vw desde la izquierda, por detrás del contenido,
+              para que la zona que el clip-path todavía no reveló muestre el
+              fondo del panel y no la página de atrás. Su ancho lo anima el rAF
+              de entrada por ref (ver el useLayoutEffect más arriba). */}
+          <div ref={huellaColorPanelRef} style={{
+            position:'fixed', top:0, left:0, width:'0vw', height:'100vh',
+            background:'#F1F1F1', zIndex:9999, transition:'none', overflow:'hidden'
+          }}/>
+          {/* 2026-11-22, a pedido de Ana: mismo wipe de entrada que
+              ProjectTransition (ver su contentRef). El clip-path y la opacidad
+              los escribe el rAF de entrada por ref; el valor estático de acá
+              (closing=false) no cambia entre renders, así que React no pisa lo
+              que dejó la animación. Al cerrar sí hay un valor nuevo: el panel
+              queda revelado del todo (inset(0 0% 0 0)) mientras el overlay se
+              desvanece. */}
+          <div ref={huellaLeftPanelRef} className="left-panel" onScroll={(event) => updateActiveHuellaSection(event.currentTarget)} style={{
+            flex:'0 0 60vw', width:'60vw', height:'100vh', background:'#F1F1F1', position:'relative', zIndex:10000,
+            display:'flex', flexDirection:'column', alignItems:'flex-start', padding:'0 60px 60px 20px',
+            overflowY:'auto', overflowX:'hidden',
+            opacity: huellaPanelClosing ? 1 : 0,
+            clipPath: huellaPanelClosing ? 'inset(0 0% 0 0)' : 'inset(0 100% 0 0)',
+            transition:'none'
+          }}>
             <p style={{
               fontFamily: "'Poppins', sans-serif",
               fontWeight: 700,
@@ -7826,10 +7912,17 @@ export default function Home() {
                   </div>
                   <div style={{ width: '100%', marginTop: '42px' }}>
                     <div style={{ display: 'flex', justifyContent: 'center' }}>
+                      {/* 2026-11-22, a pedido de Ana: aspect-ratio real del PNG
+                          (7900 x 8320) para que reserve su alto antes de cargar.
+                          Esta imagen está por encima del ancla "01. Primeras
+                          preguntas de alcance" y, en la fila de mockups, su
+                          columna es la más alta de las dos; sin el alto
+                          reservado la fila medía de menos y el scroll de
+                          apertura arrancaba "muy arriba". */}
                       <img
                         src="/contraste.png"
                         alt="Captura del Contrast Checker de Huella."
-                        style={{ width: '100%', height: 'auto', borderRadius: '8px', display: 'block' }}
+                        style={{ width: '100%', aspectRatio: '7900 / 8320', height: 'auto', borderRadius: '8px', display: 'block' }}
                       />
                     </div>
                   </div>
@@ -8389,7 +8482,19 @@ export default function Home() {
             </div>
           </div>
           </div>
-          <div style={{flex:'0 0 40vw', width:'40vw', background:'#56555A', position:'relative'}}>
+          {/* 2026-11-22, a pedido de Ana: mismo panel derecho que
+              ProjectTransition (ver su rightPanelRef) -- arranca cubriendo
+              todo el ancho (100vw, anclado a la derecha) y se encoge hasta
+              40vw, revelando por izquierda el panel de Huella que entra con
+              el wipe. El ancho y la visibilidad los escribe el rAF de entrada
+              por ref; el valor estático de acá (closing=false) no cambia entre
+              renders, así que React no pisa lo que dejó la animación. */}
+          <div ref={huellaRightPanelRef} style={{
+            position:'fixed', top:0, right:0,
+            width: huellaPanelClosing ? '40vw' : '100vw',
+            height:'100vh', background:'#56555A', zIndex:9999,
+            transition:'none', visibility:'hidden'
+          }}>
             <div style={{position:'relative', top:'0', left:'20px', right:'20px'}}>
               <p style={{
                 position:'absolute',
@@ -8402,8 +8507,8 @@ export default function Home() {
                 fontSize:'90px',
                 color:'#F1F1F1',
                 lineHeight:1,
-                opacity: huellaPanelClosing ? (1 - huellaPanelCloseProgress) : huellaPanelVisible ? 1 : 0,
-                transform: huellaPanelClosing ? 'translateY(-14px)' : huellaPanelVisible ? 'translateY(0)' : 'translateY(-14px)',
+                opacity: huellaPanelClosing ? (1 - huellaPanelCloseProgress) : huellaRightVisible ? 1 : 0,
+                transform: huellaPanelClosing ? 'translateY(-14px)' : huellaRightVisible ? 'translateY(0)' : 'translateY(-14px)',
                 transition: 'opacity 0.4s ease, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
               }}>
                 Huella
@@ -8433,7 +8538,7 @@ export default function Home() {
                       width: isActive ? '2px' : '1px',
                       height: '20px',
                       background: isActive ? '#F1F1F1' : 'rgba(241,241,241,0.4)',
-                      transform: (huellaPanelClosing || !huellaPanelVisible) ? 'translateY(-100%)' : 'translateY(0)',
+                      transform: (huellaPanelClosing || !huellaRightVisible) ? 'translateY(-100%)' : 'translateY(0)',
                       transition: 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
                     }} />
                   </div>
@@ -8445,7 +8550,7 @@ export default function Home() {
                       letterSpacing: '0.05em',
                       fontWeight: isActive ? 700 : 300,
                       color: isActive ? '#F1F1F1' : 'rgba(241,241,241,0.72)',
-                      transform: (huellaPanelClosing || !huellaPanelVisible) ? 'translateY(-100%)' : 'translateY(0)',
+                      transform: (huellaPanelClosing || !huellaRightVisible) ? 'translateY(-100%)' : 'translateY(0)',
                       transition: `transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) ${i * 60}ms`
                     }}>{section.title}</p>
                   </div>
@@ -8472,7 +8577,7 @@ export default function Home() {
                     color:'#F1F1F1',
                     lineHeight:1.2,
                     margin:0,
-                    transform: (huellaPanelClosing || !huellaPanelVisible) ? 'translateY(-100%)' : 'translateY(0)',
+                    transform: (huellaPanelClosing || !huellaRightVisible) ? 'translateY(-100%)' : 'translateY(0)',
                     transition: `transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) ${i * 60}ms`
                   }}>✳ {tag}</p>
                 </div>
@@ -8492,7 +8597,7 @@ export default function Home() {
                     color: item.color,
                     margin: 0,
                     marginBottom: i < 2 ? '4px' : '0',
-                    transform: (huellaPanelClosing || !huellaPanelVisible) ? 'translateY(-100%)' : 'translateY(0)',
+                    transform: (huellaPanelClosing || !huellaRightVisible) ? 'translateY(-100%)' : 'translateY(0)',
                     transition: `transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) ${i * 60}ms`
                   }}>{item.text}</p>
                 </div>
@@ -8511,7 +8616,7 @@ export default function Home() {
               justifyContent:'center',
               cursor:'pointer',
               background:'transparent',
-              opacity: huellaPanelClosing ? 0 : huellaPanelVisible ? 1 : 0,
+              opacity: huellaPanelClosing ? 0 : huellaRightVisible ? 1 : 0,
               transition: 'opacity 0.4s ease'
             }}>
               <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
@@ -8522,8 +8627,8 @@ export default function Home() {
               position:'absolute',
               bottom:'40px',
               right:'20px',
-              opacity: huellaPanelClosing ? 0 : huellaPanelVisible ? 1 : 0,
-              transform: huellaPanelClosing ? 'translateY(20px)' : huellaPanelVisible ? 'translateY(0)' : 'translateY(20px)',
+              opacity: huellaPanelClosing ? 0 : huellaRightVisible ? 1 : 0,
+              transform: huellaPanelClosing ? 'translateY(20px)' : huellaRightVisible ? 'translateY(0)' : 'translateY(20px)',
               transition: 'opacity 0.4s ease, transform 0.4s ease'
             }}>
               <VerProductoBtn
