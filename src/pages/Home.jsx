@@ -9127,10 +9127,10 @@ export default function Home() {
               flexShrink:0
             }}>
               <div style={{display:'flex', flexDirection:'column', alignItems:'flex-start', gap:'4px'}}>
-                <a href="#" style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:400, fontSize:'13px', letterSpacing:'0.04em', textTransform:'uppercase', color:'#F5F2EE', textDecoration:'none'}}>
+                <a href="https://www.linkedin.com/in/anaserrano15" target="_blank" rel="noopener noreferrer" style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:400, fontSize:'13px', letterSpacing:'0.04em', textTransform:'uppercase', color:'#F5F2EE', textDecoration:'none'}}>
                   LinkedIn
                 </a>
-                <a href="#" style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:400, fontSize:'13px', letterSpacing:'0.04em', textTransform:'uppercase', color:'#F5F2EE', textDecoration:'none'}}>
+                <a href="https://drive.google.com/file/d/1nglCbouQRlRcLGpGIxKW45FiVi63f8RQ/view?usp=sharing" target="_blank" rel="noopener noreferrer" style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:400, fontSize:'13px', letterSpacing:'0.04em', textTransform:'uppercase', color:'#F5F2EE', textDecoration:'none'}}>
                   CV
                 </a>
               </div>
