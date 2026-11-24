@@ -6289,6 +6289,15 @@ export default function Home() {
     requestAnimationFrame(step)
   }
 
+  const scrollAboutPanelToEnd = () => {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const panel = aboutPanelRef.current
+        if (panel) panel.scrollTop = panel.scrollHeight
+      })
+    })
+  }
+
   // Copia el correo al portapapeles (con fallback por si el navegador no
   // soporta la Clipboard API, por ejemplo en http o navegadores viejos).
   const copyEmail = () => {
@@ -6848,7 +6857,7 @@ export default function Home() {
         width: phase === 'projects' ? 'auto' : 'calc(100% - 160px)',
         display: 'flex',
         gap: '0',
-        zIndex: (aboutPhase === 'ticker' && aboutProgress >= 1 && navReadyToShow) ? 9500 : (phase === 'projects' ? 600 : 100),
+        zIndex: (aboutPhase === 'ticker' && aboutProgress >= 1 && (navReadyToShow || conectemosProgress >= 1)) ? 9500 : (phase === 'projects' ? 600 : 100),
         justifyContent: scrolled ? 'flex-end' : 'space-between',
         background: phase === 'projects' ? 'rgba(245,242,238,0.85)' : '#F5F2EE',
         backdropFilter: phase === 'projects' ? 'blur(8px)' : 'none',
@@ -6863,7 +6872,7 @@ export default function Home() {
         // tapado, así que al destaparse (navReadyToShow) sí hay una
         // transición real de 0 a 1 para animar.
         opacity: (aboutPhase === 'ticker' && aboutProgress > 0.55 && aboutProgress < 1) ? 0
-          : (aboutPhase === 'ticker' && aboutProgress >= 1 && !navReadyToShow) ? 0
+          : (aboutPhase === 'ticker' && aboutProgress >= 1 && !navReadyToShow && conectemosProgress < 1) ? 0
           : 1,
         pointerEvents: (aboutPhase === 'ticker' && aboutProgress > 0.55 && aboutProgress < 1) ? 'none' : 'auto',
         transition: 'background 0.5s ease, border 0.5s ease, box-shadow 0.5s ease, top 0.5s ease, right 0.5s ease, left 0.5s ease, width 0.5s ease, opacity 0.5s ease'
@@ -7112,6 +7121,7 @@ export default function Home() {
                 if (aboutPhaseRef.current === 'ticker' && aboutProgressRef.current >= 1) {
                   // Ya estamos en Sobre mí (destapado o no): solo falta
                   // terminar de destapar Conectemos.
+                  scrollAboutPanelToEnd()
                   if (conectemosProgressRef.current < 1 && !conectemosAutoRef.current) {
                     runConectemosAutoReveal(conectemosProgressRef.current)
                   }
@@ -7152,12 +7162,13 @@ export default function Home() {
                   setAboutPhase('ticker')
                   conectemosProgressRef.current = 1
                   setConectemosProgress(1)
+                  scrollAboutPanelToEnd()
                   setActiveLink('Conectemos')
                 })
               }
             }} style={{
               padding: '8px 16px',
-              borderLeft: i === 0 ? 'none' : '1px solid #1A1A1A',
+              borderLeft: i === 0 ? 'none' : (phase === 'projects' ? '1px solid rgba(26,26,26,0.2)' : '1px solid #1A1A1A'),
               display: 'flex',
               alignItems: 'center',
               fontFamily: "'Plus Jakarta Sans', sans-serif",
@@ -9127,10 +9138,10 @@ export default function Home() {
               flexShrink:0
             }}>
               <div style={{display:'flex', flexDirection:'column', alignItems:'flex-start', gap:'4px'}}>
-                <a href="https://www.linkedin.com/in/anaserrano15" target="_blank" rel="noopener noreferrer" style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:400, fontSize:'13px', letterSpacing:'0.04em', textTransform:'uppercase', color:'#F5F2EE', textDecoration:'none'}}>
+                <a href="https://www.linkedin.com/in/anaserrano15" target="_blank" rel="noopener noreferrer" className="contact-footer-link" style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:400, fontSize:'13px', letterSpacing:'0.04em', textTransform:'uppercase', textDecoration:'none'}}>
                   LinkedIn
                 </a>
-                <a href="https://drive.google.com/file/d/1nglCbouQRlRcLGpGIxKW45FiVi63f8RQ/view?usp=sharing" target="_blank" rel="noopener noreferrer" style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:400, fontSize:'13px', letterSpacing:'0.04em', textTransform:'uppercase', color:'#F5F2EE', textDecoration:'none'}}>
+                <a href="https://drive.google.com/file/d/1nglCbouQRlRcLGpGIxKW45FiVi63f8RQ/view?usp=sharing" target="_blank" rel="noopener noreferrer" className="contact-footer-link" style={{fontFamily:"'Plus Jakarta Sans', sans-serif", fontWeight:400, fontSize:'13px', letterSpacing:'0.04em', textTransform:'uppercase', textDecoration:'none'}}>
                   CV
                 </a>
               </div>
